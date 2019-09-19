@@ -35,6 +35,6 @@ function DOMS(selector, parentDOM = false) {
 }
 
 module.exports = {
-    DOM,DOMS
+    DOM,
+    DOMS,
 };
-
