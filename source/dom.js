@@ -34,7 +34,7 @@ function DOMS(selector, parentDOM = false) {
     }
 }
 
-module.export = {
+module.exports = {
     DOM,DOMS
 };
 
