@@ -3,3 +3,4 @@ test
 test_in_browser
 .eslintignore
 .gitignore
+.eslintrs.js
