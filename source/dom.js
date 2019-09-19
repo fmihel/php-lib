@@ -1,3 +1,4 @@
+/* global jQuery */
 /**
  * Возвращает объект DOM с использованием селектора
  * Более быстрый аналог jquery $('xxx')[0];
@@ -17,8 +18,6 @@ function DOM(selector, parentDOM = false) {
         return null;
     }
 }
-
-
 /**
  * Возвращает массив объектов DOM с использованием селектора
  * @param {string} selector - строка запроса '#xxx'  '.xxx'  'xxx'
@@ -33,8 +32,22 @@ function DOMS(selector, parentDOM = false) {
         return [];
     }
 }
-
+/**
+ * Аналогично вызову $.data(obj,'data') или $.data(obj,'data',newobj)
+ * @param  {...any} p - если параметр один. то возвращает значение data если два,
+ * то устанавливает в data значение второго параметра
+ */
+function $D(...p) {
+    if (p.length === 0) { throw new Error('$D must have one or two param'); }
+    const o = p[0] instanceof jQuery ? p[0][0] : p[0];
+    if (p.length === 1) {
+        return $.data(o, 'data');
+    }
+    $.data(o, 'data', p[1]);
+    return undefined;
+}
 module.exports = {
     DOM,
     DOMS,
+    $D,
 };

@@ -16,12 +16,15 @@
     "url": "https://github.com/fmihel/lib/issues"
   },
   "homepage": "https://github.com/fmihel/lib#readme",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^3.4.1"
+  },
   "devDependencies": {
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-import-resolver-webpack": "^0.11.1",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-react": "^7.14.3"
+    "eslint-plugin-react": "^7.14.3",
+    "mocha": "^6.2.0"
   }
 }

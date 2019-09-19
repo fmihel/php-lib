@@ -22,6 +22,7 @@ module.exports = {
     "rules": {
         'no-console': 'off',
         'no-bitwise':'off',
+        'no-undef':'warn',
         "indent": [
             "error",
             4
