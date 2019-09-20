@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.core.min.js"></script>
     <script type="text/javascript">
     let module={exports:{}};
     </script>
     <script src="../source/dom.js"></script>
+    <script src="../source/react.js"></script>
 
     
   </head>
@@ -24,6 +26,8 @@
       mocha.checkLeaks();
     </script>
     <script src="./dom.js"></script>
+    <script src="./react.js"></script>
+
     <script class="mocha-exec">
       mocha.run();
     </script>

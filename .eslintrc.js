@@ -23,6 +23,7 @@ module.exports = {
         'no-console': 'off',
         'no-bitwise':'off',
         'no-undef':'warn',
+        "max-len":0,
         "indent": [
             "error",
             4
