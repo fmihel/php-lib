@@ -1,28 +1,38 @@
 const JX = {
     _params: {
-
+        screen: {
+            x: 0, y: 0, w: 0, h: 0,
+        },
+        mouse: {
+            x: 0, y: 0,
+        },
     },
     window: $(window),
-    screen: {
-        x: 0, y: 0, w: 0, h: 0,
-    },
-    mouse: {
-        x: 0, y: 0,
-    },
     // eslint-disable-next-line no-underscore-dangle
     _initialize() {
         JX.window.on('mousemove', (e) => {
-            JX.mouse.x = e.originalEvent.clientX;
-            JX.mouse.y = e.originalEvent.clientY;
+            JX._params.mouse.x = e.originalEvent.clientX;
+            JX._params.mouse.y = e.originalEvent.clientY;
         });
 
         const updateScreenSize = () => {
-            JX.screen.w = JX.window.width();
-            JX.screen.h = JX.window.height();
+            JX._params.screen.w = JX.window.width();
+            JX._params.screen.h = JX.window.height();
         };
 
         updateScreenSize();
         JX.window.on('resize', updateScreenSize);
+    },
+    mouse() {
+        return { x: JX._params.mouse.x, y: JX._params.mouse.y };
+    },
+    screen() {
+        return {
+            x: 0,
+            y: 0,
+            w: JX._params.screen.w,
+            h: JX._params.screen.h,
+        };
     },
 };
 
