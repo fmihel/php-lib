@@ -1,6 +1,6 @@
 {
   "name": "fmihel-lib",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "most commonly js functions in my projects",
   "main": "index.js",
   "scripts": {
