@@ -23,9 +23,17 @@ const JX = {
         updateScreenSize();
         JX.window.on('resize', updateScreenSize);
     },
+    /**
+     * координаты мыши
+     * @return {x:int,y:int}
+     */
     mouse() {
         return { x: JX._params.mouse.x, y: JX._params.mouse.y };
     },
+    /**
+     * размер экрана браузера
+     * @return {x:0,y:0,w:int,h:int}
+     */
     screen() {
         return {
             x: 0,

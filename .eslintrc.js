@@ -25,6 +25,7 @@ module.exports = {
         'no-undef':'warn',
         "max-len":0,
         'no-underscore-dangle':'off',
+        'no-plusplus':'off',
         "indent": [
             "error",
             4
