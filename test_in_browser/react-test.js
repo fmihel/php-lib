@@ -1,4 +1,4 @@
-/* global describe,it,chai, defaultProps */
+/* global describe,it,chai, defaultProps,_ */
 describe('react', () => {
     describe('defaultProps', () => {
         it('defaultProps(com,{value:123,css:{self:"main"}})', () => {
