@@ -49,6 +49,43 @@ const ut = {
             return defaultValue;
         }
     },
+    /**
+     * Возврат команды по ее алиасу(короткому описанию)
+     * Ex: alias('direct',{direction:'direct'}) => direction
+     * Ex: alias('direct',{direction:['direct','dir','d']}) => direction
+     * Ex: alias('d',{direction:['direct','dir','d']}) => direction
+     * Ex: alias('left',{direction:['direct','dir','d'],right:['r','noLeft']}) => left
+     * Ex: alias('r',{direction:['direct','dir','d'],right:['r','noLeft']}) => right
+     * @param {string} alias
+     * @param {string|[]} conform
+     * @return string|Exception
+     */
+    alias(alias, conform) {
+        const keys = Object.keys(conform);
+        for (let k = 0; k < keys.length; k++) {
+            const name = keys[k];
+            const def = conform[name];
+            if (Array.isArray(def)) {
+                try {
+                    for (let i = 0; i < def.length; i++) {
+                        if (def[i] === alias) {
+                            return name;
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                    throw new Error(e);
+                }
+            } else if (typeof def === 'string') {
+                if (alias === name) {
+                    return name;
+                }
+            } else {
+                throw new Error(`ut.alias [${def}] is not array of string`);
+            }
+        }
+        return alias;
+    },
 };
 
-module.exports = ut;
+export default ut;

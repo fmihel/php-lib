@@ -6,7 +6,7 @@
  * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
  * @return DOM or null
  */
-function DOM(selector, parentDOM = false) {
+export function DOM(selector, parentDOM = false) {
     const own = parentDOM || document;
     try {
         if (selector[0] === '#') {
@@ -24,7 +24,7 @@ function DOM(selector, parentDOM = false) {
  * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
  * @return [DOM,DOM,DOM...] or []
  */
-function DOMS(selector, parentDOM = false) {
+export function DOMS(selector, parentDOM = false) {
     const own = parentDOM || document;
     try {
         return own.querySelectorAll(selector);
@@ -37,7 +37,7 @@ function DOMS(selector, parentDOM = false) {
  * @param  {...any} p - если параметр один. то возвращает значение data если два,
  * то устанавливает в data значение второго параметра
  */
-function $D(...p) {
+export function $D(...p) {
     if (p.length === 0) { throw new Error('$D must have one or two param'); }
     const o = p[0] instanceof jQuery ? p[0][0] : p[0];
     if (p.length === 1) {
@@ -46,7 +46,8 @@ function $D(...p) {
     $.data(o, 'data', p[1]);
     return undefined;
 }
-module.exports = {
+
+export default {
     DOM,
     DOMS,
     $D,

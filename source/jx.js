@@ -49,4 +49,4 @@ const JX = {
     JX._initialize();
 }());
 
-module.exports = JX;
+export default JX;

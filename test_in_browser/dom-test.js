@@ -1,4 +1,6 @@
-/* global describe,it,chai, DOM,DOMS,$D */
+/* global describe,it,chai, */
+import { DOM, DOMS, $D } from '../source/dom';
+
 describe('dom', () => {
     describe('DOM', () => {
         it('DOM("body")', () => {
@@ -6,7 +8,6 @@ describe('dom', () => {
             console.info('DOM("body")', res);
             chai.expect((res && res.tagName === 'BODY')).to.equal(true);
         });
-
 
         it('DOM("#mocha-stats")', () => {
             const res = DOM('#mocha-stats');

@@ -1,4 +1,6 @@
-/* global describe,it,chai,ut */
+/* global describe,it,chai */
+import ut from '../source/ut';
+
 describe('ut', () => {
     it('random(10,100)', () => {
         const res = ut.random(10, 100);
@@ -33,6 +35,32 @@ describe('ut', () => {
         it('get(a,"b") => Exception ', (done) => {
             chai.expect(() => {
                 ut.get(a, 'b');
+            }).to.throw();
+            done();
+        });
+    });
+
+    describe('alias', () => {
+        const def = { direction: ['dir', 'direct'], 'left-grow': ['left', 'top'] };
+
+        it('alias("dir",...) === "direction"', () => {
+            const res = ut.alias('dir', def);
+            console.info('alias(..., def = ', def, ' )');
+            chai.expect(res === 'direction').to.equal(true);
+        });
+        it('alias("right",...) === "right"', () => {
+            const res = ut.alias('right', def);
+            chai.expect(res === 'right').to.equal(true);
+        });
+        it('alias("left",...) === "left-grow"', () => {
+            const res = ut.alias('left', def);
+            chai.expect(res === 'left-grow').to.equal(true);
+        });
+        const def2 = { direction: 15, 'left-grow': ['left', 'top'] };
+        it('alias(...) => Exception ', (done) => {
+            console.info('alias(..., def2 = ', def2, ' )');
+            chai.expect(() => {
+                ut.alias('some', def2);
             }).to.throw();
             done();
         });

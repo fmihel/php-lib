@@ -1,4 +1,6 @@
-/* global chai,describe,it,JX */
+/* global chai,describe,it */
+import JX from '../source/jx';
+
 describe('JX', () => {
     it('JX.screen()', () => {
         const res = JX.screen();
