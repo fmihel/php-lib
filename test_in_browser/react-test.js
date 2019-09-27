@@ -1,5 +1,5 @@
 /* global describe,it,chai,  */
-import { defaultProps, flex } from '../source/react';
+import { defaultProps, flex, flexChild } from '../source/react';
 
 describe('react', () => {
     describe('defaultProps', () => {
@@ -8,7 +8,7 @@ describe('react', () => {
             defaultProps(com, { value: 123, css: { self: 'main' } });
             const ok = { value: 123, caption: 'header', css: { self: 'main', border: 'brdr' } };
 
-            console.info(com.defaultProps, '=', ok);
+            // console.info(com.defaultProps, '=', ok);
             chai.expect(com.defaultProps).to.deep.equal(ok);
         });
     });
@@ -18,14 +18,14 @@ describe('react', () => {
             const res = flex();
 
             const out = {
-                display: 'flex',
                 alignContent: 'stretch',
                 alignItems: 'stretch',
+                display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
-            // console.info('flex()', res);
+            console.info('flex()', res);
             chai.expect(res).to.deep.equal(out);
         });
 
@@ -85,7 +85,80 @@ describe('react', () => {
                 flexWrap: 'nowrap',
                 justifyContent: 'center',
             };
-            console.info('flex', res);
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+    });
+    describe('flexChild', () => {
+        it('flexChild()', () => {
+            const res = flexChild();
+
+            const out = {
+                alignSelf: 'auto',
+                flexBasis: 'auto',
+                flexGrow: 0,
+                flexShrink: 1,
+                order: 0,
+            };
+            // console.info('flex()', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{ grow: 1 }', () => {
+            const res = flexChild({ grow: 1 });
+
+            const out = {
+                alignSelf: 'auto',
+                flexBasis: 'auto',
+                flexGrow: 1,
+                flexShrink: 1,
+                order: 0,
+            };
+            // console.info('flex()', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{ stretch: 1 } = {grow: 1}', () => {
+            const res = flexChild({ stretch: 1 });
+
+            const out = {
+                alignSelf: 'auto',
+                flexBasis: 'auto',
+                flexGrow: 1,
+                flexShrink: 1,
+                order: 0,
+            };
+            // console.info('flex()', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{ flexGrow: 2 } = {grow:2} ', () => {
+            const res = flexChild({ flexGrow: 2 });
+
+            const out = {
+                alignSelf: 'auto',
+                flexBasis: 'auto',
+                flexGrow: 2,
+                flexShrink: 1,
+                order: 0,
+            };
+            // console.info('flex()', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{grow: 3, basis: 5, align: \'end\', shrink: 2, order: 5,}', () => {
+            const res = flexChild({
+                grow: 3, basis: 5, align: 'end', shrink: 2, order: 5,
+            });
+
+            const out = {
+                alignSelf: 'flex-end',
+                flexBasis: 5,
+                flexGrow: 3,
+                flexShrink: 2,
+                order: 5,
+            };
+            console.info('flexChild()', res);
             chai.expect(res).to.deep.equal(out);
         });
     });

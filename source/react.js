@@ -11,10 +11,60 @@ export function defaultProps(ReactComponent, props) {
 }
 
 /**
- * Возвращаеет настройки style flex для react элемента
+ * Возвращаеет настройки style flex для дочернего элемента react элемента
  * @param {*} prop
  */
-export function flex(prop = {}) {
+export function flexChild(props = {}) {
+    const aliasNames = {
+        flexGrow: ['grow', 'stretch'],
+        flexShrink: ['shrink', 'decrease'],
+        flexBasis: ['basis'],
+        alignSelf: ['align'],
+    };
+
+    const a = $.extend(true, {
+        grow: 0,
+        shrink: 1,
+        basis: 'auto',
+        align: 'auto',
+        order: 0,
+    }, props);
+
+    const valids = {
+        alignSelf: ['auto', 'flex-start', 'flex-end', 'center', 'space-between', 'space-around'],
+    };
+    const aliasValues = {
+        'flex-start': ['start'],
+        'flex-end': ['end'],
+        'space-between': ['between'],
+        'space-around': ['around'],
+    };
+
+    const value = (v, can = undefined) => {
+        if ((can !== undefined) && (can.length >= 0) && (can.indexOf(v) === -1)) {
+            return can[0];
+        }
+        return v;
+    };
+
+    const p = {};
+    Object.keys(a).forEach((key) => { p[ut.alias(key, aliasNames)] = a[key]; });
+
+
+    const out = {};
+    Object.keys(p).forEach((k) => {
+        const v = p[k];
+        out[k] = value(ut.alias(v, aliasValues), valids[k]);
+    });
+
+    return out;
+}
+
+/**
+ * Возвращаеет настройки style flex контейнера react элемента
+ * @param {*} prop
+ */
+export function flex(prop = {}, child = undefined) {
     const aliasNames = {
         flexDirection: ['direction'],
         flexWrap: ['wrap'],
@@ -48,7 +98,7 @@ export function flex(prop = {}) {
         wrap: 'nowrap',
         content: 'flex-start',
         align: 'stretch',
-        alignContent: 'start',
+        alignContent: 'stretch',
     }, prop);
 
 
@@ -57,13 +107,18 @@ export function flex(prop = {}) {
     p.display = 'flex';
 
     const out = {};
-
     Object.keys(p).forEach((k) => {
         const v = p[k];
-        const name = ut.alias(k, aliasNames);
-        out[name] = ut.alias(value(v, valids[name]), aliasValues);
+        const val = ut.alias(v, aliasValues);
+        out[k] = value(val, valids[k]);
+
+        // out[k] = ut.alias(value(v, valids[k]), aliasValues);
     });
 
+    if (child !== undefined) {
+        $.extend(true, out, flexChild(child));
+    }
     return out;
 }
-export default { defaultProps, flex };
+
+export default { defaultProps, flex, flexChild };
