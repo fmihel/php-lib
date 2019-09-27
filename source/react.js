@@ -10,34 +10,23 @@ export function defaultProps(ReactComponent, props) {
     ReactComponent.defaultProps = $.extend(true, $.extend(true, {}, ReactComponent.defaultProps), props);
 }
 
+/**
+ * Возвращаеет настройки style flex для react элемента
+ * @param {*} prop
+ */
 export function flex(prop = {}) {
-    const p = $.extend(true, {
-        direction: 'row',
-        wrap: 'nowrap',
-        content: 'flex-start',
-        align: 'stretch',
-        alignContent: 'start',
-    }, prop);
-
-    p.display = 'flex';
-
     const aliasNames = {
-
         flexDirection: ['direction'],
         flexWrap: ['wrap'],
         justifyContent: ['content'],
         alignItems: ['align'],
-
     };
     const aliasValues = {
-
         'flex-start': ['start'],
         'flex-end': ['end'],
         'space-between': ['between'],
         'space-around': ['around'],
-
     };
-
 
     const valids = {
         flexDirection: ['row', 'row-reverse', 'column', 'column-reverse'],
@@ -54,6 +43,19 @@ export function flex(prop = {}) {
         return v;
     };
 
+    const a = $.extend(true, {
+        direction: 'row',
+        wrap: 'nowrap',
+        content: 'flex-start',
+        align: 'stretch',
+        alignContent: 'start',
+    }, prop);
+
+
+    const p = {};
+    Object.keys(a).forEach((key) => { p[ut.alias(key, aliasNames)] = a[key]; });
+    p.display = 'flex';
+
     const out = {};
 
     Object.keys(p).forEach((k) => {
@@ -64,5 +66,4 @@ export function flex(prop = {}) {
 
     return out;
 }
-
 export default { defaultProps, flex };

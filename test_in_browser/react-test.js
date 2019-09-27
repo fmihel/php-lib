@@ -14,7 +14,7 @@ describe('react', () => {
     });
     describe('flex', () => {
         // { display:"flex", alignContent: "stretch", alignItems:"stretch", flexDirection:"row", flexWrap:"nowrap", justifyContent: "flex-start" }
-        it('with default params', () => {
+        it('flex()', () => {
             const res = flex();
 
             const out = {
@@ -61,6 +61,21 @@ describe('react', () => {
 
         it('{content:"stretch",align:"start"}', () => {
             const res = flex({ content: 'center', align: 'stretch' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'center',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{justifyContent:"stretch",alignItems:"start"}', () => {
+            const res = flex({ justifyContent: 'center', alignItems: 'stretch' });
 
             const out = {
                 alignContent: 'stretch',
