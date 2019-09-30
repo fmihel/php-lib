@@ -26,6 +26,7 @@ module.exports = {
         "max-len":0,
         'no-underscore-dangle':'off',
         'no-plusplus':'off',
+        'import/no-extraneous-dependencies':'off',
         "indent": [
             "error",
             4
