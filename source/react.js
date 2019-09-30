@@ -23,7 +23,7 @@ export function flexChild(props = {}) {
     };
 
     const a = $.extend(true, {
-        grow: 0,
+        grow: 1,
         shrink: 1,
         basis: 'auto',
         align: 'auto',
@@ -66,7 +66,7 @@ export function flexChild(props = {}) {
  */
 export function flex(prop = {}, child = undefined) {
     const aliasNames = {
-        flexDirection: ['direction'],
+        flexDirection: ['direction', 'direct'],
         flexWrap: ['wrap'],
         justifyContent: ['content'],
         alignItems: ['align'],

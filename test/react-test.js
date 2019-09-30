@@ -96,7 +96,7 @@ describe('react', () => {
             const out = {
                 alignSelf: 'auto',
                 flexBasis: 'auto',
-                flexGrow: 0,
+                flexGrow: 1,
                 flexShrink: 1,
                 order: 0,
             };
