@@ -42,6 +42,31 @@ const JX = {
             h: JX._params.screen.h,
         };
     },
+    pos(dom, bound = undefined) {
+        if (bound === undefined) {
+            return {
+                x: dom.offsetLeft + 1,
+                y: dom.offsetTop + 1,
+                w: dom.offsetWidth,
+                h: dom.offsetHeight,
+            };
+        }
+        // console.warn('pos(dom,bound) is not released !!!');
+        return undefined;
+    },
+    abs(dom, bound = undefined) {
+        if (bound === undefined) {
+            const w = dom.getBoundingClientRect();
+            return {
+                x: Math.round(w.left + window.pageXOffset),
+                y: Math.round(w.top + window.pageYOffset),
+                w: Math.round(w.width),
+                h: Math.round(w.height),
+            };
+        }
+        // console.warn('abs(dom,bound) is not released !!!');
+        return undefined;
+    },
 };
 
 // eslint-disable-next-line func-names
