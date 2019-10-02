@@ -120,5 +120,21 @@ export function flex(prop = {}, child = undefined) {
     }
     return out;
 }
+/**
+ * сокращение синтаксиса для привязывания ф-ций react класса к контексту
+ * Ex:
+ * this.onMouseMove = this.onMouseMove.bind(this);
+ * this.onClick = this.onClick.bind(this);
+ * vs
+ * binds(this,'onMouseMove','onClick');
+ *
+ * @param {*} hThis - ссылка на контекст (this)
+ */
+export function binds(hThis/**/) {
+    for (let i = 1; i < arguments.length; i++) {
+        // eslint-disable-next-line prefer-rest-params
+        hThis[arguments[i]] = hThis[arguments[i]].bind(hThis);
+    }
+}
 
-export default { defaultProps, flex, flexChild };
+// export default { defaultProps, flex, flexChild };

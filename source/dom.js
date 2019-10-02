@@ -3,11 +3,11 @@
  * Возвращает объект DOM с использованием селектора
  * Более быстрый аналог jquery $('xxx')[0];
  * @param {string} selector - строка запроса '#xxx'  '.xxx'  'xxx'
- * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
+ * @param {DOM|false} _parentDOM - родительский элемент в котором будет поиск
  * @return DOM or null
  */
-export function DOM(selector, parentDOM = false) {
-    const own = parentDOM || document;
+export function DOM(selector, _parentDOM = false) {
+    const own = _parentDOM || document;
     try {
         if (selector[0] === '#') {
             return own.getElementById(selector.substring(1));
@@ -21,11 +21,11 @@ export function DOM(selector, parentDOM = false) {
 /**
  * Возвращает массив объектов DOM с использованием селектора
  * @param {string} selector - строка запроса '#xxx'  '.xxx'  'xxx'
- * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
+ * @param {DOM|false} _parentDOM - родительский элемент в котором будет поиск
  * @return [DOM,DOM,DOM...] or []
  */
-export function DOMS(selector, parentDOM = false) {
-    const own = parentDOM || document;
+export function DOMS(selector, _parentDOM = false) {
+    const own = _parentDOM || document;
     try {
         return own.querySelectorAll(selector);
     } catch (e) {
@@ -47,8 +47,46 @@ export function $D(...p) {
     return undefined;
 }
 
-export default {
-    DOM,
-    DOMS,
-    $D,
-};
+/**
+ * Возвращает объект родительский DOM с использованием селектора
+ * @param {string|DOM} selector - строка запроса '#xxx'  '.xxx'  'xxx' , или объект DOM от которого ищем родителя
+ * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
+ * @return DOM or null
+ */
+export function parentDOM(selector, _parentDOM = false) {
+    try {
+        if (typeof selector === 'string') {
+            const dom = DOM(selector, _parentDOM);
+            if (dom) {
+                return dom.parentNode;
+            }
+        } else {
+            return selector.parentNode;
+        }
+    } catch (e) {
+        console.error('parentDOM', e);
+    }
+    return null;
+}
+
+/**
+ * Возвращает ссылку на подчиненные объекты DOM
+ * @param {string|DOM} selector - строка запроса '#xxx'  '.xxx'  'xxx' , или объект DOM от которого ищем родителя
+ * @param {DOM|false} parentDOM - родительский элемент в котором будет поиск
+ * @return DOM or null
+ */
+export function childDOM(selector, _parentDOM = false) {
+    try {
+        if (typeof selector === 'string') {
+            const dom = DOM(selector, _parentDOM);
+            if (dom) {
+                return dom.children;
+            }
+        } else {
+            return selector.children;
+        }
+    } catch (e) {
+        console.error('childDOM', e);
+    }
+    return null;
+}

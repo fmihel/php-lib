@@ -1,7 +1,7 @@
-const dom = require('./source/dom');
-const react = require('./source/react');
-const JX = require('./source/jx');
-const ut = require('./source/ut');
+import * as dom from './source/dom';
+import * as react from './source/react';
+import JX from './source/jx';
+import ut from './source/ut';
 
 module.exports = {
     ...dom,

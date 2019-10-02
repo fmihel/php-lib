@@ -1,5 +1,11 @@
 /* global describe,it,chai, */
-import { DOM, DOMS, $D } from '../source/dom';
+import {
+    DOM,
+    DOMS,
+    $D,
+    parentDOM,
+    childDOM,
+} from '../source/dom';
 
 describe('dom', () => {
     describe('DOM', () => {
@@ -51,6 +57,35 @@ describe('dom', () => {
             const res = $D(dom);
             console.info('DOM("#mocha-stats")', res);
             chai.expect((res) && ('a' in res) && (res.a === 1)).to.equal(true);
+        });
+    });
+    describe('parentDOM', () => {
+        it('parentDOM("body")', () => {
+            const res = parentDOM('body');
+            console.info('parentDOM("body")', res);
+            chai.expect((res && res.tagName === 'HTML')).to.equal(true);
+        });
+
+        it('parentDOM("#mocha-stats")', () => {
+            const res = parentDOM('#mocha-stats');
+            console.info('parentDOM("#mocha-stats")', res);
+            chai.expect((res && res.id === 'mocha')).to.equal(true);
+        });
+
+
+        it('parentDOM(DOM("#mocha-report"))', () => {
+            const dom = DOM('#mocha-report');
+            const res = parentDOM(dom);
+            console.info('parentDOM(DOM("#mocha-report"))', res);
+            chai.expect((res && res.id === 'mocha')).to.equal(true);
+        });
+    });
+
+    describe('childDOM', () => {
+        it('childDOM("#mocha-stats")', () => {
+            const res = childDOM('#mocha-stats');
+            console.info('childDOM("#mocha-stats")', res);
+            chai.expect((res && res.length > 0)).to.equal(true);
         });
     });
 });
