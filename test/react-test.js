@@ -25,7 +25,7 @@ describe('react', () => {
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
-            console.info('flex()', res);
+            // console.info('flex()', res);
             chai.expect(res).to.deep.equal(out);
         });
 
@@ -84,6 +84,50 @@ describe('react', () => {
                 flexDirection: 'row',
                 flexWrap: 'nowrap',
                 justifyContent: 'center',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{direct:"vert"}', () => {
+            const res = flex({ direct: 'vert' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{flexDirection:"vert"}', () => {
+            const res = flex({ flexDirection: 'vert' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+        it('{direct:"horiz"}', () => {
+            const res = flex({ direct: 'horiz' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
             };
             // console.info('flex', res);
             chai.expect(res).to.deep.equal(out);
@@ -158,7 +202,7 @@ describe('react', () => {
                 flexShrink: 2,
                 order: 5,
             };
-            console.info('flexChild()', res);
+            // console.info('flexChild()', res);
             chai.expect(res).to.deep.equal(out);
         });
     });

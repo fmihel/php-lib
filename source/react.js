@@ -72,6 +72,8 @@ export function flex(prop = {}, child = undefined) {
         alignItems: ['align'],
     };
     const aliasValues = {
+        row: ['horiz', 'horizont'],
+        column: ['vert', 'vertical'],
         'flex-start': ['start'],
         'flex-end': ['end'],
         'space-between': ['between'],
