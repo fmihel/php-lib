@@ -17,7 +17,7 @@ describe('JX', () => {
         it('pos("#mocha")', () => {
             const dom = DOM('#mocha');
             const res = JX.pos(dom);
-            console.log('res >> ', res);
+            // console.log('res >> ', res);
             chai.expect(res).to.have.property('x');
             chai.expect(res).to.have.property('y');
             chai.expect(res).to.have.property('w');
@@ -28,7 +28,7 @@ describe('JX', () => {
         it('abs("#mocha")', () => {
             const dom = DOM('#mocha');
             const res = JX.abs(dom);
-            console.log('res >> ', res);
+            // console.log('res >> ', res);
             chai.expect(res).to.have.property('x');
             chai.expect(res).to.have.property('y');
             chai.expect(res).to.have.property('w');

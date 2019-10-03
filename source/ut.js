@@ -86,6 +86,42 @@ const ut = {
         }
         return alias;
     },
+    /**
+     * перебор по элементам или свойствам
+     * При переборе по объекту в ф-цию func передается 4 параметра
+     * ( значение свойства, имя свойства, весь объект, порядковый номер )
+     *
+     * @param {object|array} o
+     * @param {function} func
+     * @return obj|Exception
+     */
+    each(o, func) {
+        let msg = '';
+        if (typeof func !== 'function') {
+            msg = 'func in ut.each(..,func) must be function';
+            console.error(msg);
+            throw Error(msg);
+        }
+
+        if (Array.isArray(o)) {
+            return o.find(func);
+        }
+        if (typeof o === 'object') {
+            try {
+                const keys = Object.keys(o);
+                const res = keys.find((key, i) => func(o[key], key, o, i));
+                return (res ? o[res] : undefined);
+            } catch (e) {
+                console.error(e);
+                throw Error(e);
+            }
+        }
+
+        msg = 'o in ut.each(o,..) must be array or object';
+        console.error(msg);
+        throw Error(msg);
+    },
+
 };
 
 export default ut;

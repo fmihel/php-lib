@@ -11,41 +11,41 @@ describe('dom', () => {
     describe('DOM', () => {
         it('DOM("body")', () => {
             const res = DOM('body');
-            console.info('DOM("body")', res);
+            // console.info('DOM("body")', res);
             chai.expect((res && res.tagName === 'BODY')).to.equal(true);
         });
 
         it('DOM("#mocha-stats")', () => {
             const res = DOM('#mocha-stats');
-            console.info('DOM("#mocha-stats")', res);
+            // console.info('DOM("#mocha-stats")', res);
             chai.expect((res && res.tagName === 'UL')).to.equal(true);
         });
 
 
         it('DOM(".progress")', () => {
             const res = DOM('.progress');
-            console.info('DOM(".progress")', res);
+            // console.info('DOM(".progress")', res);
             chai.expect((res && res.tagName === 'LI')).to.equal(true);
         });
     });
     describe('DOMS', () => {
         it('DOMS("div")', () => {
             const res = DOMS('div');
-            console.info('DOMS("div")', res);
+            // console.info('DOMS("div")', res);
             chai.expect((res !== [])).to.equal(true);
         });
 
 
         it('DOMS("#mocha-stats")', () => {
             const res = DOMS('#mocha-stats');
-            console.info('DOMS("#mocha-stats")', res);
+            // console.info('DOMS("#mocha-stats")', res);
             chai.expect((res !== [])).to.equal(true);
         });
 
 
         it('DOMS(".suite")', () => {
             const res = DOMS('.suite');
-            console.info('DOMS(".suite")', res);
+            // console.info('DOMS(".suite")', res);
             chai.expect((res !== [])).to.equal(true);
         });
     });
@@ -55,20 +55,20 @@ describe('dom', () => {
             const dom = DOM(sel);
             $D(dom, { a: 1, b: 2 });
             const res = $D(dom);
-            console.info('DOM("#mocha-stats")', res);
+            // console.info('DOM("#mocha-stats")', res);
             chai.expect((res) && ('a' in res) && (res.a === 1)).to.equal(true);
         });
     });
     describe('parentDOM', () => {
         it('parentDOM("body")', () => {
             const res = parentDOM('body');
-            console.info('parentDOM("body")', res);
+            // console.info('parentDOM("body")', res);
             chai.expect((res && res.tagName === 'HTML')).to.equal(true);
         });
 
         it('parentDOM("#mocha-stats")', () => {
             const res = parentDOM('#mocha-stats');
-            console.info('parentDOM("#mocha-stats")', res);
+            // console.info('parentDOM("#mocha-stats")', res);
             chai.expect((res && res.id === 'mocha')).to.equal(true);
         });
 
@@ -76,7 +76,7 @@ describe('dom', () => {
         it('parentDOM(DOM("#mocha-report"))', () => {
             const dom = DOM('#mocha-report');
             const res = parentDOM(dom);
-            console.info('parentDOM(DOM("#mocha-report"))', res);
+            // console.info('parentDOM(DOM("#mocha-report"))', res);
             chai.expect((res && res.id === 'mocha')).to.equal(true);
         });
     });
@@ -84,7 +84,7 @@ describe('dom', () => {
     describe('childDOM', () => {
         it('childDOM("#mocha-stats")', () => {
             const res = childDOM('#mocha-stats');
-            console.info('childDOM("#mocha-stats")', res);
+            // console.info('childDOM("#mocha-stats")', res);
             chai.expect((res && res.length > 0)).to.equal(true);
         });
     });
