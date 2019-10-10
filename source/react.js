@@ -22,14 +22,6 @@ export function flexChild(props = {}) {
         alignSelf: ['align'],
     };
 
-    const a = $.extend(true, {
-        grow: 1,
-        shrink: 1,
-        basis: 'auto',
-        align: 'auto',
-        order: 0,
-    }, props);
-
     const valids = {
         alignSelf: ['auto', 'flex-start', 'flex-end', 'center', 'space-between', 'space-around'],
     };
@@ -47,8 +39,16 @@ export function flexChild(props = {}) {
         return v;
     };
 
-    const p = {};
-    Object.keys(a).forEach((key) => { p[ut.alias(key, aliasNames)] = a[key]; });
+    const a = {};
+    Object.keys(props).forEach((key) => { a[ut.alias(key, aliasNames)] = props[key]; });
+
+    const p = $.extend(true, {
+        flexGrow: 1, // grow
+        flexShrink: 1, // shrink | decreese
+        flexBasis: 'auto', // basis
+        alignSelf: 'auto', // align
+        order: 0,
+    }, a);
 
 
     const out = {};
@@ -84,7 +84,7 @@ export function flex(prop = {}, child = undefined) {
         flexDirection: ['row', 'row-reverse', 'column', 'column-reverse'],
         flexWrap: ['nowrap', 'wrap', 'wrap-reverse'],
         justifyContent: ['flex-start', 'flex-end', 'center', 'space-between', 'space-around'],
-        alignItems: ['stretch', 'flex-start', 'flex-end', 'baseline'],
+        alignItems: ['stretch', 'flex-start', 'flex-end', 'baseline', 'center'],
         alignContent: ['stretch', 'flex-start', 'flex-end', 'baseline'],
     };
 
@@ -95,17 +95,20 @@ export function flex(prop = {}, child = undefined) {
         return v;
     };
 
-    const a = $.extend(true, {
-        direction: 'row',
-        wrap: 'nowrap',
-        content: 'flex-start',
-        align: 'stretch',
-        alignContent: 'stretch',
-    }, prop);
+    const a = {};
+    Object.keys(prop).forEach((key) => { a[ut.alias(key, aliasNames)] = prop[key]; });
+
+    const p = $.extend(true, {
+        flexDirection: 'row', // deirecrion | direct
+        flexWrap: 'nowrap', // wrap
+        justifyContent: 'flex-start', // content
+        alignItems: 'stretch', // align
+        alignContent: 'stretch', // alignContent
+    }, a);
 
 
-    const p = {};
-    Object.keys(a).forEach((key) => { p[ut.alias(key, aliasNames)] = a[key]; });
+    // const p = {};
+    // Object.keys(a).forEach((key) => { p[ut.alias(key, aliasNames)] = a[key]; });
     p.display = 'flex';
 
     const out = {};

@@ -14,6 +14,36 @@ describe('react', () => {
     });
     describe('flex', () => {
         // { display:"flex", alignContent: "stretch", alignItems:"stretch", flexDirection:"row", flexWrap:"nowrap", justifyContent: "flex-start" }
+        it('{alignItems:"center"}', () => {
+            const res = flex({ alignItems: 'center' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('{align:"center"}', () => {
+            const res = flex({ align: 'center' });
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
         it('flex()', () => {
             const res = flex();
 
