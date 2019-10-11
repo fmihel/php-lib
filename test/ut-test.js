@@ -105,7 +105,7 @@ describe('ut', () => {
             const res = ut.each({
                 a: 1, b: 3, c: 7, d: { f: 10 },
             }, (v, k) => (k === 'b'));
-            console.log('res >> ', res);
+            // console.log('res >> ', res);
             chai.expect(res).to.equal(3);
         });
         it('object loop all', () => {
@@ -116,7 +116,7 @@ describe('ut', () => {
                 // eslint-disable-next-line no-param-reassign
                 o[k] = `${v}a`;
             });
-            console.log('res >> ', res);
+            // console.log('res >> ', res);
             chai.expect(res).to.deep.equal({
                 a: '1a', b: '3a', c: '7a', d: '15a',
             });

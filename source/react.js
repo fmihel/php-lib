@@ -2,7 +2,7 @@ import ut from './ut';
 
 const flexScripts = {
     vert: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         flexWrap: 'nowrap',
         justifyContent: 'flex-start',
         alignItems: 'stretch',
@@ -10,7 +10,7 @@ const flexScripts = {
         display: 'flex',
     },
     horiz: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         flexWrap: 'nowrap',
         justifyContent: 'flex-start',
         alignItems: 'stretch',

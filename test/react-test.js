@@ -21,7 +21,7 @@ describe('react', () => {
                 alignContent: 'stretch',
                 alignItems: 'stretch',
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
                 flexGrow: 0,
@@ -29,8 +29,6 @@ describe('react', () => {
                 flexBasis: 'auto',
                 alignSelf: 'auto',
                 order: 0,
-
-
             };
             // console.info('flex', res);
             chai.expect(res).to.deep.equal(out);
@@ -43,7 +41,7 @@ describe('react', () => {
                 alignContent: 'stretch',
                 alignItems: 'stretch',
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
@@ -57,7 +55,7 @@ describe('react', () => {
                 alignContent: 'stretch',
                 alignItems: 'stretch',
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
