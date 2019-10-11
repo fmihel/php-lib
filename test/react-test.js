@@ -14,6 +14,57 @@ describe('react', () => {
     });
     describe('flex', () => {
         // { display:"flex", alignContent: "stretch", alignItems:"stretch", flexDirection:"row", flexWrap:"nowrap", justifyContent: "flex-start" }
+        it('"vert fixed"', () => {
+            const res = flex('vert fixed');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                alignSelf: 'auto',
+                order: 0,
+
+
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('"horiz"', () => {
+            const res = flex('horiz');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+        it('"vert"', () => {
+            const res = flex('vert');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
         it('{alignItems:"center"}', () => {
             const res = flex({ alignItems: 'center' });
 
@@ -25,7 +76,7 @@ describe('react', () => {
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
-            console.info('flex', res);
+            // console.info('flex', res);
             chai.expect(res).to.deep.equal(out);
         });
 
@@ -40,7 +91,7 @@ describe('react', () => {
                 flexWrap: 'nowrap',
                 justifyContent: 'flex-start',
             };
-            console.info('flex', res);
+            // console.info('flex', res);
             chai.expect(res).to.deep.equal(out);
         });
 

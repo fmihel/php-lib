@@ -1,4 +1,38 @@
 import ut from './ut';
+
+const flexScripts = {
+    vert: {
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        display: 'flex',
+    },
+    horiz: {
+        flexDirection: 'column',
+        flexWrap: 'nowrap',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        alignContent: 'stretch',
+        display: 'flex',
+    },
+    stretch: {
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: 'auto',
+        alignSelf: 'auto',
+        order: 0,
+    },
+    fixed: {
+        flexGrow: 0,
+        flexShrink: 1,
+        flexBasis: 'auto',
+        alignSelf: 'auto',
+        order: 0,
+    },
+};
+
 /**
  * Позволяет расширить наследуемые свойства текущими props
  * При этом свойства из props считаются более приоритетными
@@ -65,6 +99,15 @@ export function flexChild(props = {}) {
  * @param {*} prop
  */
 export function flex(prop = {}, child = undefined) {
+    if (typeof prop === 'string') {
+        let out = {};
+        prop.split(' ').forEach((name) => {
+            const p = flexScripts[name];
+            if (p) out = { ...out, ...p };
+        });
+        return out;
+    }
+
     const aliasNames = {
         flexDirection: ['direction', 'direct'],
         flexWrap: ['wrap'],
