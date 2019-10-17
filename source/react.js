@@ -179,9 +179,10 @@ export function flex(prop = {}, child = undefined) {
  * @param {*} hThis - ссылка на контекст (this)
  */
 export function binds(hThis/**/) {
+    const h = hThis;
     for (let i = 1; i < arguments.length; i++) {
         // eslint-disable-next-line prefer-rest-params
-        hThis[arguments[i]] = hThis[arguments[i]].bind(hThis);
+        h[arguments[i]] = h[arguments[i]].bind(h);
     }
 }
 
