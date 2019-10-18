@@ -1,6 +1,6 @@
 # Библиотека браузерных ф-ций 
 ## Установка
-`npm i fmihel-lib -D`
+`npm i fmihel-browser-lib -D`
 ## Набор ф-ций 
 |name|result|notes|
 |-----|-----|-----|
