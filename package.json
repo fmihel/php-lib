@@ -1,13 +1,15 @@
 {
-  "name": "browser-lib",
+  "name": "fmihel-browser-lib",
   "version": "0.0.1",
-  "description": "browser functions",
+  "description": "browser function js",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
+  "dependencies": {},
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -15,29 +17,14 @@
   },
   "keywords": [
     "browser",
-    "js",
     "javascript",
-    "react"
+    "react",
+    "js"
   ],
   "author": "fmihel76@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/fmihel/browser-lib/issues"
   },
-  "homepage": "https://github.com/fmihel/browser-lib#readme",
-  "dependencies": {
-    "fmihel-lib": "^1.0.0",
-    "jquery": "^3.4.1"
-  },
-  "devDependencies": {
-    "eslint": "^6.4.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-import-resolver-webpack": "^0.11.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-react": "^7.14.3",
-    "express": "^4.17.1",
-    "mocha": "^6.2.0",
-    "open": "^6.4.0",
-    "serve-favicon": "^2.5.0"
-  }
+  "homepage": "https://github.com/fmihel/browser-lib#readme"
 }
