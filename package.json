@@ -6,8 +6,6 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "scripts": {
     "test": "mocha"
   },
@@ -26,5 +24,22 @@
   "bugs": {
     "url": "https://github.com/fmihel/browser-lib/issues"
   },
-  "homepage": "https://github.com/fmihel/browser-lib#readme"
+  "homepage": "https://github.com/fmihel/browser-lib#readme",
+
+  "dependencies": {
+    "fmihel-lib": "^1.0.0",
+    "jquery": "^3.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-import-resolver-webpack": "^0.11.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-react": "^7.14.3",
+    "express": "^4.17.1",
+    "mocha": "^6.2.0",
+    "open": "^6.4.0",
+    "serve-favicon": "^2.5.0"
+  }
+
 }
