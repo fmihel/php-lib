@@ -1,26 +1,30 @@
 {
-  "name": "fmihel-browser",
+  "name": "browser-lib",
   "version": "0.0.1",
-  "description": "browser funcs",
+  "description": "browser functions",
   "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "node ./test/server"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fmihel/browser.git"
+    "url": "git+https://github.com/fmihel/browser-lib.git"
   },
   "keywords": [
     "browser",
+    "js",
     "javascript",
-    "js"
+    "react"
   ],
   "author": "fmihel76@gmail.com",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fmihel/browser/issues"
+    "url": "https://github.com/fmihel/browser-lib/issues"
   },
-  "homepage": "https://github.com/fmihel/browser#readme",
+  "homepage": "https://github.com/fmihel/browser-lib#readme",
   "dependencies": {
     "fmihel-lib": "^1.0.0",
     "jquery": "^3.4.1"
