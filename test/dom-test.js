@@ -13,6 +13,7 @@ describe('dom', () => {
         it('DOM("body")', () => {
             const res = DOM('body');
             // console.info('DOM("body")', res);
+
             chai.expect((res && res.tagName === 'BODY')).to.equal(true);
         });
 
