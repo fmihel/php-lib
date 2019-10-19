@@ -1,7 +1,7 @@
-/* global chai,describe,it */
+/* global describe,it */
+import chai from 'chai';
 import JX from '../source/jx';
 import { DOM } from '../source/dom';
-
 
 describe('JX', () => {
     it('screen()', () => {

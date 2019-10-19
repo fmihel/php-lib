@@ -8,8 +8,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const SOURCE_PATH = './test/';
 const PUBLIC_PATH = './test-build/';
 const TEMPLATE_PATH = './test/';
-const MEDIA_PATH = './';
-
+const MEDIA_PATH = './test/';
+// const HOSTNAME = 'localhost';
 module.exports = {
     entry: `${SOURCE_PATH}index.js`,
     output: {
@@ -24,6 +24,11 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /test\.js$/,
+                use: 'mocha-loader',
+                exclude: /node_modules/,
+            },
+            {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
@@ -37,7 +42,7 @@ module.exports = {
         ],
     },
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     devServer: {
         contentBase: PUBLIC_PATH,
         port: 3000,

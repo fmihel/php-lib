@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "build-test": "webpack",
-    "test": "node ./test/server"
+    "test-build": "webpack",
+    "test-dev": "webpack-dev-server --config webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -27,11 +27,12 @@
   },
   "homepage": "https://github.com/fmihel/browser-lib#readme",
   "dependencies": {
-    "chai": "^4.2.0",
+   
     "fmihel-lib": "^1.0.1",
     "jquery": "^3.4.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-react": "^7.0.0",
@@ -48,6 +49,7 @@
     "express": "^4.17.1",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^6.2.1",
+    "mocha-loader": "^3.0.0",
     "open": "^6.4.0",
     "serve-favicon": "^2.5.0",
     "style-loader": "^1.0.0",

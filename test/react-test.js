@@ -1,4 +1,5 @@
-/* global describe,it,chai,  */
+/* global describe,it  */
+import chai from 'chai';
 import { defaultProps, flex, flexChild } from '../source/react';
 
 describe('react', () => {

@@ -1,11 +1,4 @@
-import mocha from 'mocha';
-import test from './dom-test';
 
-$(() => {
-    mocha.setup();
-
-    test();
-
-    mocha.run();
-    mocha.checkLeaks();
-});
+const context = require.context('.', true, /.+-test\.js?$/);
+context.keys().forEach(context);
+module.exports = context;
