@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/fmihel/browser-lib#readme",
   "dependencies": {
-   
     "fmihel-lib": "^1.0.1",
     "jquery": "^3.4.1"
   },

@@ -1,6 +1,8 @@
 /* global describe,it  */
 import chai from 'chai';
-import { defaultProps, flex, flexChild } from '../source/react';
+import {
+    defaultProps, flex, flexChild, propsToState,
+} from '../source/react';
 
 describe('react', () => {
     describe('defaultProps', () => {
@@ -283,6 +285,35 @@ describe('react', () => {
                 order: 5,
             };
             // console.info('flexChild()', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+    });
+
+
+    describe('propsToState', () => {
+        it('this,"name","age"', () => {
+            const res = {
+                props: {
+                    name: 'Mike',
+                    age: 18,
+                    force: true,
+                },
+            };
+
+            propsToState(res, 'name', 'age');
+
+            const out = {
+                props: {
+                    name: 'Mike',
+                    age: 18,
+                    force: true,
+                },
+                state: {
+                    name: 'Mike',
+                    age: 18,
+                },
+            };
+            // console.info('flex()', res);
             chai.expect(res).to.deep.equal(out);
         });
     });

@@ -176,14 +176,28 @@ export function flex(prop = {}, child = undefined) {
  * vs
  * binds(this,'onMouseMove','onClick');
  *
- * @param {*} hThis - ссылка на контекст (this)
+ * @param {...any}  - первый параметра ссылка на объект, остальные - строковые имена функция
  */
-export function binds(hThis/**/) {
-    const h = hThis;
-    for (let i = 1; i < arguments.length; i++) {
-        // eslint-disable-next-line prefer-rest-params
-        h[arguments[i]] = h[arguments[i]].bind(h);
-    }
+export function binds(...a) {
+    let h = null;
+    a.forEach((v, i) => {
+        if (i === 0) { h = v; } else { h[v] = h[v].bind(h); }
+    });
 }
-
+/**
+ * стартовая инициализация состояний react одноименными данными из props
+ *
+ * @param  {...any} a - первый параметра ссылка на объект, остальные - строковые имена переменных из props
+ */
+export function propsToState(...a) {
+    let h = null;
+    a.forEach((v, i) => {
+        if (i === 0) {
+            h = v;
+            h.state = h.state === undefined ? {} : h.state;
+        } else {
+            h.state[v] = h.props[v];
+        }
+    });
+}
 // export default { defaultProps, flex, flexChild };
