@@ -17,6 +17,7 @@ const flexScripts = {
         alignContent: 'stretch',
         display: 'flex',
     },
+
     stretch: {
         flexGrow: 1,
         flexShrink: 1,
@@ -30,6 +31,22 @@ const flexScripts = {
         flexBasis: 'auto',
         alignSelf: 'auto',
         order: 0,
+    },
+    ':center': {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    ':left': {
+        justifyContent: 'flex-start',
+    },
+    ':right': {
+        justifyContent: 'flex-end',
+    },
+    ':top': {
+        justifyContent: 'flex-start',
+    },
+    ':bottom': {
+        justifyContent: 'flex-end',
     },
 };
 
@@ -101,7 +118,8 @@ export function flexChild(props = {}) {
 export function flex(prop = {}, child = undefined) {
     if (typeof prop === 'string') {
         let out = {};
-        prop.split(' ').forEach((name) => {
+
+        prop.replace(':', ' :').split(' ').forEach((name) => {
             const p = flexScripts[name];
             if (p) out = { ...out, ...p };
         });

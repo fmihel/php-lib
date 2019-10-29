@@ -17,6 +17,67 @@ describe('react', () => {
     });
     describe('flex', () => {
         // { display:"flex", alignContent: "stretch", alignItems:"stretch", flexDirection:"row", flexWrap:"nowrap", justifyContent: "flex-start" }
+
+        it('"fixed vert:center:bottom"', () => {
+            const res = flex('fixed vert:center:bottom');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-end',
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                alignSelf: 'auto',
+                order: 0,
+            };
+            console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('"fixed horiz:left"', () => {
+            const res = flex('fixed horiz:left');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'stretch',
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                alignSelf: 'auto',
+                order: 0,
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
+        it('"fixed vert:center"', () => {
+            const res = flex('fixed vert:center');
+
+            const out = {
+                alignContent: 'stretch',
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                justifyContent: 'center',
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                alignSelf: 'auto',
+                order: 0,
+            };
+            // console.info('flex', res);
+            chai.expect(res).to.deep.equal(out);
+        });
+
         it('"vert fixed"', () => {
             const res = flex('vert fixed');
 
