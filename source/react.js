@@ -119,7 +119,7 @@ export function flex(prop = {}, child = undefined) {
     if (typeof prop === 'string') {
         let out = {};
 
-        prop.replace(':', ' :').split(' ').forEach((name) => {
+        ut.replaceAll(prop, ':', ' :').split(' ').forEach((name) => {
             const p = flexScripts[name];
             if (p) out = { ...out, ...p };
         });
