@@ -2,6 +2,30 @@
 import ut from '../source/ut';
 
 describe('ut', () => {
+    describe('replaceAll', () => {
+        it(' "яблоки на снегу, как яблоки на снегу","яблоки","апельсины"', () => {
+            const str = 'яблоки на снегу, как яблоки на снегу';
+            const find = 'яблоки';
+            const to = 'апельсины';
+            const out = 'апельсины на снегу, как апельсины на снегу';
+            const res = ut.replaceAll(str, find, to);
+            // console.info(res);
+            chai.expect(res).to.equal(out);
+        });
+    });
+
+    describe('replaceAll', () => {
+        it(' "apple is not pineapple, is a apple","apple","orange"', () => {
+            const str = 'apple is not pineapple, is a apple';
+            const find = 'apple';
+            const to = 'orange';
+            const out = 'orange is not pineorange, is a orange';
+            const res = ut.replaceAll(str, find, to);
+            // console.info(res);
+            chai.expect(res).to.equal(out);
+        });
+    });
+
     it('random(10,100)', () => {
         const res = ut.random(10, 100);
         // console.info('random(10,100)', res);

@@ -11,6 +11,16 @@ const ut = {
         return res;
     },
     /**
+     * Заменяет все вхождения search на replaceTo в строке str
+     * @param {*} str исходная строка
+     * @param {*} search искомая замена
+     * @param {*} replaceTo на что будем менять
+     */
+    replaceAll(str, search, replaceTo) {
+        return str.replace(new RegExp(search, 'g'), replaceTo);
+    },
+
+    /**
      * Получить значение дочернего свойства используя цепочку аргументов
      * Example:
      * let a = { b: {f:[0,1,2,{c:"text"}]}}
@@ -109,7 +119,7 @@ const ut = {
         if (typeof o === 'object') {
             try {
                 const keys = Object.keys(o);
-                const res = keys.find((key, i) => func(o[key], key, o, i));
+                const res = keys.find((key, i) => func(o[key], key, o, keys.length));
                 return (res ? o[res] : undefined);
             } catch (e) {
                 console.error(e);
@@ -121,6 +131,8 @@ const ut = {
         console.error(msg);
         throw Error(msg);
     },
+
+
 
 };
 
