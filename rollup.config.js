@@ -7,7 +7,7 @@ export default {
     input: './source/index.js',
     output: {
         file: './dist/fmihel-lib.js',
-        format: 'umd', // umd cjs iife
+        format: 'iife', // umd cjs iife
         name: 'fmihel_lib',
     },
     plugins: [
