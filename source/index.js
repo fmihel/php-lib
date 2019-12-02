@@ -1,5 +1,3 @@
-const ut = require('./ut').default;
+import ut from './ut';
 
-module.exports = {
-    ut,
-};
+export default ut;
