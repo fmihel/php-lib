@@ -2,13 +2,14 @@
   "name": "fmihel-browser-lib",
   "version": "0.2.1",
   "description": "browser function js",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test-build": "webpack",
-    "test-dev": "webpack-dev-server --config webpack.config.js"
+    "test-dev": "webpack-dev-server --config webpack.config.js",
+    "build-dist": "webpack --config webpack.build.js"
   },
   "repository": {
     "type": "git",
