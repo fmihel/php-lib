@@ -1,9 +1,9 @@
-const dom = require('./dom');
-const react = require('./react');
-const JX = require('./jx').default;
-const ut = require('./ut').default;
+import * as dom from './dom';
+import * as react from './react';
+import JX from './jx';
+import ut from './ut';
 
-module.exports = {
+export default {
     ...dom,
     ...react,
     JX,

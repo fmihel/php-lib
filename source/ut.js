@@ -1,4 +1,4 @@
-import { ut as inner } from 'fmihel-lib';
+import fl from 'fmihel-lib';
 
 const ut = {
     /** пустышка  */
@@ -8,5 +8,5 @@ const ut = {
 };
 
 export default {
-    ...inner, ...ut,
+    ...fl.ut, ...ut,
 };

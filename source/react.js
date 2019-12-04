@@ -1,4 +1,4 @@
-import { ut } from 'fmihel-lib';
+import ut from './ut';
 
 const flexScripts = {
     vert: {
