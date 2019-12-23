@@ -1,6 +1,6 @@
 {
   "name": "fmihel-browser-lib",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "browser function js",
   "main": "./index.js",
   "directories": {
