@@ -34,7 +34,16 @@ export class Storage {
             ...this.param,
             ...param,
         };
-        return true;
+        try {
+            if (p.type === 'cookie') {
+                // eslint-disable-next-line no-useless-escape
+                const matches = document.cookie.match(new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1')}=([^;]*)`));
+                return !!matches;
+            }
+            return (p.type === 'session' ? (sessionStorage.getItem(name) !== null) : (localStorage.getItem(name) !== null));
+        } catch (e) {
+            return false;
+        }
     }
 
     del(name, param = {}) {
@@ -42,6 +51,15 @@ export class Storage {
             ...this.param,
             ...param,
         };
+        if (p.type === 'cookie') {
+            this.set(name, '', { ...p, cookie_expires: -1 });
+        } else if (this.exist(name, p)) {
+            if (p.type === 'session') {
+                sessionStorage.removeItem(name);
+            } else {
+                localStorage.removeItem(name);
+            }
+        }
     }
 
     static pack(val) {
@@ -93,6 +111,7 @@ export class Storage {
         try {
             if (this.exist(name, param)) {
                 if (param.type === 'cookie') {
+                    // eslint-disable-next-line no-useless-escape
                     const matches = document.cookie.match(new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1')}=([^;]*)`));
                     if (matches) {
                         return decodeURIComponent(matches[1]);

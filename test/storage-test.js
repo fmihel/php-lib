@@ -33,7 +33,6 @@ describe('storage', () => {
             const res = storage.get('test');
             chai.expect(res).to.equal(eq);
         });
-
         it('set/get(object)', () => {
             const eq = {
                 str: 'jesn', num: 100, auth: { name: 'Mike', bool: true }, arr: [1, 4, 5],
@@ -42,13 +41,31 @@ describe('storage', () => {
             const res = storage.get('test_obj');
             chai.expect(res).to.deep.equal(eq);
         });
+        it('not exist', () => {
+            const name = 'hwwjkehdjkwhdw22';
+            const res = storage.exist(name);
+            chai.expect(res).to.equal(false);
+        });
+        it('exist', () => {
+            const name = 'test';
+            const res = storage.exist(name);
+            chai.expect(res).to.equal(true);
+        });
+
+        it('del', () => {
+            const name = 'for_del';
+            storage.set(name, { obj: 'name' });
+            storage.del(name);
+            const res = storage.exist(name);
+            chai.expect(res).to.equal(false);
+        });
     });
     describe('cookie', () => {
         it('set/get(string)', () => {
             const param = { type: 'cookie' };
             const eq = 'Mike';
-            storage.set('test', eq, param);
-            const res = storage.get('test', param);
+            storage.set('test_z', eq, param);
+            const res = storage.get('test_z', param);
             chai.expect(res).to.equal(eq);
         });
 
@@ -60,6 +77,27 @@ describe('storage', () => {
             storage.set('test_obj', eq, param);
             const res = storage.get('test_obj', param);
             chai.expect(res).to.deep.equal(eq);
+        });
+        it('exist', () => {
+            const param = { type: 'cookie' };
+            const name = 'test_z';
+            const res = storage.exist(name, param);
+            chai.expect(res).to.equal(true);
+        });
+        it('not exist', () => {
+            const param = { type: 'cookie' };
+            const name = 'hwwssjkehdjkwhdw22';
+            const res = storage.exist(name, param);
+            chai.expect(res).to.equal(false);
+        });
+        it('del', () => {
+            const param = { type: 'cookie' };
+            const name = 'for_del';
+
+            storage.set(name, { obj: 'name' }, param);
+            storage.del(name, param);
+            const res = storage.exist(name, param);
+            chai.expect(res).to.equal(false);
         });
     });
 });
