@@ -2,6 +2,7 @@ import * as dom from './dom';
 import * as react from './react';
 import JX from './jx';
 import ut from './ut';
+import storage, { Storage } from './storage';
 
 export default {
     DOM: dom.DOM,
@@ -18,4 +19,6 @@ export default {
 
     JX,
     ut,
+    storage,
+    Storage,
 };

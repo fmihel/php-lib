@@ -13,6 +13,8 @@ export const {
     defaultProps,
     JX,
     ut,
+    storage,
+    Storage,
 } = dist;
 
 
@@ -29,4 +31,6 @@ export default {
     defaultProps,
     JX,
     ut,
+    storage,
+    Storage,
 };
