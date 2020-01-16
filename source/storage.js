@@ -2,7 +2,7 @@
 export class Storage {
     constructor(param = {}) {
         this.param = {
-            default: false,
+            default: undefined,
             type: 'local', // local session cookie
             cookie_expires: 315400000, /* 10 years */
             cookie_path: '/',
@@ -120,9 +120,10 @@ export class Storage {
                 }
                 return (param.type === 'session' ? (sessionStorage.getItem(name)) : (localStorage.getItem(name)));
             }
+
             throw new Error(`${name} is not exists`);
         } catch (e) {
-            console.error(e);
+            if (param.default === undefined) console.error(e);
             return Storage.pack(param.default);
         }
     }

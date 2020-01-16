@@ -27,6 +27,19 @@ describe('storage', () => {
     });
 
     describe('local', () => {
+        it('get(notExists)', () => {
+            const name = 'notExistsVar0394';
+            const res = storage.get(name);
+            chai.expect(res).to.equal(undefined);
+        });
+
+        it('get(notExists,default)', () => {
+            const name = 'notExistsVar536';
+            const def = { name: 'Mike', age: 10 };
+            const res = storage.get(name, { default: def });
+            chai.expect(res).to.deep.equal(res);
+        });
+
         it('set/get(string)', () => {
             const eq = 'Mike';
             storage.set('test', eq);
@@ -41,6 +54,7 @@ describe('storage', () => {
             const res = storage.get('test_obj');
             chai.expect(res).to.deep.equal(eq);
         });
+
         it('not exist', () => {
             const name = 'hwwjkehdjkwhdw22';
             const res = storage.exist(name);
