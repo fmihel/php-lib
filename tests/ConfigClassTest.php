@@ -2,13 +2,13 @@
 namespace fmihel\lib\test;
 
 use PHPUnit\Framework\TestCase;
-use fmihel\lib\Config;
+use fmihel\lib\ConfigClass;
 
 $config = null;
 function getConfig(){
     global $config;
     if ($config === null){
-        $config = new Config();
+        $config = new ConfigClass();
         $config->loadFromFile(__DIR__.'/data/config.php');
     }
     return $config;
