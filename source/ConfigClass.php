@@ -54,7 +54,7 @@ class ConfigClass{
                 
             }else{
                 $abs =  Dir::abs_path($__DIR__,$file);
-                $file = Dir::rel_path($this->appPath,$abs);                
+                $file = Dir::rel_path($s['appPath'],$abs);                
             }    
         };    
         $abs = Dir::abs_path($s['appPath'],$file);    

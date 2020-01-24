@@ -25,7 +25,7 @@ class Config{
         $config = self::get_config();
         $config->def($name,$value);
     }
-    public function loadFromFile($__DIR__,$file='',$reopen=false){
+    public static function loadFromFile($__DIR__,$file='',$reopen=false){
         $config = self::get_config();
         return $config->loadFromFile($__DIR__,$file,$reopen);
     }
