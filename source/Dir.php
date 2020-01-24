@@ -1,7 +1,7 @@
 <?php
 namespace fmihel\lib;
 
-define('_DIR_SEPARATOR','/');
+define('_DIRECTORY_SEPARATOR','/');
 
 class Dir{
     /**
@@ -12,7 +12,7 @@ class Dir{
         /*учитываем вариант когда точка находится в имени корневой папки*/
         $root =  substr($_SERVER['DOCUMENT_ROOT'],strrpos($_SERVER['DOCUMENT_ROOT'],'/')+1);
 
-        $dirs = explode(_DIR_SEPARATOR,trim($dir));
+        $dirs = explode(_DIRECTORY_SEPARATOR,trim($dir));
         $out = '';
         
         $is_dos = false;
@@ -23,10 +23,10 @@ class Dir{
 				}	
         
         for($i=0;$i<count($dirs);$i++)
-            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?_DIR_SEPARATOR:'').$dirs[$i]:'');
+            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?_DIRECTORY_SEPARATOR:'').$dirs[$i]:'');
         
         $last=$dirs[count($dirs)-1];
-        return ((($left)&&(!$is_dos))?_DIR_SEPARATOR:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?_DIR_SEPARATOR:'');
+        return ((($left)&&(!$is_dos))?_DIRECTORY_SEPARATOR:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?_DIRECTORY_SEPARATOR:'');
     }
     
     public static function pathinfo($file){
@@ -184,7 +184,7 @@ class Dir{
         
     }    
     
-    static function lstruct($path,$exts=array()){
+    private static function lstruct($path,$exts=array()){
         $struct = self::struct($path,$exts);
         $out = array();
         for($i=0;$i<count($struct);$i++){
@@ -332,6 +332,51 @@ class Dir{
             return false;
             
         return $res;    
+    }
+    /** 
+     * Получение абсолютного пути из from в to
+    */
+    public static function abs_path($from,$to = ''){
+        if ($to !== '')
+        {
+            $to     = self::slash($to,true,false);
+            $from   = self::slash($from,false,false).self::slash($to,true,false);
+        };
+            
+        $path = $from;
+        $path = str_replace(array('/', '\\'), _DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(_DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) 
+        {
+            if ('.' == $part) 
+                continue;
+            if ('..' == $part) 
+            {
+                array_pop($absolutes);
+            }else{
+                $absolutes[] = $part;
+            };
+        };
+        return self::slash(implode(_DIRECTORY_SEPARATOR, $absolutes),false,true);
+    }
+    /**
+     * Получение относительного пути
+     * from = '/home/decoinf3/public_html/test/myproject/';
+     * to = '/home/decoinf3/public_html/rest/a
+     * result ../../rest/a
+     */
+    static function rel_path($from,$to){
+        
+        $ps = _DIRECTORY_SEPARATOR;
+        $arFrom = explode($ps, rtrim($from, $ps));
+        $arTo = explode($ps, rtrim($to, $ps));
+        while(count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0]))
+        {
+            array_shift($arFrom);
+            array_shift($arTo);
+        }
+        return str_pad("", count($arFrom) * 3, '..'.$ps).implode($ps, $arTo);
     }
     
     
