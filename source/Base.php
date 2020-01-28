@@ -1,4 +1,5 @@
 <?php
+namespace fmihel\lib;
 
 class _db{
     public $db;
@@ -36,17 +37,16 @@ class Base{
         if (isset(self::$_base[$base]))
             return true;
         
-        $db = new mysqli($server,$user,$pass,$base_name);
+        $db = new \mysqli($server,$user,$pass,$base_name);
 
         if ($db->connect_errno){
             $msg = "can`t connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-            
+            error_log($msg);
             if ($die){
                 echo $msg;
                 exit;
             }
 
-            self::log($msg,__LINE__);
             return false;
         }
         
@@ -84,7 +84,7 @@ class Base{
      * 
     */
     public static function charSet($coding=null,$base=null){
-            /** убираем путаницу с UTF-8 и utf8 */ 
+            // убираем путаницу с UTF-8 и utf8 
             if (!is_null($coding)){
                 $coding = strtolower($coding);
                 if ($coding==='utf-8')
@@ -92,14 +92,13 @@ class Base{
             }    
             
             $_base = self::getbase($base);
-            if ($_base===false) 
-                return false;
                 
             if (is_null($coding)){
                 return $_base->charset;
             }else{
+                
                 if ($coding === '') 
-                    return false;
+                    self::doThrow(__METHOD__,$base,'coding must not be empty ');
                     
                 if ($coding === 'story'){
                     
@@ -111,149 +110,116 @@ class Base{
                 }else if ($coding === 'restory'){
                     $_base->db->set_charset(array_pop(self::$_codings[$base]));
                 }else if (!$_base->db->set_charset($coding)) {
-                    self::log('error set charSet = '.$coding,__LINE__);
-                    return false;
+                    self::doThrow(__METHOD__,$base,'error set charSet = '.$coding);
                 }else
                     $_base->charset = $coding;
-            
-                return true;
             }    
-        
     }
-    
-    private static function getbase($base){
-        if (count(self::$_base)===0) return false;
+    /**  
+     * return base or raise Exception 
+     * */
+    private static function getbase($base,$exception = true){
+        
+        if (count(self::$_base)===0) {
+            if ($exception)
+                throw new \Exception(__CLASS__.__METHOD__.": no have initializing base", 0);
+            return false;
+        }   
         
         $keys = array_keys(self::$_base);
-        if (is_null($base)) $base = $keys[0]; 
+        if (is_null($base)) 
+            $base = $keys[0]; 
 
-        return  isset(self::$_base[$base])?self::$_base[$base]:false;
+        if (isset(self::$_base[$base]))
+            return self::$_base[$base];
+        
+        if ($exception)
+            throw new \Exception(__CLASS__.__METHOD__.": base $base is not exists", 0);
+
+        return false;
+        
     }
     
     private static function db($base){
-        $base  = self::getbase($base);
-        return  $base===false?false:$base->db;
-        
+        return self::getbase($base)->db;
     }
-    private static function dbE($base){
-        $result = self::db($base);
-        if (!$result)
-            throw new \Exception(" not exists basename = '$base'");
-        return $result;
-    }
-    
-    private static function _storyError($base){
-        $_base = self::getbase($base);
-        if ($_base===false) 
-            return;
-        else{    
-            $err = $_base->db->error;
-            if ($err!==''){
-                if ($_base->error!==$err){
-                    $_base->error = $err;
-                    $_base->errors[]=$err;
-                }
-            }
-        }
-    }
-    
+
     public static function error($base){
         $_base = self::getbase($base);
-        if ($_base)
-            return $_base->error;
-        else
-            return "not exists base='$base'";
+        return $_base->db->error;
     }
-    public static function query($sql,$base=null,$coding=null){
+
+    public static function query($sql,$base,$coding=null){
         $db = self::db($base);
-        if (!$db) return false;
         
         if (!is_null($coding)){
             $story  =   self::charSet(null,$base);
             self::charSet($coding,$base);
-            self::_storyError($base);
         }    
-        
 
         $res =  $db->query($sql);
-        self::_storyError($base);
-        
-        if (!is_null($coding)){
-            self::charSet($story,$base);
-            self::_storyError($base);
-        }    
+        if ($res === false)
+            self::doThrow(__METHOD__,$base,$sql);
             
-
+        
+        if (!is_null($coding))
+            self::charSet($story,$base);
+        
+            
         return $res;
 
     }
     
-    private static function doThrow($sql,$base,$error_msg=''){
-        throw new \Exception($error_msg.($error_msg!==''?' ':'').self::error($base).' in "'.$sql.'"');
-    }
-    /** выполняет запрс, в случае ошибки вызывает исключение с описанием ошибки */
-    public static function queryE($sql,$base=null,$coding=null,$error_msg=''){
+    private static function doThrow($method,$base,...$msgs){
+        $msg = '';
 
-        if (!self::query($sql,$base,$coding))
-            self::doThrow($sql,$base,$error_msg);
+        foreach($msgs as $m){
+            if ($msg !== '') $msg.="\n";
+            if (gettype($m) === 'string')
+                $msg.=$m;
+            else
+                $msg.=print_r($m,true);
+        }
+
+        
+        if (self::getbase($base,false)!==false) {
+            $error = self::error($base);
+            if ($error)
+                $msg = $error."\n".$msg;
+        }
+        
+        throw new \Exception($method.' '.$msg);
     }
 
-
-    public static function assign($ds){
-        return ($ds!==false);    
-    }
     /**
      * @return  false - если ошибка
      * @return object - если запрос выполнен
      */
-    public static function ds($sql,$base=null,$coding=null){
+    public static function ds($sql,$base,$coding=null){
 
-        $db = self::db($base);
-        if (!$db)
-            return false;
-
-        if (!is_null($coding)){
-            $story  =   self::charSet(null,$base);
-            self::charSet($coding,$base);
-            self::_storyError($base);
-        }
-        
-        
-        $ds = $db->query($sql);
-        self::_storyError($base);
-        
-        if (!is_null($coding)){
-            self::charSet($story,$base);
-            self::_storyError($base);
-        }    
-            
-        if (!$ds)
-            return false;
-        else{
-            $ds->data_seek(0);
-            return $ds;    
-        }                    
-    }
-    public static function dsE($sql,$base=null,$coding=null,$error_msg=''){
-        $ds = self::ds($sql,$base,$coding);
-        if (!$ds)
-            self::doThrow($sql,$base,$error_msg);
+        $ds = self::query($sql,$base,$coding);
+        $ds->data_seek(0);
         return $ds;
     }
-    
+    /**
+     * 
+     */
+    public static function assign($ds){
+        return (gettype($ds)==='object');    
+    }
     public static function isEmpty($ds){
-        return ( ($ds===false) || ($ds->num_rows===0) );
+        return ( (!self::assign($ds)) || ($ds->num_rows===0) );
     }
     /**
      * Возвращает кол-во записей запроса sql или в ds
      * если задать countFieldName, то будет искать соответсвтвующее поле и выдаст его значение
      * можно задать countFieldName как число, тогда это будет номер необходимого поля
      */
-    public static function count($sqlOrDs,$base=null,$countFieldName=''){
+    public static function count($sqlOrDs,$base = null,$countFieldName=''){
         
         $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base,null):$sqlOrDs;
         if (!$ds)
-            throw new Exception('Error in ds');
+            self::doThrow(__METHOD__,$base,'can`t get ds from sqlOrDs =  ',$sqlOrDs);
         $type = gettype($countFieldName);
 
         if (($countFieldName!='')||($type==='integer')){
@@ -282,28 +248,26 @@ class Base{
     }
 
     /** список таблиц */
-    public static function tables($base=null){
-        $res = array();
+    public static function tables($base){
+        $res = [];
+        
         $q = 'SHOW TABLES';
         $ds = self::ds($q,$base);
-        if ($ds){
-            
-            while(self::by($ds,$row))
-                foreach($row as $field => $table)
-                    array_push($res,$table);    
-        }
+        while($row = self::read($ds)){
+            foreach($row as $field => $table)
+                array_push($res,$table);    
+        };
             
         return $res;    
 
     }
     public static function haveField($field,$tableName,$base=null){
-        $list = self::fieldsInfo($tableName,true,$base);
+        $list = self::fieldsInfo($tableName,$base,true);
         return (array_search($field,$list)!==false);
     }    
     /** 
      * сокращенное имя типа возвращаемое по SHOW COLUMNS FROM...
     */
-    
     private static function shorType($type){
         $match = [
             'int'       =>'int',
@@ -332,34 +296,23 @@ class Base{
      *  short = 'types' список [поле=>тип,...]
      *  short = false|'full' полную информацию [ [Fiel=>'name',Type=>'string',...], ..] ]
     */
-    public static function fieldsInfo($tableName,$short=true,$base=null){
-        $out = array();
+    public static function fieldsInfo($tableName,$base,$short=true){
+        $out = [];
+        
         $q = 'SHOW COLUMNS FROM `'.$tableName.'`';
         $ds = self::ds($q,$base);
-        if ($ds){
-            $row=[];
-            while(self::by($ds,$row)){
-                
-                if (($short===true)||($short==='short')){
-                    $out[] = $row['Field'];
-                }elseif($short === 'types'){
-                    $out[$row['Field']] = self::shorType($row['Type']);
-                }else{
-                    $out[]=$row;
-                    /*
-                    array_push($out,array(
-                        'Field'=>$row['Field'],
-                        'Type'=>$row['Type'],
-                        'Key'=>$row['Key'],
-                        'Extra'=>$row['Extra']
-                    ));
-                    */
-                    
-                }
-                
+        
+        while($row = self::read($ds)){
+            
+            if (($short===true)||($short==='short')){
+                $out[] = $row['Field'];
+            }elseif($short === 'types'){
+                $out[$row['Field']] = self::shorType($row['Type']);
+            }else{
+                $out[]=$row;
             }
-        }else
-            _LOG("Error [$q]",__FILE__,__LINE__);
+            
+        }
             
         return $out;    
         
@@ -368,9 +321,9 @@ class Base{
     public static function fields($ds,$short_info=true){
         $ff = $ds->fetch_fields();
         if ($short_info){
-            $out = array();
+            $out = [];
             for($i=0;$i<count($ff);$i++)
-                array_push($out,$ff[$i]->name);
+                $out[] = $ff[$i]->name;
             
             return $out;
             
@@ -476,69 +429,36 @@ class Base{
         };
     }
     
+    /**
+     * перемещает указатель на первую запись
+     */
     public static function first($ds){
         $ds->data_seek(0);
     }
-    
+    /** 
+     * возвращает текущую строку
+     * если строки закончились или их нет, то возвращает NULL
+    */
     public static function row($sqlOrDs,$base=null,$coding=null){
         
         $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base,$coding):$sqlOrDs;
-        if ($ds)        
-            return $ds->fetch_assoc();
-        else
-            return false;
-    }
-    public static function rowE($sqlOrDs,$base=null,$coding=null,$error_msg=''){
         
-        $ds = gettype($sqlOrDs)==='string'?self::dsE($sqlOrDs,$base,$coding,$error_msg):$sqlOrDs;
-        if (!$ds)
-            self::doThrow($sqlOrDs,$base,$error_msg);
+        if (self::isEmpty($ds))
+            return NULL;
+        
         return $ds->fetch_assoc();
     }
     
     public static function rows($sqlOrDs,$base=null,$coding=null){
-
+        $out = [];
         $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base,$coding):$sqlOrDs;
-
-        if ($ds){
-            $out = array();
-            while(self::by($ds,$row))
-                array_push($out,$row);
-
-            return $out;
-        }
-        
-        return array();    
-    
-    }
-    public static function rowsE($sqlOrDs,$base=null,$coding=null,$error_msg=''){
-
-        $ds = gettype($sqlOrDs)==='string'?self::dsE($sqlOrDs,$base,$coding,$error_msg):$sqlOrDs;
-
-        if ($ds){
-            $out = array();
-            while(self::by($ds,$row))
-                array_push($out,$row);
-
-            return $out;
-        }else
-            self::doThrow($sqlOrDs,$base,$error_msg);
-
+        while($row = self::read($ds))
+            array_push($out,$row);
+        return $out;
     }
     
-    public static function by($ds,&$row){
-        /*
-            $ds = base::ds('...');
-            while(base::by($ds)){
-                
-            }
-        */
-        $row = $ds->fetch_assoc();
-        return ($row!==NULL);
-    }
     /**
      * используется для чтения строки из dataset
-     * 
      * Ex:
      * $ds = base::ds(...)l
      * while($row=base::read($ds)){
@@ -551,141 +471,75 @@ class Base{
         return $ds->fetch_assoc();
     }
 
-    public static function loop($sqlOrDs,$func,$base=null){
-        /*
-            base::loop('select * ...',function($row){
-                echo $row['ID'];
-                // use return true for stop!!!
+    public static function value($sql,$base,$param=[]){
+        $p = array_merge([
+            'field'     =>'',
+            'default'   =>null,
+            'coding'    =>null,
+            'limit'     =>true
+        ],$param);
 
-            })
-        */
-        if (is_null($func)) return false;
+        $field      = $p['field'];
+        $default    = $p['default'];
+        $coding     = $p['coding'];
         
-        $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base):$sqlOrDs;
-        
-        if (self::assign($ds)){
-           while(self::by($ds,$row)){
-                if ($func($row))
-                    break;
-           }
-           return true;
-        }
+        try {
+
+            if ($p['limit']===true){
+                if (preg_match('/\s+limit\s+[0-9]+[\s\S]*\Z/m', $sql)!==1)
+                    $sql.=' limit 1';
+            }            
+
+            $ds = self::ds($sql,$base,$coding);
             
-        return false;
-    }
-
-    public static function asTable($sqlOrDs,$base=null){
-        $c = '';
-        $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base):$sqlOrDs;
-        
-        $fields = self::fields($ds);
-        
-        $c.='<tr>';
-        for($i=0;$i<count($fields);$i++){
-            $c.='<td>'.$fields[$i].'</td>';
-        }
-        $c.='</tr>';
-        
-        
-        if (self::isEmpty($ds)){
-            $c.='<tr><td colspan="'.(count($fields)).'">empty</td></tr>';
+            $fields = self::fields($ds);
             
-        }else{    
-            $row = array();
-            while(self::by($ds,$row)){
-                $_c='';
-                foreach($row as $name=>$mean)
-                    $_c.='<td>'.$mean.'</td>';
-
-                $c.='<tr>'.$_c.'</tr>';
-            }
-        }
-        return '<table border=1 cellpadding=0 cellspacing=0>'.$c.'</table>';
-    }
-
-
-    public static function val($sql,$default='',$base=null,$coding=null){
-        return self::value($sql,'',$default,$base,$coding); 
-    }
-
-    public static function valE($sql,$default='',$base=null,$coding=null,$error_msg=''){
-        return self::valueE($sql,'',$default,$base,$coding,$error_msg); 
-    }
-
-    public static function value($sql,$field='',$default='',$base=null,$coding=null){
-        
-        $ds = self::ds($sql,$base,$coding);
-        
-        if (!$ds) 
-            return $default;
-
-        $fields = self::fields($ds);
-        
-        if ($field === '')
-            $field = $fields[0];
-        else if (array_search($field,$fields)===false) return $default;
-        
-        if (self::isEmpty($ds))
-            return $default;
-        else{    
+            if ($field === '')
+                $field = $fields[0];
+            else if (array_search($field,$fields)===false)
+                throw new \Exception(" field = ['$field'] not exist", 0);
+                
+            if (self::isEmpty($ds))
+                throw new \Exception('result of ['.$sql.'] is empty',0);
+            
             $row = self::row($ds);
             return $row[$field];
-        };    
-        
-    }    
-    public static function valueE($sql,$field='',$default='',$base=null,$coding=null,$error_msg=''){
-        
-        $ds = self::dsE($sql,$base,$coding,$error_msg);
-        
-        $fields = self::fields($ds);
-        
-        if ($field === '')
-            $field = $fields[0];
-        else if (array_search($field,$fields)===false)
-            self::doThrow($sql,$base,$error_msg." field ='$field' not exists");
-            
-        
-        if (self::isEmpty($ds))
-            return $default;
-        else{    
-            $row = self::rowE($ds,null,null,$error_msg);
-            return $row[$field];
-        };    
-        
+
+        } catch (\Exception $e) {
+            if ($default === null)
+                self::doThrow(__METHOD__,$base,$e->getMessage());
+        };
+
+        return $default;
     }    
     
-    public static function startTransaction($base=null){
+    public static function startTransaction($base){
         $b = self::getbase($base);
-        if (!$b) return false;
         
         if ($b->transaction==0)
             $b->db->autocommit(false);    
         $b->transaction+=1;
         return true;
     }
-    
-    public static function commit($base=null){
+
+    public static function commit($base){
         $b = self::getbase($base);
-        if (!$b) return false;
-        
+
         $b->transaction-=1;
         
         if ($b->transaction==0){
-
             $b->db->commit();
             return true;
         }
         
-        if ($b->transaction<0){ 
-            self::_log('transaction overflow loop...');
-        }
+        if ($b->transaction<0)
+            self::doThrow(__METHOD__,$base,'transaction overflow loop...');
         
         return false;
     }
     
     public static function rollback($base=null){
         $b = self::getbase($base);
-        if (!$b) return false;
         
         $b->transaction-=1;
         
@@ -694,15 +548,15 @@ class Base{
             return true;
         }
         
-        if ($b->transaction<0){ 
-            self::_log('transaction overflow loop...');
-        }
+        if ($b->transaction<0)
+            self::doThrow(__METHOD__,$base,'transaction overflow loop...');
         
         return false;
         
     }
     
-    private static function _uuidProxy(){
+    private static function uuidProxy(){
+        
         $chrLeft  = 97; //a
         $chrRight  = 102;//f
         $chr0  = 48;
@@ -718,42 +572,21 @@ class Base{
         return chr($code);
     }
         
-    private static function _uuid($count=32){
+    public static function uuid($count=32){
         $uuid = '';
         for($i=0;$i<$count;$i++)
-            $uuid.=self::_uuidProxy();
-        return $uuid;
-    }
-        
-    public static function uuid($count=32){
-        return self::_uuid($count);
+            $uuid.=self::uuidProxy();
+        return $uuid;        
     }
     
     public static function insert_uuid($table,$index,$base,$fieldUUID='UUID',$countUUID=32){
         $uuid = self::uuid($countUUID);
 
         $q='insert into `'.$table.'` set `'.$fieldUUID."` = '".$uuid."'";
-        
-        if (!self::query($q,$base)){
-            self::_log("Error [$q]",__LINE__);
-            return false;
-        }    
+        self::query($q,$base);
 
         $q = 'select `'.$index.'` from `'.$table.'` where `'.$fieldUUID."`='".$uuid."'";
-
         return self::value($q,$index,false,$base);
-        
-    }
-    public static function insert_uuidE($table,$index,$base,$fieldUUID='UUID',$countUUID=32,$error_msg=''){
-        
-        $uuid = self::uuid($countUUID);
-
-        $q='insert into `'.$table.'` set `'.$fieldUUID."` = '".$uuid."'";
-        self::queryE($q,$base,null,$error_msg);
-
-        $q = 'select `'.$index.'` from `'.$table.'` where `'.$fieldUUID."`='".$uuid."'";
-
-        return self::valueE($q,$index,false,$base,null,$error_msg);
         
     }
 
@@ -787,10 +620,9 @@ class Base{
     *   
     * @return string|bool    вернет либо запрос, либо false если ни одного поля не было добавлено в запрос
     */
-    public static function dataToSQL($queryType,$table,$data,$param=array()){
-        
-    
-        $types      = isset($param['types'])?$param['types']:array();
+    public static function generate($queryType,$table,$data,$param=[]){
+
+        $types      = isset($param['types'])?$param['types']:[];
         $bTypes     = count($types)>0;
         
         $exclude    = isset($param['exclude'])?$param['exclude']:array();
@@ -813,19 +645,15 @@ class Base{
                 }
             }
         }
-        
 
         $where      =  trim(isset($param['where'])?$param['where']:'');
         if ( ($where!=='') && (mb_strpos(strtoupper($where),'WHERE')!==0))
             $where =  'where '.$where;
         
-
         $pref     =  isset($param['alias'])?$param['alias']:array();
         if (is_string($pref))
             $pref=array($pref);
         $bPref    = count($pref)>0;
-            
-        
         
         if ( isset($param['refactoring'])  &&  $param['refactoring'] === true ){
             $bRef = true;
@@ -909,14 +737,15 @@ class Base{
         if ($is_empty) 
             return false;
         else{    
+            $result = false;
             if ($queryType === 'insert'){
-                return 'insert into '.$DCR."`$table` ".$CR."(".$CR."$insertBlockLeft".$CR.") ".$CR."values ($insertBlockRight) ";
+                $result = 'insert into '.$DCR."`$table` ".$CR."(".$CR."$insertBlockLeft".$CR.") ".$CR."values ($insertBlockRight) ";
             }elseif ($queryType === 'update'){
-                return 'update '.$DCR."`$table` ".$CR."set $updateBlock ".$CR.$where.' ';
+                $result = 'update '.$DCR."`$table` ".$CR."set $updateBlock ".$CR.$where.' ';
             }elseif($queryType === 'insertOnDuplicate'){
-                return 'insert into '.$DCR."`$table` ".$CR."(".$CR."$insertBlockLeft".$CR.") ".$CR."values ($insertBlockRight) ".$CR."on duplicate key update "."$updateBlock ";
+                $result = 'insert into '.$DCR."`$table` ".$CR."(".$CR."$insertBlockLeft".$CR.") ".$CR."values ($insertBlockRight) ".$CR."on duplicate key update "."$updateBlock ";
             }
-            //return ($queryType==='insert'?'insert into ':'update ').$DCR."`$table` ".$CR.($queryType==='insert'?"(".$CR."$insertBlockLeft".$CR.") ".$CR."values ($insertBlockRight) ":"set $insertBlockLeft ").$CR;
+            return trim($result);
         }
     }
 
@@ -991,32 +820,6 @@ class Base{
         return $res.' '.$CR;
     }
         
-    /** генератор запроса select 
-    */
-    public static function select($tabs,$join=null,$where=''){
-        $CR = baseSetup::CR();
-        $out = '';
-        $exists = array();
-        
-        foreach($tabs as $i=>$select){
-            
-            $fields = (gettype($i)==='integer'?$select::fields('default',$exists):$i::fields($select,$exists));
-            /*--------------------------*/
-
-            $out.=($out!==''?','.$CR:'').$fields;
-            
-        }
-        $out='select distinct'.$CR.$out;
-        if (is_object($join))
-            $out.=$CR.'from'.$CR.$join->asString();
-        else if (is_string($join))
-            $out.=$CR.'from'.$CR._table::macro($join);
-        
-        if (strlen($where)>0)
-            $out.=$CR._table::macro($where);
-        
-        return $out;
-    }
     public static function real_escape($string,$base=null){
         $db = self::db($base);
         if (!$db) 
@@ -1025,127 +828,10 @@ class Base{
             return $db->real_escape_string($string);
     }
     
-    public static function esc($string,$base=null){
-        //$db = self::db($base);
-        //if (!$db) return $string;
-        //return $db->real_escape_string($string);
-        if (baseSetup::removeEscape()){
-            $from = array('"');
-            $to   = array('\"');
-            return str_replace($from,$to,$string);
-        }else
-            return $string;
-        
-    }
-    
-    /** генерирует тестовыеданные, для запроса select 
-     * используется для проверки возможности обработки данных update и insert
-    */
-    public static function testSelectData($tabs){
-        
-        $data = array();
-        
-        foreach($tabs as $i=>$select){
-
-            if (gettype($i)==='integer'){
-                $table = $select;
-                $get = 'default';
-            }else{
-                $table = $i;
-                $get = $select;
-            };
-            
-            $fields = $table::$select[$get];
-            $types = $table::$types;
-            foreach($fields as $k=>$field){
-                $mean = STR::random(10);
-                
-                if (isset($types[$field])){
-                    
-                    $t = $types[$field];
-                    if ($t==='int')
-                        $mean = rand(0,10000);
-                    elseif (($t==='float')||($t==='double'))
-                        $mean = rand(10,100)/rand(5,7);
-                    elseif ($t=='string')    
-                        $mean = STR::random(10);
-                    elseif ($t=='date')    
-                        $mean = rand(1,9).'/'.rand(1,12).'/'.rand(2000,2018);
-                        
-                }
-                
-                $data[$table::pref($field)] = $mean;
-            }
-            
-        }
-        return $data;
-        
-    }
-    
-    /** принудительная типизация 
-     *  используется константа COMMON_TYPE_STRING из модуля common.php
-     *  Ex1:
-     * 
-     *  $ds = base::ds('select *,CAPTION CC from K_TOVAR where ID_K_TOVAR = 23674');
-     *  $rows = base::rows($ds);
-     *  $fields = base::fields($ds,false);
-     * 
-     *  $rows = base::forcedTyping($rows,$ds); // будут помечены все строковые поля
-     *  or
-     *  $rows = base::forcedTyping($rows,$fields); // будут помечены все строковые поля
-     *  or
-     *  $rows = base::forcedTyping($rows,'ID_K_TOVAR,CC'); // будут помечены только ID_K_TOVAR и CC
-     *  or 
-     *  $rows = base::forcedTyping($rows); // все будут помечены как строки
-     *  
-     * 
-    */
-    public static function forcedTyping($rowOrRows,$fieldsOrDs=array()){
-        
-         $aType = TYPE::info($fieldsOrDs);
-         
-         if ($aType==='object'){
-            $fieldsOrDs = self::fields($fieldsOrDs,false);
-            $aType = 'array';
-         }    
-        
-         if ($aType==='array'){
-            $fields = array();
-            for($i=0;$i<count($fieldsOrDs);$i++){
-                $fType = TYPE::info($fieldsOrDs[$i]);
-                if ($fType==='string')
-                    $fields[]=$fieldsOrDs[$i];
-                else{
-                    $o = $fieldsOrDs[$i];
-                    if ($o->stype ==='string'){
-                        $fields[]=$o->name;
-                    }
-                }    
-            };
-
-         }elseif($aType==='string'){
-             $fields = trim($fieldsOrDs);
-
-             if ($fields[0]!=='[')
-                $fields='['.$fields.']';
-                
-             $fields = ARR::extend($fields);
-         }
-         
-         $type = TYPE::info($rowOrRows);
-         
-         
-         return ARR::forcedTyping($rowOrRows,$fields);
-         
-    
-         
-    }
-    
-    public static function log($msg,$line=0){
-        
-        $msg = gettype($msg)==='object'?print_r($msg,true):$msg;
-        
-        error_log('['.__FILE__.$line.'] '.$msg);
+    public static function esc($string){
+        $from = array('"');
+        $to   = array('\"');
+        return str_replace($from,$to,$string);
     }
     
 };
