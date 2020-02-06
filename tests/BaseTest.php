@@ -180,6 +180,57 @@ final class BaseTest extends TestCase{
         // ----------------------------------------        
         $result = Base::generate('insertOnDuplicate',$table,$data,array_merge($param,['exclude'=>'ID']));
         $equal = 'insert into `MY_TABLE` (`NAME`,`AGE`,`STORY`) values ("Mike",12,"ok") on duplicate key update `NAME`="Mike",`AGE`=12,`STORY`="ok"';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+
+        $result = Base::generate('update',$table,$data,['where'=>'ID=::ID','types'=>$types]);
+        $equal = 'update `MY_TABLE` set `NAME`="Mike",`AGE`=12,`STORY`="ok",`ID`=102934 where ID=102934';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+        $result = Base::generate('update',$table,$data,['where'=>'ID=::ID and AGE=::AGE','exclude'=>'NAME','types'=>$types]);
+        $equal = 'update `MY_TABLE` set `AGE`=12,`STORY`="ok",`ID`=102934 where ID=102934 and AGE=12';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+        $result = Base::generate(
+            'update',
+            'DEALER',
+            [
+                'ID_DEALER' =>  1839,
+                'NAME'      =>  ['Mike','string'],
+                'DAY'       =>  10,
+                'ARCH'      =>  [1,'string'],
+            ],
+            [
+                'where' =>'ID_DEALER=::ID_DEALER or ARCH="1"',
+                'exclude'=>['ID_DEALER','ARCH']
+            ]
+        );
+
+        $equal = 'update `DEALER` set `NAME`="Mike",`DAY`=10 where ID_DEALER=1839 or ARCH="1"';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+        // ----------------------------------------        
+        $result = Base::generate(
+            'update',
+            'DEALER',
+            [
+                'ID_DEALER' =>  1839,
+                'NAME'      =>  ['Mike','string'],
+                'DAY'       =>  10,
+                'ARCH'      =>  [1,'string'],
+            ],
+            [
+                'rename'=>['ID_DEALER'=>'ID'],    
+                'where' =>'ID=::ID or ARCH="1"',
+                'exclude'=>['ID','ARCH']
+            ]
+        );
+
+        $equal = 'update `DEALER` set `NAME`="Mike",`DAY`=10 where ID=1839 or ARCH="1"';
         error_log($result);
         self::assertSame($result,$equal);
         // ----------------------------------------        
