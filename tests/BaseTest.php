@@ -60,7 +60,26 @@ final class BaseTest extends TestCase{
     /**
      * @depends test_connect
      */    
+    public function test_charSet(){
+        // ------------------------------
+        // charset is not set
+        $cs = Base::charSet('test');
+        self::assertSame($cs,'');
+        // ------------------------------
+        // first set charset (cant restory)
+        Base::charSet('test','utf8');
+        $cs = Base::charSet('test');
+        self::assertSame($cs,'utf8');
+        // ------------------------------
+    }
+    /**
+     * @depends test_connect
+     */    
     public function test_ds(){
+        // ------------------------------
+        $q = 'select * from '.TABLE_FILL;
+        $ds = Base::ds($q,'test','utf8');
+        self::assertTrue( Base::assign($ds) );
         // ------------------------------
         $q = 'select * from '.TABLE_FILL;
         $ds = Base::ds($q,'test');

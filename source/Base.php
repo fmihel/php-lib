@@ -105,19 +105,26 @@ class Base{
      * set or return charset
      * 
      * example set default charset
-     * base::charSet('UTF-8','mybase');
+     * base::charSet('mybase','UTF-8');
      * 
      * example return default charset
-     * $v = base::charSet(null,'mybase');
+     * $v = base::charSet('mybase');
      *
      * example: story/restory codings
-     * base::charSet('story','mybase');
-     * base::charSet('UTF-8','mybase');
+     * base::charSet('mybase','story');
+     * base::charSet('mybase','UTF-8');
      * ...
-     * base::charSet('restory','mybase');
+     * base::charSet('mybase','restory');
      * 
     */
-    public static function charSet($coding=null,$base=null){
+    public static function charSet($base=null,$coding=null){
+            
+            if ( (gettype($coding) === 'string')){
+                if ($coding === '')
+                    $coding = null;
+            }else
+                $coding = null;
+
             // убираем путаницу с UTF-8 и utf8 
             if (!is_null($coding)){
                 $coding = strtolower($coding);
@@ -131,8 +138,8 @@ class Base{
                 return $_base->charset;
             }else{
                 
-                if ($coding === '') 
-                    self::doThrow(__METHOD__,$base,'coding must not be empty ');
+                //if ($coding === '') 
+                //    self::doThrow(__METHOD__,$base,'coding must not be empty ');
                     
                 if ($coding === 'story'){
                     
@@ -187,8 +194,8 @@ class Base{
         $db = self::db($base);
         
         if (!is_null($coding)){
-            $story  =   self::charSet(null,$base);
-            self::charSet($coding,$base);
+            $story  =   self::charSet($base);
+            self::charSet($base,$coding);
         }    
 
         $res =  $db->query($sql);
@@ -197,7 +204,7 @@ class Base{
             
         
         if (!is_null($coding))
-            self::charSet($story,$base);
+            self::charSet($base,$story);
         
             
         return $res;
