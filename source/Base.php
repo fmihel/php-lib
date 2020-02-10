@@ -42,9 +42,6 @@ class Base{
     */
     public static function connect($server,$user='',$pass='',$baseName='',$alias='',$die = true){
 
-        if (isset(self::$_base[$alias]))
-            return true;
-        
         if (gettype($server)==='array'){
             
             $p = array_merge([
@@ -62,8 +59,18 @@ class Base{
             $baseName   = $p['baseName'];
             $alias      = $p['alias'];
             $die        = $p['die'];
+            
+        };
+        
+        if ( ($server!=='') && ($user==='') && ($pass==='') && ($baseName === '')  && ($alias === '') ) {
+            return isset(self::$_base[$server])?true:false;
         }
+        
 
+        if (isset(self::$_base[$alias])){
+            return true;
+        }
+        
         $db = new \mysqli($server,$user,$pass,$baseName);
 
         if ($db->connect_errno){

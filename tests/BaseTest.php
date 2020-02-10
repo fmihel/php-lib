@@ -30,6 +30,7 @@ final class BaseTest extends TestCase{
 
     }    
     public function test_connect(){
+        /*
         $connect = Base::connect(
             Config::get('server'),
             Config::get('user'),
@@ -37,6 +38,8 @@ final class BaseTest extends TestCase{
             Config::get('baseName'),
             'test'
         );
+        */
+        $connect = Base::connect('test');
         self::assertTrue( $connect === true);
     }
 
