@@ -11,7 +11,7 @@ class _db{
     public $server;
     public $user;
     public $pass;
-    public $base_name;
+    public $name;
     */
     function __construct(){
         $this->db=null;
@@ -31,13 +31,40 @@ class Base{
 
     static private $_base = array();
     static private $_codings = array();
+    /** 
+     * @param string | array $server server name or ['server'=>...,'user'=>...,...]
+     * @param string $user -   user name
+     * @param string $pass -  password
+     * @param string $baseName - base name
+     * @param string $alias - alias for base
+     * @param bool $die - if true then exit from script if connect error
+     * @return bool
+    */
+    public static function connect($server,$user='',$pass='',$baseName='',$alias='',$die = true){
 
-    public static function connect($server,$user,$pass,$base_name,$base,$die = true){
-
-        if (isset(self::$_base[$base]))
+        if (isset(self::$_base[$alias]))
             return true;
         
-        $db = new \mysqli($server,$user,$pass,$base_name);
+        if (gettype($server)==='array'){
+            
+            $p = array_merge([
+                'server'    =>'',
+                'user'      =>'',
+                'pass'      =>'',
+                'base'      =>'',
+                'alias'     =>'',
+                'die'       =>true
+            ],$server);
+
+            $server     = $p['server'];
+            $user       = $p['user'];
+            $pass       = $p['pass'];
+            $baseName   = $p['baseName'];
+            $alias      = $p['alias'];
+            $die        = $p['die'];
+        }
+
+        $db = new \mysqli($server,$user,$pass,$baseName);
 
         if ($db->connect_errno){
             $msg = "can`t connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
@@ -53,7 +80,7 @@ class Base{
         $_db = new _db();
         $_db->db = $db;
         
-        self::$_base[$base]=$_db;
+        self::$_base[$alias]=$_db;
         
         return true;
         

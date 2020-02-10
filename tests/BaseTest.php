@@ -17,20 +17,24 @@ final class BaseTest extends TestCase{
     public static function setUpBeforeClass(): void
     {
         Config::loadFromFile(__DIR__.'/data/configBase.php');
+        /*
         Base::connect(
             Config::get('server'),
             Config::get('user'),
             Config::get('pass'),
-            Config::get('base'),
+            Config::get('baseName'),
             'test'
         );
+        */
+        Base::connect(Config::get('test'));
+
     }    
     public function test_connect(){
         $connect = Base::connect(
             Config::get('server'),
             Config::get('user'),
             Config::get('pass'),
-            Config::get('base'),
+            Config::get('baseName'),
             'test'
         );
         self::assertTrue( $connect === true);
