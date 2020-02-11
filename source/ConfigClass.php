@@ -72,7 +72,7 @@ class ConfigClass{
             $ext = pathinfo($file,PATHINFO_EXTENSION);
             if ($ext ==='php'){
                 require_once $file;
-                $this->param = ARR::extend($this->param,${$s['varName']});
+                $this->param = Arr::extend($this->param,${$s['varName']});
                 if (array_search($abs,$this->loadedFiles)===false)
                     $this->loadedFiles[]=$abs;
                 return true;
