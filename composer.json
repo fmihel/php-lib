@@ -10,7 +10,8 @@
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "fmihel/console-log": "^0.0.2"
     },
     "autoload": {
         "psr-4": {

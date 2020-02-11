@@ -3,6 +3,7 @@ namespace fmihel\lib\test;
 
 use PHPUnit\Framework\TestCase;
 use fmihel\lib\{Config,Base};
+use fmihel\console;
 
 define('TABLE_FILL','test_clients');
 define('TABLE_EMPTY','test_clients_phone');
@@ -57,6 +58,75 @@ final class BaseTest extends TestCase{
          $res = Base::query($q,'test2');
          // --------------------------------------------
     }
+    /**
+     * @depends test_ds
+     */    
+    public function test_fields(){
+        // ------------------------------
+        // charset is not set
+        $q = 'select * from '.TABLE_FILL;
+        $ds = Base::ds($q,'test');
+        $fields = Base::fields($ds);
+        $eq = ['ID_CLIENT','NAME','AGE','LAST_MODIFY','SUM','UUID'];
+        self::assertSame($fields,$eq);
+        // ------------------------------
+        $q = 'select ID_CLIENT oid,NAME oName from '.TABLE_FILL;
+        $ds = Base::ds($q,'test');
+        $out = Base::fields($ds,false);
+        $fields = [];
+        foreach($out as $obj)
+            $fields[]=(array)$obj;
+        $eq = [ 
+            [
+                "name"=>"oid",
+                "orgname"=>"ID_CLIENT",
+                "table"=>"test_clients",
+                "orgtable"=>"test_clients",
+                "def"=>"",
+                "db"=>"_wd_test",
+                "catalog"=>"def",
+                "max_length"=>2,
+                "length"=>11,
+                "charsetnr"=>63,
+                "flags"=>49667,
+                "type"=>3,
+                "decimals"=>0,
+                "stype"=>"int",
+            ],[
+                "name"=>"oName",
+                "orgname"=>"NAME",
+                "table"=>"test_clients",
+                "orgtable"=>"test_clients",
+                "def"=>"",
+                "db"=>"_wd_test",
+                "catalog"=>"def",
+                "max_length"=>11,
+                "length"=>768,
+                "charsetnr"=>33,
+                "flags"=>4097,
+                "type"=>253,
+                "decimals"=>0,
+                "stype"=>"string",
+            ]
+        ];
+        self::assertSame($fields,$eq);
+        // ------------------------------
+        $q = 'select ID_CLIENT oid,NAME oName from '.TABLE_FILL;
+        $ds = Base::ds($q,'test');
+        $fields = Base::fields($ds,['name','table']);
+        $eq = [ 
+            [
+                "name"=>"oid",
+                "table"=>"test_clients",
+            ],[
+                "name"=>"oName",
+                "table"=>"test_clients",
+            ]
+        ];
+        self::assertSame($fields,$eq);
+        // ------------------------------
+    }
+
     /**
      * @depends test_connect
      */    
@@ -257,7 +327,7 @@ final class BaseTest extends TestCase{
         );
 
         $equal = 'update `DEALER` set `NAME`="Mike",`DAY`=10 where ID=1839 or ARCH="1"';
-        error_log($result);
+        //error_log($result);
         self::assertSame($result,$equal);
         // ----------------------------------------        
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90c0766ebe4be173d0f9c082fa6f84db",
+    "content-hash": "956ea86f663bd0a16d730fd1c42b60b1",
     "packages": [],
     "packages-dev": [
         {
@@ -62,6 +62,42 @@
                 "instantiate"
             ],
             "time": "2019-10-21T16:45:58+00:00"
+        },
+        {
+            "name": "fmihel/console-log",
+            "version": "v0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fmihel/console-log.git",
+                "reference": "df3312e38521a4250b642e0f2c6f5d3678fb40fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fmihel/console-log/zipball/df3312e38521a4250b642e0f2c6f5d3678fb40fe",
+                "reference": "df3312e38521a4250b642e0f2c6f5d3678fb40fe",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "fmihel\\": "source"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "fmihel",
+                    "email": "fmihel76@gmail.com"
+                }
+            ],
+            "description": "error,log,console,php,javascript,js,error_log,console.log,console.info",
+            "time": "2020-02-04T06:34:23+00:00"
         },
         {
             "name": "myclabs/deep-copy",

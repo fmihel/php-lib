@@ -358,10 +358,27 @@ class Base{
         return $out;    
         
     }
-    
+    /** 
+     * возвращает информацию о полях результата запроса
+     * @param object $ds - ссылка на результат запроса
+     * @param bool | array $short_info true-короткая информация, false полная информация ,[field1,field2,..] - только выборочные поля из запроса
+     * @return array | object
+    */
     public static function fields($ds,$short_info=true){
         $ff = $ds->fetch_fields();
-        if ($short_info){
+        if (gettype($short_info) === 'array'){
+            $out = [];
+            for($i=0;$i<count($ff);$i++){
+                $item = (array)$ff[$i];
+                $dat = [];
+                foreach($short_info as $info){
+                    if (isset($item[$info]))
+                        $dat[$info] = $item[$info]; 
+                }
+                $out[] = $dat;
+            }
+            return $out;
+        }elseif ($short_info){
             $out = [];
             for($i=0;$i<count($ff);$i++)
                 $out[] = $ff[$i]->name;
