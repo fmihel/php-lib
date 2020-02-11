@@ -644,7 +644,7 @@ class Base{
         self::query($q,$base);
 
         $q = 'select `'.$index.'` from `'.$table.'` where `'.$fieldUUID."`='".$uuid."'";
-        return self::value($q,$index,false,$base);
+        return self::value($q,$base,['field'=>$index]);
         
     }
 
