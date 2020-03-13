@@ -3,6 +3,7 @@ import * as react from './react';
 import JX from './jx';
 import ut from './ut';
 import storage, { Storage } from './storage';
+import dvc from './dvc';
 
 export default {
     DOM: dom.DOM,
@@ -21,4 +22,5 @@ export default {
     ut,
     storage,
     Storage,
+    dvc,
 };

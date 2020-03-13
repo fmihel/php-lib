@@ -12,8 +12,9 @@ export const propsToState  = dist.propsToState;
 export const defaultProps  = dist.defaultProps;
 export const JX         = dist.JX;
 export const ut         = dist.ut;
-export const storage  = dist.storage;
-export const Storage  = dist.Storage;
+export const storage    = dist.storage;
+export const Storage    = dist.Storage;
+export const dvc        = dist.dvc;
 
 
 export default dist;
