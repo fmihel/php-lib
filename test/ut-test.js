@@ -40,4 +40,11 @@ describe('ut', () => {
             chai.expect(res).to.equal(out);
         });
     });
+    describe('translate', () => {
+        it('translate(1,0,10,0,100)=10', () => {
+            const res = ut.translate(1, 0, 10, 0, 100);
+            // console.info('test', res);
+            chai.expect((res)).to.equal(10);
+        });
+    });
 });
