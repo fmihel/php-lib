@@ -146,4 +146,23 @@ describe('ut', () => {
             });
         });
     });
+
+
+    describe('translate', () => {
+        it('translate(1,0,10,0,100) = 10', () => {
+            const res = ut.translate(1, 0, 10, 0, 100);
+            chai.expect(res).to.equal(10);
+        });
+        it('translate(-4,-5,0,0,5) = 1', () => {
+            const res = ut.translate(-4, -5, 0, 0, 5);
+            chai.expect(res).to.equal(1);
+        });
+
+        it('translate(-10,10,10,200,400) = Exception', (done) => {
+            chai.expect(() => {
+                ut.translate(-10, 10, 10, 200, 400);
+            }).to.throw('translate param y1 == y2 !');
+            done();
+        });
+    });
 });
