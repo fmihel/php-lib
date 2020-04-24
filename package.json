@@ -1,6 +1,6 @@
 {
   "name": "fmihel-browser-lib",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "browser function js",
   "main": "dist/fmihel-browser-lib.min.js",
   "directories": {
@@ -14,7 +14,6 @@
     "webpack-build": "webpack",
     "webpack-build-min": "webpack --prod",
     "build": "npm run webpack-build && npm run webpack-build-min"
-  
   },
   "repository": {
     "type": "git",
