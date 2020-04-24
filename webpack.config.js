@@ -19,8 +19,8 @@ module.exports = {
         library: 'fmihel-browser-lib',
     },
     externals: {
-        'fmihel-lib': 'fm',
-        jquery: 'jQuery',
+        'fmihel-lib': 'fmihel-lib',
+        jquery: 'jquery',
     },
     module: {
         rules: [
