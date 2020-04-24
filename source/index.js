@@ -1,9 +1,26 @@
 import * as dom from './dom';
 import * as react from './react';
-import JX from './jx';
-import ut from './ut';
-import storage, { Storage } from './storage';
-import dvc from './dvc';
+import _JX from './jx';
+import _ut from './ut';
+import _storage, { Storage } from './storage';
+import _dvc from './dvc';
+
+export const DOM = dom.DOM;
+export const DOMS= dom.DOMS;
+export const childDOM= dom.childDOM;
+export const $D= dom.$D;
+export const parentDOM= dom.parentDOM;
+
+export const binds= react.binds;
+export const flex= react.flex;
+export const flexChild= react.flexChild;
+export const propsToState= react.propsToState;
+export const defaultProps= react.defaultProps;
+
+export const JX=_JX;
+export const ut=_ut;
+export const storage=_storage;
+export const dvc=_dvc;
 
 export default {
     DOM: dom.DOM,
