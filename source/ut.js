@@ -1,6 +1,6 @@
-import ut from 'fmihel-lib';
+import fm from 'fmihel-lib';
 
-const _ut = {
+const ut = {
     _changeLocation: {
         list: [],
         observer: undefined,
@@ -55,5 +55,5 @@ const _ut = {
 };
 
 export default {
-    ...ut, ..._ut,
+    ...fm.ut, ...ut,
 };

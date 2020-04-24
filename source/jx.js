@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 const JX = {
     _params: {
         screen: {

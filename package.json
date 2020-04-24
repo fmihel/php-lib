@@ -2,15 +2,19 @@
   "name": "fmihel-browser-lib",
   "version": "1.4.0",
   "description": "browser function js",
-  "main": "./index.js",
+  "main": "dist/fmihel-browser-lib.min.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test-build": "webpack",
-    "test-dev": "webpack-dev-server --config webpack.config.js",
-    "build-dist": "rollup -c rollup.config.js",
-    "build-dist-min": "rollup -c rollup.config.min.js"
+    "test-build": "webpack webpack.config.test.js",
+    "test-dev": "webpack-dev-server --config webpack.config.test.js",
+    "rollup-build-dist": "rollup -c rollup.config.js",
+    "rollup-build-dist-min": "rollup -c rollup.config.min.js",
+    "webpack-build": "webpack",
+    "webpack-build-min": "webpack --prod",
+    "build": "npm run webpack-build && npm run webpack-build-min"
+  
   },
   "repository": {
     "type": "git",
@@ -28,9 +32,6 @@
     "url": "https://github.com/fmihel/browser-lib/issues"
   },
   "homepage": "https://github.com/fmihel/browser-lib#readme",
-  "dependencies": {
-    "jquery": "^3.5.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
@@ -47,7 +48,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.19.0",
     "express": "^4.17.1",
-    "fmihel-lib": "^1.2.1",
+    "fmihel-server-lib": "^0.1.0",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^6.2.3",
     "mocha-loader": "^3.0.0",
@@ -62,5 +63,9 @@
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "fmihel-lib": "^1.2.1",
+    "jquery": "^3.5.0"
   }
 }

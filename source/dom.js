@@ -1,3 +1,4 @@
+import $ from 'jquery';
 /* global jQuery */
 /**
  * Возвращает объект DOM с использованием селектора
