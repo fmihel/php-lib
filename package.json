@@ -1,6 +1,6 @@
 {
   "name": "fmihel-lib",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "most commonly js functions ",
   "main": "dist/fmihel-lib.min.js",
   "scripts": {
