@@ -1,8 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 // const HtmlWebPackPlugin = require('html-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { defArg } = require('fmihel-server-lib');
 
 

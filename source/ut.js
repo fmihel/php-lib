@@ -1,5 +1,5 @@
 
-const ut = {
+export default {
     random(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
@@ -153,4 +153,4 @@ const ut = {
 };
 
 
-export default ut;
+// export default ut;

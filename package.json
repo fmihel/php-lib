@@ -2,13 +2,14 @@
   "name": "fmihel-lib",
   "version": "1.2.1",
   "description": "most commonly js functions ",
-  "main": "index.js",
+  "main": "dist/fmihel-lib.js",
   "scripts": {
     "test": "node ./test/server",
-    "webpack-build-lib-dev": "webpack",
-    "webpack-build-prod": "webpack --prod",
-    "build-lib": "rollup -c rollup.config.js",
-    "build-lib-min": "rollup -c rollup.config_min.js"
+    "webpack-build": "webpack",
+    "webpack-build-min": "webpack --prod",
+    "rollup-build-lib": "rollup -c rollup.config.js",
+    "rollup-build-lib-min": "rollup -c rollup.config_min.js",
+    "build":"npm run webpack-build && npm run webpack-build-min"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "@babel/preset-react": "^7.7.4",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",

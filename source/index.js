@@ -1,3 +1,4 @@
-import ut from './ut';
+import _ut from './ut';
 
-export default ut;
+export const ut = _ut;
+export default { ut };
