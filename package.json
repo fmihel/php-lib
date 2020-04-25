@@ -65,8 +65,10 @@
     "fmihel-lib": "^1.2.3",
     "jquery": "^3.5.0"
   },
+  "dependencies": {
+    "fmihel-lib": ">=1.2.3"
+  },
   "peerDependencies": {
-    "fmihel-lib": "^1.2.3",
     "jquery": "^3.5.0"
   }
 }
