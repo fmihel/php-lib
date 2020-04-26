@@ -1,9 +1,9 @@
 {
   "name": "fmihel-browser-lib",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "browser function js",
   "main": "dist/fmihel-browser-lib.min.js",
-  "types":"source/types.d.ts",
+  "types": "source/types.d.ts",
   "directories": {
     "test": "test"
   },
