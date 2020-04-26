@@ -32,7 +32,7 @@ export default {
      *  or
      *   return ut.get(a,'b','f',3,'c','find`t text');
      * @param  {...any} args args[0] - исходный объект, args[1]..args[n-1] - имена или индексы args[n] - значение по умолчанию.
-     * @return throw|any|default
+     * @returns throw|any|default
      */
     get(...args) {
         if (args.length < 3) {
@@ -68,7 +68,7 @@ export default {
      * Ex: alias('r',{direction:['direct','dir','d'],right:['r','noLeft']}) => right
      * @param {string} alias
      * @param {string|[]} conform
-     * @return string|Exception
+     * @returns {string|Exception}
      */
     alias(alias, conform) {
         const keys = Object.keys(conform);
@@ -98,12 +98,12 @@ export default {
     },
     /**
      * перебор по элементам или свойствам
-     * При переборе по объекту в ф-цию func передается 4 параметра
-     * ( значение свойства, имя свойства, весь объект, порядковый номер )
+     * При переборе по объекту в ф-цию func передается 5 параметра
+     * ( значение свойства, имя свойства, весь объект, порядковый номер,список свойств )
      *
      * @param {object|array} o
      * @param {function} func
-     * @return obj|Exception
+     * @returns {obj|Exception}
      */
     each(o, func) {
         let msg = '';
@@ -119,7 +119,7 @@ export default {
         if (typeof o === 'object') {
             try {
                 const keys = Object.keys(o);
-                const res = keys.find((key, i) => func(o[key], key, o, keys.length));
+                const res = keys.find((key, i) => func(o[key], key, o, i, keys));
                 return (res ? o[res] : undefined);
             } catch (e) {
                 console.error(e);
@@ -140,7 +140,7 @@ export default {
      * @param {*} y2 - правый экстремум исходной СК
      * @param {*} x1 - левый экстремум СК искомого значения, соотвествует y1
      * @param {*} x2 x2 - правый экстремум СК искомого значения, соотвествует y2
-     * @return {number | Exception}
+     * @returns {number | Exception}
      */
     translate(y, y1, y2, x1, x2) {
         if (y2 == y1) {
