@@ -1,6 +1,6 @@
 {
   "name": "fmihel-browser-lib",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "description": "browser function js",
   "main": "dist/fmihel-browser-lib.min.js",
   "types": "source/types.d.ts",
@@ -14,8 +14,8 @@
     "rollup-build-dist-min": "rollup -c rollup.config.min.js",
     "webpack-build": "webpack",
     "webpack-build-min": "webpack --prod",
-    "git-commit":"git add . && git commit ",
-    "git-push":"git push browser-lib && git push browser-lib --tags",
+    "git-commit": "git add . && git commit ",
+    "git-push": "git push browser-lib && git push browser-lib --tags",
     "build": "npm run webpack-build && npm run webpack-build-min"
   },
   "repository": {
