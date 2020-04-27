@@ -30,7 +30,7 @@ const ut = {
     */
     // eslint-disable-next-line consistent-return
     onChangeLocation(callback) {
-        const cl = _ut._changeLocation;
+        const cl = ut._changeLocation;
 
         if (cl.observer === undefined) {
             cl.observer = new MutationObserver(() => { cl.update(); });

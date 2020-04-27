@@ -187,6 +187,8 @@ export function flex(prop = {}, child = undefined) {
     }
     return out;
 }
+//    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+
 /**
  * сокращение синтаксиса для привязывания ф-ций react класса к контексту
  * Ex:
@@ -194,29 +196,33 @@ export function flex(prop = {}, child = undefined) {
  * this.onClick = this.onClick.bind(this);
  * vs
  * binds(this,'onMouseMove','onClick');
- *
- * @param {...any}  - первый параметра ссылка на объект, остальные - строковые имена функция
+ * @param {object} - ссылка на объект привязки, this
+ * @param {...any}  -  строковые имена функций
  */
-export function binds(...a) {
-    let h = null;
-    a.forEach((v, i) => {
-        if (i === 0) { h = v; } else { h[v] = h[v].bind(h); }
+export function binds(_this, ...funcNames) {
+    funcNames.forEach((name) => {
+        try {
+            if (_this[name]) {
+                _this[name].bind(_this);
+            } else {
+                console.warn(`func ${name} not exists in object:`, _this);
+            }
+        } catch (e) {
+            console.error(e);
+        }
     });
 }
 /**
  * стартовая инициализация состояний react одноименными данными из props
- *
- * @param  {...any} a - первый параметра ссылка на объект, остальные - строковые имена переменных из props
+ * @param {object} - ссылка на объект привязки, this
+ * @param  {...any}   строковые имена переменных из props
  */
-export function propsToState(...a) {
-    let h = null;
-    a.forEach((v, i) => {
-        if (i === 0) {
-            h = v;
-            h.state = h.state === undefined ? {} : h.state;
-        } else {
-            h.state[v] = h.props[v];
-        }
+export function propsToState(_this, ...a) {
+    const h = _this;
+    h.state = h.state === undefined ? {} : h.state;
+
+    a.forEach((v) => {
+        h.state[v] = h.props[v];
     });
 }
 // export default { defaultProps, flex, flexChild };
