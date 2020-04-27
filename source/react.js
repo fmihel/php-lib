@@ -187,8 +187,6 @@ export function flex(prop = {}, child = undefined) {
     }
     return out;
 }
-//    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
-
 /**
  * сокращение синтаксиса для привязывания ф-ций react класса к контексту
  * Ex:

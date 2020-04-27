@@ -14,7 +14,8 @@
     "rollup-build-dist-min": "rollup -c rollup.config.min.js",
     "webpack-build": "webpack",
     "webpack-build-min": "webpack --prod",
-    "git-commit":"git add . && git commit -m \"version up\"",
+    "git-commit":"git add . && git commit ",
+    "git-push":"git push browser-lib && git push browser-lib --tags",
     "build": "npm run webpack-build && npm run webpack-build-min"
   },
   "repository": {
