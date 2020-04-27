@@ -198,12 +198,13 @@ export function flex(prop = {}, child = undefined) {
  * @param {...any}  -  строковые имена функций
  */
 export function binds(_this, ...funcNames) {
+    const h = _this;
     funcNames.forEach((name) => {
         try {
-            if (_this[name]) {
-                _this[name].bind(_this);
+            if (h[name]) {
+                h[name] = h[name].bind(h);
             } else {
-                console.warn(`func ${name} not exists in object:`, _this);
+                console.warn(`func ${name} not exists in object:`, h);
             }
         } catch (e) {
             console.error(e);
