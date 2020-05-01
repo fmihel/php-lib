@@ -6,7 +6,7 @@ const ut = {
         observer: undefined,
         pathname: false,
         update(forced = false) {
-            const cl = _ut._changeLocation;
+            const cl = ut._changeLocation;
             if ((forced) || (window.location.pathname !== cl.pathname)) {
                 cl.pathname = window.location.pathname;
                 cl.list.forEach((f) => {
