@@ -54,7 +54,7 @@
     "express": "^4.17.1",
     "fmihel-server-lib": "^0.1.0",
     "html-webpack-plugin": "^3.2.0",
-    "jquery": "^3.5.0",
+    "jquery": "^3.4.1",
     "mocha": "^6.2.3",
     "mocha-loader": "^3.0.0",
     "open": "^6.4.0",
@@ -73,6 +73,6 @@
     "fmihel-lib": "^1.2.5"
   },
   "peerDependencies": {
-    "jquery": "^3.5.0"
+    "jquery": "^3.4.1"
   }
 }
