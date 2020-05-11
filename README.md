@@ -16,6 +16,7 @@
 |window|jquery| ссылка на window |
 |mouse()|{ x: int, y: int }| координаты мыши|
 |screen()|{ x: 0, y: 0, w:int, h:int }| размер экрана браузера|
+|visible(DOM,any?,string?)|boolean| определение или уставновка видимости DOM|
 
 
 

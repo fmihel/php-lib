@@ -64,7 +64,15 @@ export namespace JX {
   export function pos(dom:object,bound?:iCoord=undefined);
   /** определяет позицию DOM элемента относительно окна броузера */
   export function abs(dom:object,bound?:iCoord=undefined);
-
+  /** видимость dom 
+   * visible(dom) - возвращает видим ли dom
+   * visible(dom,'deep') возвращает видим ли dom анализируя видимость и родительских элементов
+   * visible(dom,false) устанваливает dom.style.display = 'none'
+   * visible(dom,true) устанваливает dom.style.display = 'block'
+   * visible(dom,true,'table') устанваливает dom.style.display = 'table' 
+  */
+  export function visible(dom:object,param:any,visibleMean:string):boolean;
+ 
 }; 
 
 export namespace storage{

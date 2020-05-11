@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { parentDOM } from './dom';
 
 const JX = {
     _params: {
@@ -24,6 +25,15 @@ const JX = {
 
         updateScreenSize();
         JX.window.on('resize', updateScreenSize);
+    },
+    computedStyle(dom) {
+        let view = dom.ownerDocument.defaultView;
+
+        if (!view) {
+            view = window;
+        }
+
+        return view.getComputedStyle(dom);
     },
     /**
      * координаты мыши
@@ -69,6 +79,33 @@ const JX = {
         // console.warn('abs(dom,bound) is not released !!!');
         return undefined;
     },
+
+    visible(dom, param = undefined, visibleMean = 'block') {
+        const display = () => {
+            if ((dom.style === undefined) || (dom.style.display === undefined) || (dom.style.display === '')) {
+                return JX.computedStyle(dom).display;
+            }
+            return dom.style.display;
+        };
+
+        if (param === undefined) {
+            return (display() !== 'none');
+        }
+        if (param === 'deep') {
+            if (display() === 'none') {
+                return false;
+            }
+            if (dom.tagName === 'BODY') {
+                return true;
+            }
+            return JX.visible(parentDOM(dom), 'deep');
+        }
+
+        // eslint-disable-next-line no-param-reassign
+        dom.style.display = param ? visibleMean : 'none';
+        return !!param;
+    },
+
 };
 
 // eslint-disable-next-line func-names

@@ -35,4 +35,25 @@ describe('JX', () => {
             chai.expect(res).to.have.property('h');
         });
     });
+    describe('visible', () => {
+        it('visible("#mocha")', () => {
+            const dom = DOM('#mocha');
+            const res = JX.visible(dom);
+            // console.log('res >> ', res);
+            chai.expect(res).to.equal(true);
+        });
+        it('visible("#mocha","deep")', () => {
+            $('body').append('<div style="display:none"><div id="hgw4ws"></div>');
+            const dom = DOM('#hgw4ws');
+            const res = JX.visible(dom, 'deep');
+            // console.log('res >> ', res);
+            chai.expect(res).to.equal(false);
+        });
+        it('visible("#mocha","deep")', () => {
+            const dom = DOM('#mocha');
+            const res = JX.visible(dom, 'deep');
+            // console.log('res >> ', res);
+            chai.expect(res).to.equal(true);
+        });
+    });
 });
