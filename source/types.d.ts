@@ -26,13 +26,20 @@ export  namespace ut{
     */
   export function each(o:any[]|object, func:Function):any;
   export function translate(y:number, y1:number, y2:number, x1:number, x2:number):number;
+   /**
+     * Последовательное выполнение цепочки промисов заданных массивом funcs
+     * @param {Function[]} funcs - массив функций
+     * @param {any} param - параметр, передаваемый в первый промис
+     * @returns {Promise}
+     */
+    export function promises(funcs:Function[], param?:any):Promise;
 }
 
-export function DOM(selector:string, _parentDOM?:object = false):object;
-export function DOMS(selector:string, _parentDOM?:object = false):object;
+export function DOM(selector:string, _parentDOM?:object):object;
+export function DOMS(selector:string, _parentDOM?:object):object;
 export function $D(...p):object;
-export function parentDOM(selector:string, _parentDOM?:object = false):object;
-export function childDOM(selector:string, _parentDOM?:object = false):object;
+export function parentDOM(selector:string, _parentDOM?:object):object;
+export function childDOM(selector:string, _parentDOM?:object):object;
 
 export interface iDevice{
   os:string;
