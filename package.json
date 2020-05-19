@@ -6,11 +6,16 @@
   "types": "source/types.d.ts",
   "scripts": {
     "test": "node ./test/server",
+    "git-push": "git push lib && git push lib --tags",
     "webpack-build": "webpack",
     "webpack-build-min": "webpack --prod",
     "rollup-build-lib": "rollup -c rollup.config.js",
     "rollup-build-lib-min": "rollup -c rollup.config_min.js",
-    "build": "npm run webpack-build && npm run webpack-build-min"
+    "build": "npm run webpack-build && npm run webpack-build-min",
+    "npm-publish-patch": "npm run build && npm version patch && npm publish && npm run git-push",
+    "npm-publish-minor": "npm run build && npm version minor && npm publish && npm run git-push",
+    "npm-publish-major": "npm run build && npm version major && npm publish && npm run git-push"
+
   },
   "repository": {
     "type": "git",

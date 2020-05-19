@@ -149,6 +149,21 @@ export default {
         return (x2 * (y - y1) + x1 * (y2 - y)) / (y2 - y1);
     },
 
+    /**
+     * Последовательное выполнение цепочки промисов заданных массивом funcs
+     * @param {Function[]} funcs - массив функций
+     * @param {any} param - параметр, передаваемый в первый промис
+     * @returns {Promise}
+     */
+    promises(funcs, param = undefined) {
+        let chain = Promise.resolve(param);
+        funcs.map((func) => {
+            chain = chain
+                .then((p) => func(p));
+        });
+        return chain;
+    },
+
 
 };
 

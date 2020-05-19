@@ -165,4 +165,21 @@ describe('ut', () => {
             done();
         });
     });
+
+    describe('promises', () => {
+        it('promises([f1,f2,..],param)', (done) => {
+            const f = (res) => new Promise((ok) => {
+                setTimeout(() => {
+                    ok(res + 1);
+                }, 10);
+            });
+            const funcs = [f, f, f];
+            ut.promises(funcs, 0).then((res) => {
+                if (res !== funcs.length) {
+                    throw new Error(`Expected ${res}, but got ${funcs.length}`);
+                }
+                done();
+            });
+        });
+    });
 });

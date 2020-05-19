@@ -21,4 +21,12 @@ export  namespace ut{
       */
     export function each(o:any[]|object, func:Function):any;
     export function translate(y:number, y1:number, y2:number, x1:number, x2:number):number;
+     
+    /**
+     * Последовательное выполнение цепочки промисов заданных массивом funcs
+     * @param {Function[]} funcs - массив функций
+     * @param {any} param - параметр, передаваемый в первый промис
+     * @returns {Promise}
+     */
+    export function promises(funcs:Function[], param:any):Promise;
 }
