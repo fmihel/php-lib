@@ -4,6 +4,7 @@ import _JX from './jx';
 import _ut from './ut';
 import _storage, { Storage } from './storage';
 import _dvc from './dvc';
+import _scriptLoader from './scriptLoader';
 
 export const DOM = dom.DOM;
 export const DOMS= dom.DOMS;
@@ -21,6 +22,7 @@ export const JX=_JX;
 export const ut=_ut;
 export const storage=_storage;
 export const dvc=_dvc;
+export const scriptLoader=_scriptLoader;
 
 export default {
     DOM: dom.DOM,
@@ -40,4 +42,5 @@ export default {
     storage,
     Storage,
     dvc,
+    scriptLoader
 };

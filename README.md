@@ -47,4 +47,12 @@ param - настройки для storage
 |cookie_path|string| путь переменной cookie при type = 'cookie'|
 |cookie_domen|string| домен переменной cookie при type = 'cookie'|
 
+## scriptLoader
+Загрузка скрипта
+|name|result|notes|
+|-----|-----|-----|
+|load(string\|object)|Promise| загружает скрипт из адреса|
+|count()|int|кол-во загруженных скриптов|
+|exist(string)|boolean|признак существования|
+|get(int)|string|возвращает имя загруженного скрипта |
 

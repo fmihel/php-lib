@@ -1,3 +1,4 @@
+import scriptLoader from "./scriptLoader";
 
 export  namespace ut{
   /**
@@ -91,3 +92,30 @@ export namespace storage{
 
 export function flex(prop:string):object;
 export function binds(_this:object,...funcName:string):void;
+
+class Promise{
+  then(func:Function):Promise
+  catch(func:Function):Promise;
+}
+
+class ScriptLoader{
+  /** возвращает признак, что загружен скрипт
+  * @param {string} addr of scripts
+  * @returns {bool}
+  */
+  exist(url:string):boolean;
+  /** @returns {number} count of loading script */
+  count():number;
+  /** return name loading script by index
+  * @param {int} index
+  * @returns {string}
+  */
+  get(i:number):string;
+
+  /** динамическая загрузка js скрипта
+   * @param {string|object} string = "addr" object = {url:"addr"}
+   * @returns {Promise}
+  */
+  load(param:any):Promise;
+}
+export const scriptLoader:ScriptLoader;

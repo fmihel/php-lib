@@ -2,10 +2,12 @@ const path = require('path');
 const { defArg } = require('fmihel-server-lib');
 
 
-const toProduction = defArg('prod');
+const toRemotePath = defArg('path');
+const toProduction = !toRemotePath && defArg('prod');
 
 const SOURCE_PATH = './source/';
-const PUBLIC_PATH = './dist/';
+const PUBLIC_PATH = toRemotePath ? 'C:/work/admin/node_modules/fmihel-browser-lib/dist/' : './dist/';
+
 module.exports = {
     mode: toProduction ? 'production' : 'development',
     devtool: toProduction ? false : 'inline-source-map',
@@ -13,7 +15,7 @@ module.exports = {
     entry: `${SOURCE_PATH}index.js`,
     output: {
         path: path.resolve(__dirname, PUBLIC_PATH),
-        filename: `fmihel-browser-lib${toProduction ? '.min.' : '.'}js`,
+        filename: `fmihel-browser-lib${(toProduction || toRemotePath) ? '.min' : ''}.js`,
         libraryTarget: 'umd',
         globalObject: 'this',
         library: 'fmihel-browser-lib',
