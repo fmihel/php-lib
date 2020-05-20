@@ -1,6 +1,6 @@
 {
   "name": "fmihel-browser-lib",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "browser function js",
   "main": "dist/fmihel-browser-lib.min.js",
   "types": "source/types.d.ts",
