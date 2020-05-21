@@ -111,11 +111,11 @@ class ScriptLoader{
   * @returns {string}
   */
   get(i:number):string;
-
-  /** динамическая загрузка js скрипта
-   * @param {string|object} string = "addr" object = {url:"addr"}
-   * @returns {Promise}
-  */
-  load(param:any):Promise;
+    /** динамическая загрузка js скрипта
+     * @param {string|object} string = "addr" object = {url:"addr"}
+     * @param {string} - имя глобальной переменной в загружаемом скрипте, которая будет возвращена в случае удачи
+     * @returns {Promise}
+    */
+  load(url:string|object,varName?:string):Promise;
 }
 export const scriptLoader:ScriptLoader;

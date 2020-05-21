@@ -29,12 +29,15 @@ class ScriptLoader {
 
     /** динамическая загрузка js скрипта
      * @param {string|object} string = "addr" object = {url:"addr"}
+     * @param {string} - имя глобальной переменной в загружаемом скрипте, которая будет возвращена в случае удачи
      * @returns {Promise}
     */
-    load(param) {
+    load(url, varName = false) {
         const p = {
             url: false,
-            ...(typeof param === 'string' ? { url: param } : param),
+            returnVar: varName,
+            wait: 2000,
+            ...(typeof url === 'string' ? { url } : url),
         };
 
         return new Promise((ok, err) => {
@@ -46,7 +49,22 @@ class ScriptLoader {
                 const script = document.createElement('script');
                 script.onload = () => {
                     this.list.push(p.url);
-                    ok(p.url);
+                    if (p.returnVar !== false) {
+                        const hWait = setInterval(() => {
+                            if (p.returnVar in window) {
+                                clearInterval(hWait);
+                                ok(window[p.returnVar]);
+                            }
+                            p.wait -= 100;
+                            if (p.wait <= 0) {
+                                clearInterval(hWait);
+                                // eslint-disable-next-line prefer-promise-reject-errors
+                                err(`can\`t load ${p.returnVar}`);
+                            }
+                        }, 100);
+                    } else {
+                        ok(p.url);
+                    }
                 };
                 script.onerror = () => {
                     err(p.url);
@@ -54,8 +72,9 @@ class ScriptLoader {
 
                 script.src = p.url;
                 document.head.append(script);
+            } else {
+                ok(p.returnVar ? window[p.returnVar] : p.url);
             }
-            ok(p.url);
         });
     }
 }
