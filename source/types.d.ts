@@ -49,6 +49,7 @@ export interface iDevice{
   isIE:boolean;
   browserName:string;
   chromium:boolean;
+  overallness:string;
 } 
 
 export const dvc:iDevice;

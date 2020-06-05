@@ -34,5 +34,10 @@ describe('dvc', () => {
             console.info('dvc.chromium =', dvc.chromium);
             chai.expect(res !== '').to.equal(true);
         });
+        it('overallness', () => {
+            const res = dvc.overallness;
+            console.info('dvc.overallness =', dvc.overallness);
+            chai.expect(res !== '').to.equal(true);
+        });
     });
 });

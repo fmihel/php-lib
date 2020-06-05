@@ -50,13 +50,13 @@ class Dvc {
         this._sfull = false;
 
         const t = this;
-        // this._handler = new jhandler();
+
 
         this._browserName();
 
         this._platform();
         this._landscape();
-        // this._updateArea();
+        this._updateArea();
         /*
         this._timer = setInterval(
             () => {
@@ -149,7 +149,7 @@ class Dvc {
 
     _viewport() {
         const t = this; const r = { w: window.innerWidth, h: window.innerHeight };
-        if (!JX.eq(r, t.viewport)) {
+        if (r.w != t.viewport.w && r.h != t.viewport.h) {
             t.viewport = r;
             return true;
         }
@@ -225,7 +225,7 @@ class Dvc {
     _device() {
         // eslint-disable-next-line no-restricted-globals
         const t = this; const r = { w: screen.width * t.devicePixelRatio, h: screen.height * t.devicePixelRatio };
-        if (!JX.eq(r, t.device)) {
+        if (r.w != t.device.w || r.h != t.device.h) {
             t.device = r;
             return true;
         }
@@ -247,8 +247,7 @@ class Dvc {
                 h: window.innerHeight,
             };
         }
-
-        if (!JX.eq(r, t.browser)) {
+        if (r.w != t.browser.w || r.h != t.browser.h) {
             t.browser = r;
             return true;
         }
@@ -260,7 +259,7 @@ class Dvc {
         const t = this; const inch = 25.4; const dpi = (t.devicePixelRatio * 96) / inch;
         const r = { w: (t.device.w / dpi / t.kmm).toFixed(1), h: (t.device.h / dpi / t.kmm).toFixed(1) };
 
-        if (!JX.eq(r, t.size)) {
+        if (r.w != t.size.w || r.h != t.size.h) {
             t.size = r;
             return true;
         }
@@ -268,8 +267,12 @@ class Dvc {
     }
 
     _overallness() {
-        const t = this; const s = t.size; let r = 'monitor';
-        if (t.mobile) r = ((s.w < t.tablet_area) || (s.h < t.tablet_area) ? 'phone' : 'tablet');
+        const t = this;
+        const s = t.size;
+        let r = 'monitor';
+        if (t.mobile) {
+            r = ((s.w < t.tablet_area) || (s.h < t.tablet_area) ? 'phone' : 'tablet');
+        }
 
         if (r !== t.overallness) {
             t.overallness = r;
