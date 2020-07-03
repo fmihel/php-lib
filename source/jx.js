@@ -164,12 +164,14 @@ const JX = {
         }
 
         const str = document.createTextNode(text);
-        const obj = document.createElement('a');
+        const obj = document.createElement('div');
 
         obj.style.fontSize = Number.isInteger(p.size) ? `${p.size}px` : p.size;
         obj.style.fontFamily = p.font;
         obj.style.margin = `${0}px`;
         obj.style.padding = `${0}px`;
+        obj.style.position = 'absolute';
+        obj.style.whiteSpace = 'nowrap';
         obj.appendChild(str);
 
         document.body.appendChild(obj);

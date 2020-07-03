@@ -17,6 +17,8 @@
 |mouse()|{ x: int, y: int }| координаты мыши|
 |screen()|{ x: 0, y: 0, w:int, h:int }| размер экрана браузера|
 |visible(DOM,any?,string?)|boolean| определение или уставновка видимости DOM|
+|$(selector,param?)|object| возвращает объект jQuery, но не пересоздает его, а при наличии сохраненного, возвращает уже ранее созданный|
+|textWidth(text,param?)|{w:int,h:int}| габариты текста в pixel|
 
 
 
