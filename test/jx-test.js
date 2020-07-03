@@ -56,4 +56,31 @@ describe('JX', () => {
             chai.expect(res).to.equal(true);
         });
     });
+    describe('$', () => {
+        it('1. JX.$("#mocha")', () => {
+            const one = JX.$('#mocha');
+            one._test738 = 'mile';
+            const two = JX.$('#mocha');
+
+            // console.log('res >> ', res);
+            chai.expect(two._test738).to.equal('mile');
+        });
+        it('2. JX.$("#mocha")', () => {
+            const one = JX.$('#mocha');
+            one._test738 = 'mile';
+            const two = JX.$('#mocha', { group: 'some' });
+
+            // console.log('res >> ', res);
+            chai.expect(two._test738).to.equal(undefined);
+        });
+    });
+    describe('textSize', () => {
+        it('textSize("someText and more texy") = {w:int,h:int}', () => {
+            const size = JX.textSize('someText qwejh jwhedf hwe');
+
+            console.log('someText >> ', size);
+            chai.expect(size).to.have.property('w');
+            chai.expect(size).to.have.property('h');
+        });
+    });
 });

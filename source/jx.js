@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { parentDOM } from './dom';
+import { DOM, parentDOM } from './dom';
 
 const JX = {
     _params: {
@@ -9,6 +9,47 @@ const JX = {
         mouse: {
             x: 0, y: 0,
         },
+        $list: {},
+    },
+    /** коллекция объектов JQ, если нет объекта, будет создан
+     * при запросе пыьается найти уже созданный, если его не существует или,
+     * ранее созданный length = 0 , пыьается его создать.
+     * Объекты можно группировать посредством указания группы param.group
+     * без указания группы объекты помещаются в группу `common`
+     * Ex:
+     * JX.$('body');    аналогично JX.$('body',{group:'common'}); )
+     * JX.$('#txt'); не аналогично JX.$('#txt',{group:'anyGroup'}),
+     * хотя возвращаемые объекты  будет ссылаться на один и тот же DOM
+    */
+    $(selector, param = {}) {
+        const t = JX;
+        const { $list } = t._params;
+        const p = {
+            refresh: false,
+            group: 'common',
+            $parent: undefined,
+            ...param,
+        };
+        let res;
+        try {
+            if (p.refresh
+                || !(p.group in $list)
+                || !(selector in $list[p.group])
+                || ($list[p.group][selector].length === 0)
+            ) {
+                res = p.$parent ? p.$parent.find(selector) : $(selector);
+                if (!(p.group in $list)) {
+                    $list[p.group] = {};
+                }
+                $list[p.group][selector] = res;
+            } else {
+                res = $list[p.group][selector];
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
+        return res;
     },
     window: $(window),
     // eslint-disable-next-line no-underscore-dangle
@@ -105,7 +146,38 @@ const JX = {
         dom.style.display = param ? visibleMean : 'none';
         return !!param;
     },
+    /** длина текста в пикселях */
+    textSize(text, param = {}) {
+        const t = JX;
+        const p = {
+            $parent: t.$('body'),
+            font: undefined,
+            size: undefined,
+            ...param,
+        };
 
+        if (p.font === undefined) {
+            p.font = p.$parent.css('font-family');
+        }
+        if (p.size === undefined) {
+            p.size = p.$parent.css('font-size');
+        }
+
+        const str = document.createTextNode(text);
+        const obj = document.createElement('a');
+
+        obj.style.fontSize = Number.isInteger(p.size) ? `${p.size}px` : p.size;
+        obj.style.fontFamily = p.font;
+        obj.style.margin = `${0}px`;
+        obj.style.padding = `${0}px`;
+        obj.appendChild(str);
+
+        document.body.appendChild(obj);
+        const res = { w: obj.offsetWidth, h: obj.offsetHeight };
+        document.body.removeChild(obj);
+
+        return res;
+    },
 };
 
 // eslint-disable-next-line func-names

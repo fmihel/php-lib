@@ -82,6 +82,20 @@ export namespace JX {
   */
   export function visible(dom:object,param:any,visibleMean:string):boolean;
  
+  /** коллекция объектов JQ, если нет объекта, будет создан
+    * при запросе пыьается найти уже созданный, если его не существует или,
+    * ранее созданный length = 0 , пыьается его создать.
+    * Объекты можно группировать посредством указания группы param.group
+    * без указания группы объекты помещаются в группу `common`
+    * Ex:
+    * JX.$('body');    аналогично JX.$('body',{group:'common'}); )
+    * JX.$('#txt'); не аналогично JX.$('#txt',{group:'anyGroup'}),
+    * хотя возвращаемые объекты  будет ссылаться на один и тот же DOM
+  */  
+  export function $(selector:string,param?:object):object;
+  
+  /** длина текста в пикселях */
+  export function textSize(text:string, param?:object):iSize;
 }; 
 
 export namespace storage{
