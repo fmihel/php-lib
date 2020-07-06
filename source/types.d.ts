@@ -96,6 +96,13 @@ export namespace JX {
   
   /** длина текста в пикселях */
   export function textSize(text:string, param?:object):iSize;
+ 
+  /** проверка актуальности объекта jQuery
+   *  если, хотябы один объект dom содержащийся в коллекции
+   *  $obj не содержится в дереве документа, то считаем
+   *  что $obj неактулен, и скорее всего его нужно перестроить 
+   */
+  export function relevance($obj:object):boolean;
 }; 
 
 export namespace storage{

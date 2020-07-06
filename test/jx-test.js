@@ -74,6 +74,14 @@ describe('JX', () => {
             chai.expect(two._test738).to.equal(undefined);
         });
     });
+    describe('getStyle', () => {
+        it('getStyle', () => {
+            const dom = DOM('#mocha');
+            const style = JX.getStyle(dom);
+            chai.expect(true).to.equal(true);
+        });
+    });
+
     describe('textSize', () => {
         it('textSize("someText and more texy") = {w:int,h:int}', () => {
             const size = JX.textSize('someText qwejh jwhedf hwe');

@@ -19,6 +19,7 @@
 |visible(DOM,any?,string?)|boolean| определение или уставновка видимости DOM|
 |$(selector,param?)|object| возвращает объект jQuery, но не пересоздает его, а при наличии сохраненного, возвращает уже ранее созданный|
 |textWidth(text,param?)|{w:int,h:int}| габариты текста в pixel|
+|relevance($obj)|boolean| проверяет актуальность обертки jquery|
 
 
 

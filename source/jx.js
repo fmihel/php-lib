@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import { DOM, parentDOM } from './dom';
+import { ut } from 'fmihel-lib';
+import { parentDOM } from './dom';
 
 const JX = {
     _params: {
@@ -10,6 +11,25 @@ const JX = {
             x: 0, y: 0,
         },
         $list: {},
+        styles: {},
+        styleAttrName: `_styleAttr_${ut.random_str(5)}`, // имя атрибута, в котором храниться расчитанное style
+    },
+    /** проверка актуальности объекта jQuery
+     *  если, хотябы один объект dom содержащийся в коллекции
+     *  $obj не содержится в дереве документа, то считаем
+     *  что $obj неактулен, и скорее всего его нужно перестроить
+    */
+    relevance($obj) {
+        try {
+            if ($obj.length === 0) return false;
+
+            for (let i = 0; i < $obj.length; i++) {
+                if (!document.body.contains($obj[i])) return false;
+            }
+        } catch (e) {
+            return false;
+        }
+        return true;
     },
     /** коллекция объектов JQ, если нет объекта, будет создан
      * при запросе пыьается найти уже созданный, если его не существует или,
@@ -35,14 +55,16 @@ const JX = {
             if (p.refresh
                 || !(p.group in $list)
                 || !(selector in $list[p.group])
-                || ($list[p.group][selector].length === 0)
+                || (!t.relevance($list[p.group][selector]))
             ) {
+                // console.info('recreate');
                 res = p.$parent ? p.$parent.find(selector) : $(selector);
                 if (!(p.group in $list)) {
                     $list[p.group] = {};
                 }
                 $list[p.group][selector] = res;
             } else {
+                // console.info('from buffer');
                 res = $list[p.group][selector];
             }
         } catch (e) {
@@ -66,6 +88,25 @@ const JX = {
 
         updateScreenSize();
         JX.window.on('resize', updateScreenSize);
+    },
+    /** возвращает computedStyle, */
+    getStyle(dom, param = {}) {
+        const t = JX;
+        const p = {
+            refresh: false,
+            ...param,
+        };
+        let style;
+
+        if (!(t._params.styleAttrName in dom) || (p.refresh)) {
+            style = t.computedStyle(dom);
+            // eslint-disable-next-line no-param-reassign
+            dom[t._params.styleAttrName] = style;
+        } else {
+            style = dom[t._params.styleAttrName];
+        }
+
+        return style;
     },
     computedStyle(dom) {
         let view = dom.ownerDocument.defaultView;
@@ -150,24 +191,27 @@ const JX = {
     textSize(text, param = {}) {
         const t = JX;
         const p = {
-            $parent: t.$('body'),
-            font: undefined,
-            size: undefined,
+            parentDom: t.$('body')[0],
+            fontFamily: undefined,
+            fontSize: undefined,
+            refresh: false,
             ...param,
         };
+        const style = (p.fontFamily === undefined || p.fontSize === undefined) ? t.getStyle(p.parentDom, { refresh: p.refresh }) : undefined;
 
-        if (p.font === undefined) {
-            p.font = p.$parent.css('font-family');
+        if (p.fontFamily === undefined) {
+            p.fontFamily = style.fontFamily;
         }
-        if (p.size === undefined) {
-            p.size = p.$parent.css('font-size');
+        if (p.fontSize === undefined) {
+            p.fontSize = style.fontSize;
         }
+
 
         const str = document.createTextNode(text);
         const obj = document.createElement('div');
 
-        obj.style.fontSize = Number.isInteger(p.size) ? `${p.size}px` : p.size;
-        obj.style.fontFamily = p.font;
+        obj.style.fontSize = Number.isInteger(p.fontSize) ? `${p.fontSize}px` : p.fontSize;
+        obj.style.fontFamily = p.fontFamily;
         obj.style.margin = `${0}px`;
         obj.style.padding = `${0}px`;
         obj.style.position = 'absolute';
