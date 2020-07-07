@@ -195,6 +195,7 @@ const JX = {
             fontFamily: undefined,
             fontSize: undefined,
             refresh: false,
+            width: 0,
             ...param,
         };
         const style = (p.fontFamily === undefined || p.fontSize === undefined) ? t.getStyle(p.parentDom, { refresh: p.refresh }) : undefined;
@@ -215,7 +216,14 @@ const JX = {
         obj.style.margin = `${0}px`;
         obj.style.padding = `${0}px`;
         obj.style.position = 'absolute';
-        obj.style.whiteSpace = 'nowrap';
+        if (p.width === 0) {
+            obj.style.whiteSpace = 'nowrap';
+        } else {
+            const w = Number.isInteger(p.width) ? `${p.width}px` : p.width;
+            obj.style.width = w;
+            obj.style.minWidth = w;
+            obj.style.maxWidth = w;
+        }
         obj.appendChild(str);
 
         document.body.appendChild(obj);
