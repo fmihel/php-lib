@@ -1,6 +1,8 @@
 <?php
 namespace fmihel\lib;
 
+use fmihel\console;
+
 class _db{
     public $db;
     public $transaction;
@@ -907,6 +909,42 @@ class Base{
         $from = array('"');
         $to   = array('\"');
         return str_replace($from,$to,$string);
+    }
+    /**  
+     * заменяет параметры типа :FIELDNAME в $sql , на их значение value из $FeildNameValue=['FIELDNAME'=>value]
+     * тк же можно задать $value [VALUE,TYPE] либо указать в $param['types'=>]
+    */
+    public static function paramToSql(string $sql,array $FieldNameValue=[],array $param=[]){
+        $param = array_merge([
+            'types'=>[]
+        ],$param);
+
+        $types = $param['types'];
+
+        try {
+            $from = [];
+            $to = [];
+            foreach($FieldNameValue as $name=>$value){
+
+                $type = 'int';
+
+                if (gettype($value) === 'array'){
+                    $type = $value[1];
+                    $value = $value[0];
+                }elseif (isset($types[$name])){
+                    $type = $types[$name];
+                };
+                
+                $value = self::typePerform($value,$type);
+                $from[] = ':'.$name;
+                $to[] = $value;
+            }
+
+            return str_replace($from,$to,$sql);
+            
+        } catch (\Exception $e) {
+            error_log('Exception ['.__FILE__.':'.__LINE__.'] '.$e->getMessage());
+        };
     }
     
 };

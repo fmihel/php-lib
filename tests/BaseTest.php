@@ -334,6 +334,28 @@ final class BaseTest extends TestCase{
 
     }
 
+    public function test_paramToSql(){
+        // ----------------------------------------        
+        $q = 'select * from TEST where ID=:ID and NAME=":NAME"';
+        $result = Base::paramToSql($q,['ID'=>1,'NAME'=>'mike']);
+        $equal = 'select * from TEST where ID=1 and NAME="mike"';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+        $q = 'select * from TEST where ID=:ID and NAME=:NAME';
+        $result = Base::paramToSql($q,['ID'=>1,'NAME'=>['mike','string']]);
+        $equal = 'select * from TEST where ID=1 and NAME="mike"';
+        //error_log($result);
+        self::assertSame($result,$equal);
+        // ----------------------------------------        
+        $q = 'select * from TEST where ID=:ID and NAME=:NAME';
+        $result = Base::paramToSql($q,['ID'=>1,'NAME'=>'mike'],['types'=>['NAME'=>'string']]);
+        $equal = 'select * from TEST where ID=1 and NAME="mike"';
+        //error_log($result);
+        self::assertSame($result,$equal);
+
+    }
+
 
 }
 
