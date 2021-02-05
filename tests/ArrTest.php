@@ -107,6 +107,34 @@ final class ArrTest extends TestCase{
         //------------------------------------
         
     }
+    /**
+     * @depends test_extend
+     */    
+    public function test_default(){
+
+        //------------------------------------
+        $default = [];
+        $args = ['a'=>10];
+        $result = Arr::default($default,$args);
+        $ok   = [];
+        //error_log(print_r($result,true));
+        self::assertEquals($result,$ok);
+        //------------------------------------
+        $default = ['id'=>100];
+        $args = ['a'=>10,'prev'=>['text']];
+        $result = Arr::default($default,$args);
+        $ok   = ['id'=>100];
+        //error_log(print_r($result,true));
+        self::assertEquals($result,$ok);
+        //------------------------------------
+        $default = ['id'=>100,'name'=>''];
+        $args = ['a'=>10,'name'=>'mike'];
+        $result = Arr::default($default,$args);
+        $ok   = ['id'=>100,'name'=>'mike'];
+        //error_log(print_r($result,true));
+        self::assertEquals($result,$ok);
+        
+    }    
 }
 
 ?>

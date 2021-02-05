@@ -102,6 +102,14 @@ class Arr {
         }
         return true;    
     }
+    /** 
+     * аналог jQuery extend но на выходе будут только ключи содержащиеся в $default
+     * Ex: Arr::default(['ID'=>1,'NAME'=>'noneme'],['NAME'=>'mike','AGE'=>100])
+     * res:  ['ID'=>1,'NAME'=>'mike']
+    */
+    public static function default(array $default,array $args){
+        return array_intersect_key(array_merge($default,$args),$default);
+    }
 
 }
 
