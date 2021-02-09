@@ -29,4 +29,9 @@ export  namespace ut{
      * @returns {Promise}
      */
     export function promises(funcs:Function[], param:any):Promise;
+    /** преобразуем значение (даже лексически схожее) в boolean
+     * @returns {boolean}
+    */
+    export function toBool(value:any):boolean;
+
 }

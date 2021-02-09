@@ -182,4 +182,52 @@ describe('ut', () => {
             });
         });
     });
+
+    describe('toBool', () => {
+        it('toBool(true) = true', () => {
+            const res = ut.toBool(true);
+            const ok = true;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(0) = false', () => {
+            const res = ut.toBool(0);
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(1) = false', () => {
+            const res = ut.toBool(undefined);
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(null) = false', () => {
+            const res = ut.toBool(null);
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(undefined) = false', () => {
+            const res = ut.toBool(undefined);
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool("1 ") = true', () => {
+            const res = ut.toBool('1 ');
+            const ok = true;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(" true") = true', () => {
+            const res = ut.toBool(' true');
+            const ok = true;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool("lkdw") = false', () => {
+            const res = ut.toBool('lkdw');
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+        it('toBool(false) = false', () => {
+            const res = ut.toBool(false);
+            const ok = false;
+            chai.expect(res).to.equal(ok);
+        });
+    });
 });

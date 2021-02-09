@@ -163,6 +163,33 @@ export default {
         });
         return chain;
     },
+    /** преобразует value в boolean
+     * @param {any}
+     * @returns {boolean}
+     * Ex:
+     * toBool(true) = true
+     * toBool(0) = false
+     * toBool(1) = false
+     * toBool(null) = false
+     * toBool(undefined) = false
+     * toBool("1 ") = true
+     * toBool(" true") = true
+     * toBool("lkdw") = false
+     * toBool(false) = false
+    */
+    toBool(value) {
+        if (value === true || value === 1) {
+            return true;
+        }
+        if (value === false || value === 0 || value === null || value === undefined) {
+            return false;
+        }
+        const str = (`${value}`).trim();
+        if (str === 'true' || str === '1') {
+            return true;
+        }
+        return false;
+    },
 
 
 };
