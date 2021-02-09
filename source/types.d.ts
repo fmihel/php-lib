@@ -34,6 +34,21 @@ export  namespace ut{
      * @returns {Promise}
      */
     export function promises(funcs:Function[], param?:any):Promise;
+    /** преобразует value в boolean
+     * @param {any}
+     * @returns {boolean}
+     * Ex:
+     * toBool(true) = true
+     * toBool(0) = false
+     * toBool(1) = false
+     * toBool(null) = false
+     * toBool(undefined) = false
+     * toBool("1 ") = true
+     * toBool(" true") = true
+     * toBool("lkdw") = false
+     * toBool(false) = false
+    */
+    export function toBool(value:any):boolean;
 }
 
 export function DOM(selector:string, _parentDOM?:object):object;
