@@ -1,6 +1,6 @@
 {
   "name": "fmihel-lib",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "most commonly js functions ",
   "main": "dist/fmihel-lib.min.js",
   "types": "source/types.d.ts",
