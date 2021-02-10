@@ -33,6 +33,7 @@ class Base{
 
     static private $_base = array();
     static private $_codings = array();
+    static private $_types = array();
     /** 
      * @param string | array $server server name or ['server'=>...,'user'=>...,...]
      * @param string $user -   user name
@@ -359,6 +360,22 @@ class Base{
             
         return $out;    
         
+    }
+
+    /** возвращает массив с типами для каждого поля таблицы $table базы $base, для использования в generate или update 
+     *  данные кешируются, поэтому при изменении структуры таблицы необходимо вызвать getTypes c $refresh =  true
+    */
+    public static function getTypes(string $table,string $base,bool $refresh = false){
+        
+        if (!isset(self::$_types[$base])){
+            self::$_types[$base] = [];
+        }
+
+        if ( $refresh || !isset(self::$_types[$base][$table]) ){
+            self::$_types[$base][$table] = self::fieldsInfo($table,$base,'types');
+        }
+
+        return self::$_types[$base][$table];
     }
     /** 
      * возвращает информацию о полях результата запроса
@@ -945,6 +962,27 @@ class Base{
         } catch (\Exception $e) {
             error_log('Exception ['.__FILE__.':'.__LINE__.'] '.$e->getMessage());
         };
+    }
+    /** внесение изменений в таблицу 
+     * @return {boolean || Exception}
+    */
+    public static function update(string $base,string $tableName,array $data,string $where,$coding = null){
+        
+        Base::startTransaction($base);
+
+        try {
+            $types  = self::getTypes($tableName,$base);
+            $q      = self::generate('update',$tableName,$data,['types'=>$types,'where'=>$where]);
+            
+            Base::query($q,$base);
+            Base::commit($base);
+
+        } catch (\Exception $e) {
+            Base::rollback($base);
+            throw new \Exception($e->getMessage());
+        };
+        return true;
+
     }
     
 };

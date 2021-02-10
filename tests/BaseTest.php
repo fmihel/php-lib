@@ -18,28 +18,10 @@ final class BaseTest extends TestCase{
     public static function setUpBeforeClass(): void
     {
         Config::loadFromFile(__DIR__.'/data/configBase.php');
-        /*
-        Base::connect(
-            Config::get('server'),
-            Config::get('user'),
-            Config::get('pass'),
-            Config::get('baseName'),
-            'test'
-        );
-        */
         Base::connect(Config::get('test'));
 
     }    
     public function test_connect(){
-        /*
-        $connect = Base::connect(
-            Config::get('server'),
-            Config::get('user'),
-            Config::get('pass'),
-            Config::get('baseName'),
-            'test'
-        );
-        */
         $connect = Base::connect('test');
         self::assertTrue( $connect === true);
     }
@@ -356,6 +338,18 @@ final class BaseTest extends TestCase{
 
     }
 
+    /**
+     * @depends test_connect
+     */    
+    public function test_update(){
+        // --------------------------------------------
+        $res = Base::update('test', TABLE_FILL , ['NAME'=>200,'AGE'=>100] ,'ID_CLIENT=32');
+        self::assertTrue( $res );
+        // --------------------------------------------
+        $this->expectException(\Exception::class);
+        $res = Base::update('test', TABLE_FILL , ['NAME'=>200,'AGE'=>100] ,'ID_CLIENTS=33');
+        // --------------------------------------------
+    }
 
 }
 
