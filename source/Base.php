@@ -932,9 +932,12 @@ class Base{
      * тк же можно задать $value [VALUE,TYPE] либо указать в $param['types'=>]
     */
     public static function paramToSql(string $sql,array $FieldNameValue=[],array $param=[]){
+        
         $param = array_merge([
             'types'=>[]
         ],$param);
+
+        uksort($FieldNameValue,function($a,$b){return strlen($a)<strlen($b);});
 
         $types = $param['types'];
 
