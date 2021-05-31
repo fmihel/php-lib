@@ -316,6 +316,9 @@ final class BaseTest extends TestCase{
 
     }
 
+    /**
+     * @depends test_haveKeys
+     */    
     public function test_paramToSql(){
         // ----------------------------------------        
         $q = 'select * from TEST where ID=:ID and NAME=":NAME"';
@@ -356,6 +359,33 @@ final class BaseTest extends TestCase{
         $res = Base::update('test', TABLE_FILL , ['NAME'=>200,'AGE'=>100] ,'ID_CLIENTS=33');
         // --------------------------------------------
     }
+
+    public function test_haveKeys(){
+        $className = 'fmihel\lib\Base';
+        $method = '_haveKeys';
+
+        $str = 'select * from table where ID = :ID';
+        $keys = ['ID'];
+        self::assertTrue( self::doPrivateStaticMethod($className,$method,$str,$keys) );
+        // --------------------------------------------
+        $str = 'select * from table where ID = :ID_K_MOD';
+        $keys = ['ID'];
+        $this->expectException(\Exception::class);
+        self::assertTrue( self::doPrivateStaticMethod($className,$method,$str,$keys) );
+        // --------------------------------------------
+        $str = 'select * from table where ID = :ID_K_MOD';
+        $keys = ['ID_K_MOD'];
+        $this->expectException(\Exception::class);
+        self::assertTrue( self::doPrivateStaticMethod($className,$method,$str,$keys) );
+
+    }
+
+    protected static function doPrivateStaticMethod($className,$name,...$args) {
+        $class = new \ReflectionClass($className);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invoke(null,...$args);
+      }
 
 }
 

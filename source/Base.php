@@ -937,12 +937,16 @@ class Base{
             'types'=>[]
         ],$param);
 
-        uksort($FieldNameValue,function($a,$b){return strlen($a)<strlen($b);});
-
-        $types = $param['types'];
 
         try {
-            $from = [];
+            
+            $fields = array_keys($FieldNameValue);
+            self::_haveKeys($sql,$fields);
+
+            uksort($FieldNameValue,function($a,$b){return strlen($a)<strlen($b);});
+            $types = $param['types'];
+
+                $from = [];
             $to = [];
             foreach($FieldNameValue as $name=>$value){
 
@@ -987,7 +991,26 @@ class Base{
         return true;
 
     }
-    
+    /** проверка, что keys содержит все подставляемые переменные для $sql 
+     * Ex: sqlHavekeys('select * from one where id=:id and name=":name"',["id",'name','data']) = true
+     * Ex: sqlHavekeys('select * from one where id=:id and name=":name"',["id",'data']) : raise Exception
+    */
+    private static function _haveKeys(string $sql,array $keys):bool{
+        
+        //error_log(print_r($keys,true));
+        $re = '/(:)([a-zA-Z_0-9]+)/m';
+        preg_match_all($re, $sql, $result);
+        $result = array_unique($result[2]);
+        //error_log(print_r($result));
+        foreach($result as $name){
+            if (array_search($name,$keys)===false){
+                //return false;
+                throw new \Exception("field $name not exists");
+            }
+        }
+
+        return true;
+    }
 };
 
 
