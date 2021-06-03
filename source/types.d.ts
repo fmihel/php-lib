@@ -33,7 +33,7 @@ export  namespace ut{
      * @param {any} param - параметр, передаваемый в первый промис
      * @returns {Promise}
      */
-    export function promises(funcs:Function[], param?:any):Promise;
+  export function promises(funcs:Function[], param?:any):Promise;
     /** преобразует value в boolean
      * @param {any}
      * @returns {boolean}
@@ -48,7 +48,14 @@ export  namespace ut{
      * toBool("lkdw") = false
      * toBool(false) = false
     */
-    export function toBool(value:any):boolean;
+  export function toBool(value:any):boolean;
+    /** сравнение переменных
+     * При совпадении типов - строгое сравнение, 
+     * при string & number строку приводим к числу,
+     * true = 1,false = 0 но true !== '1' && false !== '0'
+     * NaN = undefined = null !==0  !==false !==''
+     * */
+  export function eq(val1:any,val2:any):boolean;    
 }
 
 export function DOM(selector:string, _parentDOM?:object):object;
