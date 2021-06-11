@@ -3,7 +3,7 @@ namespace fmihel\lib\test;
 
 use PHPUnit\Framework\TestCase;
 use fmihel\lib\Common;
-
+use phpDocumentor\Reflection\Types\Null_;
 
 final class CommonTest extends TestCase{
     public function test_get(){
@@ -58,6 +58,8 @@ final class CommonTest extends TestCase{
         //error_log(print_r($current,true));
         self::assertTrue( $result );
         //------------------------------------
+        self::assertTrue( Common::get(['A'=>[1,3,5]],'A',3,-1) ===-1 );
+
 
     }
     public function test_eq(){
@@ -91,6 +93,22 @@ final class CommonTest extends TestCase{
         self::assertTrue( (Common::eq(null,'0') === true) );
         //------------------------------------        
     }    
+    public function test_isset(){
+
+        self::assertFalse(Common::isset(0,'A','ERROR') );
+        //------------------------------------
+        self::assertTrue( Common::isset(['A'=>['ERROR'=>10]],'A','ERROR') );
+        //------------------------------------
+        self::assertTrue( Common::isset(['A'=>10],'A') );
+        //------------------------------------
+        self::assertFalse(Common::isset(null,'A','ERROR') );
+        //------------------------------------
+        self::assertTrue( Common::isset(['A'=>['ERROR'=>10]],'A','ERROR') );
+        //------------------------------------
+        self::assertTrue( Common::isset(['A'=>[1,3,5]],'A',1) );
+        //------------------------------------
+        self::assertFalse( Common::isset(['A'=>[1,3,5]],'A',3) );
+    }
 
 }
 

@@ -3,6 +3,7 @@ namespace fmihel\lib;
 use fmihel\lib\Type;
 use fmihel\console;
 
+
 class Common {
 
 
@@ -113,5 +114,40 @@ class Common {
 
     }
 
-    
+    /** проверяет, существует ли указанная вложенность элементов */
+    public static function isset($var,...$props){
+        if (!isset($var))
+            return false;
+        
+        $count = count($props);
+        if ($count<1)
+            throw new \Exception("Common::get must have 2 or more params");
+        
+        for($i=0;$i<$count;$i++){
+            $prop = $props[$i];
+
+            if ((is_string($prop))&&(is_numeric($prop)))
+                $prop = intval($prop);
+                
+            $type = Type::get($var);    
+            
+            if ( ( ($type==='array')||($type==='assoc'))&&(isset($var[$prop]) ) ){
+                
+                if ( $i === $count-1 )
+                    return true;    
+                else    
+                    $var = $var[$prop];
+                    
+            }elseif ( ($type==='object')&&(property_exists($var,$prop))){
+
+                if ($i===$count-1)
+                    return true;    
+                else    
+                    $var = $var->{$prop};                
+            }else
+                return false;    
+        }
+
+    }
+
 }
