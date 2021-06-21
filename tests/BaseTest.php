@@ -2,7 +2,7 @@
 namespace fmihel\lib\test;
 
 use PHPUnit\Framework\TestCase;
-use fmihel\lib\{Config,Base};
+use fmihel\lib\{Config,Base,BaseException};
 use fmihel\console;
 
 define('TABLE_FILL','test_clients');
@@ -144,9 +144,8 @@ final class BaseTest extends TestCase{
         self::assertTrue( Base::isEmpty($ds) );
         // ------------------------------
         $q = 'select * from qwedwqd'.TABLE_FILL;
-        $this->expectException(\Exception::class);        
+        $this->expectException(BaseException::class);        
         $ds = Base::ds($q,'test');
-        
     }
 
     /**
@@ -214,7 +213,7 @@ final class BaseTest extends TestCase{
         self::assertTrue($value==2);
         // --------------------------------------------
         $q = 'select NAMEZ from '.TABLE_FILL;
-        $this->expectException(\Exception::class);
+        $this->expectException(BaseException::class);
         $value = Base::value($q,'test');
         // --------------------------------------------
     }

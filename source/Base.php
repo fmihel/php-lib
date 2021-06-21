@@ -28,13 +28,22 @@ class _db{
     }
 };
 
+class BaseException extends \Exception{
+    function __construct($msg,$base=null)
+    {
+        $error = Base::error($base);
+        if ($error)
+            $msg = "{mysqli.error:$error} ".$msg;
+        parent::__construct($msg,0);
+    }
+}
 
 class Base{
 
     static private $_base = array();
     static private $_codings = array();
     static private $_types = array();
-    /** 
+    /** connect to base
      * @param string | array $server server name or ['server'=>...,'user'=>...,...]
      * @param string $user -   user name
      * @param string $pass -  password
@@ -78,8 +87,9 @@ class Base{
 
         if ($db->connect_errno){
             $msg = "can`t connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-            error_log($msg);
-            if ($die){
+            if ($die === 'exception'){
+                throw new BaseException($msg);
+            }elseif ($die){
                 echo $msg;
                 exit;
             }
@@ -95,7 +105,7 @@ class Base{
         return true;
         
     }
-    
+    /** disconnect from base */
     public static function disconnect($base){
 
         if(isset(self::$_base[$base])){
@@ -104,8 +114,7 @@ class Base{
         }   
         
     }
-    /** 
-     * set or return charset
+    /** set or return charset
      * 
      * example set default charset
      * base::charSet('mybase','UTF-8');
@@ -141,8 +150,6 @@ class Base{
                 return $_base->charset;
             }else{
                 
-                //if ($coding === '') 
-                //    self::doThrow(__METHOD__,$base,'coding must not be empty ');
                     
                 if ($coding === 'story'){
                     
@@ -154,19 +161,17 @@ class Base{
                 }else if ($coding === 'restory'){
                     $_base->db->set_charset(array_pop(self::$_codings[$base]));
                 }else if (!$_base->db->set_charset($coding)) {
-                    self::doThrow(__METHOD__,$base,'error set charSet = '.$coding);
+                    throw new BaseException('error set charSet = '.$coding,$base);
                 }else
                     $_base->charset = $coding;
             }    
     }
-    /**  
-     * return base or raise Exception 
-     * */
+    /**  return base or raise Exception */
     private static function getbase($base,$exception = true){
         
         if (count(self::$_base)===0) {
             if ($exception)
-                throw new \Exception(__CLASS__.__METHOD__.": no have initializing base", 0);
+                throw new BaseException("no have initializing base");
             return false;
         }   
         
@@ -178,62 +183,50 @@ class Base{
             return self::$_base[$base];
         
         if ($exception)
-            throw new \Exception(__CLASS__.__METHOD__.": base $base is not exists", 0);
+            throw new BaseException("base $base is not exists");
 
         return false;
         
     }
-    
+    /** return db object as ref to base */
     private static function db($base){
         return self::getbase($base)->db;
     }
-
+    /** return error of base */
     public static function error($base){
         $_base = self::getbase($base);
-        return $_base->db->error;
+        if ($_base)
+            return $_base->db->error;
+        return '';
     }
 
     public static function query($sql,$base,$coding=null){
+        
         $db = self::db($base);
         
-        if (!is_null($coding)){
-            $story  =   self::charSet($base);
-            self::charSet($base,$coding);
-        }    
+        try{
+            $change_coding = false;
+            if (!is_null($coding)){
+                $story  =   self::charSet($base);
+                self::charSet($base,$coding);
+                $change_coding = true;
+            }    
 
-        $res =  $db->query($sql);
-        if ($res === false)
-            self::doThrow(__METHOD__,$base,$sql);
+            $res =  $db->query($sql);
             
-        
-        if (!is_null($coding))
-            self::charSet($base,$story);
-        
+            if ($res === false)
+                throw new BaseException($sql,$base);
+            
+        } catch (\Exception $e) {
+            if ( $change_coding && (!is_null($coding)))
+                self::charSet($base,$story);
+            throw $e;
+        };
             
         return $res;
 
     }
     
-    private static function doThrow($method,$base,...$msgs){
-        $msg = '';
-
-        foreach($msgs as $m){
-            if ($msg !== '') $msg.="\n";
-            if (gettype($m) === 'string')
-                $msg.=$m;
-            else
-                $msg.=print_r($m,true);
-        }
-
-        
-        if (self::getbase($base,false)!==false) {
-            $error = self::error($base);
-            if ($error)
-                $msg = $error."\n".$msg;
-        }
-        
-        throw new \Exception($method.' '.$msg);
-    }
 
     /**
      * @return  false - если ошибка
@@ -254,8 +247,7 @@ class Base{
     public static function isEmpty($ds){
         return ( (!self::assign($ds)) || ($ds->num_rows===0) );
     }
-    /**
-     * Возвращает кол-во записей запроса sql или в ds
+    /** Возвращает кол-во записей запроса sql или в ds
      * если задать countFieldName, то будет искать соответсвтвующее поле и выдаст его значение
      * можно задать countFieldName как число, тогда это будет номер необходимого поля
      */
@@ -263,7 +255,8 @@ class Base{
         
         $ds = gettype($sqlOrDs)==='string'?self::ds($sqlOrDs,$base,null):$sqlOrDs;
         if (!$ds)
-            self::doThrow(__METHOD__,$base,'can`t get ds from sqlOrDs =  ',$sqlOrDs);
+            throw new BaseException('can`t get ds from sqlOrDs =  '.print_r($sqlOrDs,true),$base);
+
         $type = gettype($countFieldName);
 
         if (($countFieldName!='')||($type==='integer')){
@@ -309,9 +302,7 @@ class Base{
         $list = self::fieldsInfo($tableName,$base,true);
         return (array_search($field,$list)!==false);
     }    
-    /** 
-     * сокращенное имя типа возвращаемое по SHOW COLUMNS FROM...
-    */
+    /** сокращенное имя типа возвращаемое по SHOW COLUMNS FROM...*/
     private static function shorType($type){
         $match = [
             'int'       =>'int',
@@ -377,8 +368,7 @@ class Base{
 
         return self::$_types[$base][$table];
     }
-    /** 
-     * возвращает информацию о полях результата запроса
+    /** возвращает информацию о полях результата запроса
      * @param object $ds - ссылка на результат запроса
      * @param bool | array $short_info true-короткая информация, false полная информация ,[field1,field2,..] - только выборочные поля из запроса
      * @return array | object
@@ -413,9 +403,7 @@ class Base{
         }    
             
     }
-    /* from:
-        http://php.net/manual/ru/mysqli-result.fetch-fields.php
-    */
+    /**  from: http://php.net/manual/ru/mysqli-result.fetch-fields.php */
     public static function map_field_type_to_bind_type($field_type){
         switch ($field_type)
         {
@@ -506,14 +494,11 @@ class Base{
         };
     }
     
-    /**
-     * перемещает указатель на первую запись
-     */
+    /** перемещает указатель на первую запись */
     public static function first($ds){
         $ds->data_seek(0);
     }
-    /** 
-     * возвращает текущую строку
+    /** возвращает текущую строку
      * если строки закончились или их нет, то возвращает NULL
     */
     public static function row($sqlOrDs,$base=null,$coding=null){
@@ -534,8 +519,7 @@ class Base{
         return $out;
     }
     
-    /**
-     * используется для чтения строки из dataset
+    /** используется для чтения строки из dataset
      * Ex:
      * $ds = base::ds(...)l
      * while($row=base::read($ds)){
@@ -574,17 +558,18 @@ class Base{
             if ($field === '')
                 $field = $fields[0];
             else if (array_search($field,$fields)===false)
-                throw new \Exception(" field = ['$field'] not exist", 0);
+                throw new BaseException(" field = ['$field'] not exist", $base);
                 
             if (self::isEmpty($ds))
-                throw new \Exception('result of ['.$sql.'] is empty',0);
+                throw new BaseException('result of ['.$sql.'] is empty',$base);
             
             $row = self::row($ds);
             return $row[$field];
 
         } catch (\Exception $e) {
-            if ($default === null)
-                self::doThrow(__METHOD__,$base,$e->getMessage());
+            if ($default === null){
+                throw $e;
+            }
         };
 
         return $default;
@@ -610,7 +595,7 @@ class Base{
         }
         
         if ($b->transaction<0)
-            self::doThrow(__METHOD__,$base,'transaction overflow loop...');
+            throw new BaseException('transaction overflow loop...',$base);
         
         return false;
     }
@@ -626,7 +611,7 @@ class Base{
         }
         
         if ($b->transaction<0)
-            self::doThrow(__METHOD__,$base,'transaction overflow loop...');
+            throw new BaseException('transaction overflow loop...',$base);
         
         return false;
         
@@ -927,9 +912,8 @@ class Base{
         $to   = array('\"');
         return str_replace($from,$to,$string);
     }
-    /**  
-     * заменяет параметры типа :FIELDNAME в $sql , на их значение value из $FeildNameValue=['FIELDNAME'=>value]
-     * тк же можно задать $value [VALUE,TYPE] либо указать в $param['types'=>]
+    /** заменяет параметры типа :FIELDNAME в $sql , на их значение value из $FeildNameValue=['FIELDNAME'=>value]
+     *  тк же можно задать $value [VALUE,TYPE] либо указать в $param['types'=>]
     */
     public static function paramToSql(string $sql,array $FieldNameValue=[],array $param=[]){
         
@@ -937,38 +921,27 @@ class Base{
             'types'=>[]
         ],$param);
 
-
-        try {
+        $fields = array_keys($FieldNameValue);
+        self::_haveKeys($sql,$fields);
+        uksort($FieldNameValue,function($a,$b){return strlen($a)<strlen($b);});
+        $types = $param['types'];
+            $from = [];
+        $to = [];
+        foreach($FieldNameValue as $name=>$value){
+            $type = 'int';
+            if (gettype($value) === 'array'){
+                $type = $value[1];
+                $value = $value[0];
+            }elseif (isset($types[$name])){
+                $type = $types[$name];
+            };
             
-            $fields = array_keys($FieldNameValue);
-            self::_haveKeys($sql,$fields);
-
-            uksort($FieldNameValue,function($a,$b){return strlen($a)<strlen($b);});
-            $types = $param['types'];
-
-                $from = [];
-            $to = [];
-            foreach($FieldNameValue as $name=>$value){
-
-                $type = 'int';
-
-                if (gettype($value) === 'array'){
-                    $type = $value[1];
-                    $value = $value[0];
-                }elseif (isset($types[$name])){
-                    $type = $types[$name];
-                };
-                
-                $value = self::typePerform($value,$type);
-                $from[] = ':'.$name;
-                $to[] = $value;
-            }
-
-            return str_replace($from,$to,$sql);
+            $value = self::typePerform($value,$type);
+            $from[] = ':'.$name;
+            $to[] = $value;
+        }
+        return str_replace($from,$to,$sql);
             
-        } catch (\Exception $e) {
-            error_log('Exception ['.__FILE__.':'.__LINE__.'] '.$e->getMessage());
-        };
     }
     /** внесение изменений в таблицу 
      * @return {boolean || Exception}
@@ -986,7 +959,7 @@ class Base{
 
         } catch (\Exception $e) {
             Base::rollback($base);
-            throw new \Exception($e->getMessage());
+            throw $e;
         };
         return true;
 
@@ -997,15 +970,12 @@ class Base{
     */
     private static function _haveKeys(string $sql,array $keys):bool{
         
-        //error_log(print_r($keys,true));
         $re = '/(:)([a-zA-Z_0-9]+)/m';
         preg_match_all($re, $sql, $result);
         $result = array_unique($result[2]);
-        //error_log(print_r($result));
         foreach($result as $name){
             if (array_search($name,$keys)===false){
-                //return false;
-                throw new \Exception("field $name not exists");
+                throw new BaseException("field $name not exists");
             }
         }
 
