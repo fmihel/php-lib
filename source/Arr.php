@@ -111,6 +111,11 @@ class Arr {
         return array_intersect_key(array_merge($default,$args),$default);
     }
 
+    /** перемещает элемент массива из позиции $from в $to */
+    public static function move(array &$array, int $from,int $to) {
+        $out = array_splice($array, $from, 1);
+        array_splice($array, $to, 0, $out);
+    }
 }
 
 

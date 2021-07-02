@@ -134,7 +134,65 @@ final class ArrTest extends TestCase{
         //error_log(print_r($result,true));
         self::assertEquals($result,$ok);
         
-    }    
+    }
+    public function test_move(){
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 0;
+          $to = 2;
+          $eq = [1,2,0,3,4,5,6];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 0;
+          $to = 0;
+          $eq = [0,1,2,3,4,5,6];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 0;
+          $to = 6;
+          $eq = [1,2,3,4,5,6,0];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 0;
+          $to = 10;
+          $eq = [1,2,3,4,5,6,0];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 6;
+          $to = 2;
+          $eq = [0,1,6,2,3,4,5];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          $arr = [0,1,2,3,4,5,6];
+          $from = 4;
+          $to = 6;
+          $eq = [0,1,2,3,5,6,4];
+          Arr::move($arr,$from,$to);
+
+          //error_log(print_r($result,true));
+          self::assertEquals($arr,$eq);
+          //------------------------------------
+          
+        }    
 }
 
 ?>
