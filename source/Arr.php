@@ -116,6 +116,21 @@ class Arr {
         $out = array_splice($array, $from, 1);
         array_splice($array, $to, 0, $out);
     }
+    /** вставить элемент в позицию в массиве ( первый элемент = 0 )
+    * Arr::insert([0,1,2,3],333);    // [0,1,2,3,333]
+    * Arr::insert([0,1,2,3],333,0);  // [333,0,1,2,3]
+    * Arr::insert([0,1,2,3],333,-10);// [333,0,1,2,3]
+    * Arr::insert([0,1,2,3],333,1);  // [0,333,1,2,3]
+    */
+    public static function insert(array &$toArray,$data,$pos=false){
+        if ($pos===false || $pos>=count($toArray)){
+            $toArray[]=$data;
+        }elseif ($pos<=0){
+            array_unshift($toArray,$data);
+        }else
+            array_splice($toArray, $pos, 0, $data);
+        
+    }
 }
 
 

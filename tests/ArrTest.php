@@ -3,7 +3,7 @@ namespace fmihel\lib\test;
 
 use PHPUnit\Framework\TestCase;
 use fmihel\lib\Arr;
-
+use fmihel\console;
 
 class ForISAssoc {
     public $a = '';
@@ -193,6 +193,25 @@ final class ArrTest extends TestCase{
           //------------------------------------
           
         }    
+        public function test_insert(){
+            //------------------------------------
+            $arr = [0,1,2,3];
+            Arr::insert($arr,333);
+            self::assertEquals($arr,[0,1,2,3,333]);
+            //------------------------------------
+            $arr = [0,1,2,3];
+            Arr::insert($arr,333,0);
+            self::assertEquals($arr,[333,0,1,2,3]);
+            //------------------------------------
+            $arr = [0,1,2,3];
+            Arr::insert($arr,333,-10);
+            self::assertEquals($arr,[333,0,1,2,3]);
+            //------------------------------------
+            $arr = [0,1,2,3];
+            Arr::insert($arr,333,1);
+            self::assertEquals($arr,[0,333,1,2,3]);
+          
+          }    
 }
 
 ?>
