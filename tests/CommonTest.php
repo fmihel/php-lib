@@ -108,6 +108,8 @@ final class CommonTest extends TestCase{
         self::assertTrue( Common::isset(['A'=>[1,3,5]],'A',1) );
         //------------------------------------
         self::assertFalse( Common::isset(['A'=>[1,3,5]],'A',3) );
+        //------------------------------------
+        self::assertTrue( Common::isset(['A'=>['Bust'=>null]],'A','Bust') );        
     }
 
 }

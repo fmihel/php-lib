@@ -131,13 +131,20 @@ class Common {
                 
             $type = Type::get($var);    
             
-            if ( ( ($type==='array')||($type==='assoc'))&&(isset($var[$prop]) ) ){
+            if ( ($type==='array') && (isset($var[$prop]) ) ){
                 
                 if ( $i === $count-1 )
                     return true;    
                 else    
                     $var = $var[$prop];
-                    
+
+            }elseif ( $type==='assoc' && array_key_exists($prop,$var) ){
+                
+                if ( $i === $count-1 )
+                    return true;
+                else    
+                    $var = $var[$prop];
+                            
             }elseif ( ($type==='object')&&(property_exists($var,$prop))){
 
                 if ($i===$count-1)
