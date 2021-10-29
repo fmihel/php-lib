@@ -7,7 +7,7 @@ const toProduction = !toRemotePath && defArg('prod');
 
 const SOURCE_PATH = './source/';
 // const PUBLIC_PATH = toRemotePath ? 'C:/work/admin/node_modules/fmihel-browser-lib/dist/' : './dist/';
-const PUBLIC_PATH = toRemotePath ? 'E:/work/aaa/node_modules/fmihel-browser-lib/dist/' : './dist/';
+const PUBLIC_PATH = toRemotePath ? 'C:/work/fmihel/windeco-components/node_modules/fmihel-browser-lib/dist/' : './dist/';
 
 module.exports = {
     mode: toProduction ? 'production' : 'development',

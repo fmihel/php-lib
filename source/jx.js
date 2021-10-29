@@ -232,6 +232,35 @@ const JX = {
 
         return res;
     },
+    /** скролирует объект scroll:DOM до момента, пока to:DOM не окажется в области видимости */
+    scroll(scroll, to, param = {}) {
+        const a = {
+            animate: 0,
+            off: 0,
+            alg: 'simple', /* reach */
+            ...param,
+        };
+        const posTar = JX.abs(to);
+        const posScr = JX.abs(scroll);
+        const $scroll = $(scroll);
+        let delta;
+
+        if (a.alg === 'reach') {
+            if ((posTar.h > posScr.h) || (posTar.y < posScr.y)) {
+                delta = posTar.y - posScr.y + $scroll.scrollTop() - a.off;
+            } else {
+                delta = posTar.y - (posScr.y + posScr.h - posTar.h) + $scroll.scrollTop() + a.off;
+            }
+        } else {
+            delta = posTar.y - posScr.y + $scroll.scrollTop() - a.off;
+        }
+
+        if (a.animate === 0) {
+            $scroll.scrollTop(delta);
+        } else {
+            $scroll.animate({ scrollTop: delta }, a.animate);
+        }
+    },
 };
 
 // eslint-disable-next-line func-names

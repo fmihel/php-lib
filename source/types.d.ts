@@ -125,6 +125,9 @@ export namespace JX {
    *  что $obj неактулен, и скорее всего его нужно перестроить 
    */
   export function relevance($obj:object):boolean;
+   
+  /** скролирует объект scroll:DOM до момента, пока to:DOM не окажется в области видимости */
+  export function scroll(scroll:object,to:object,param?:object={});
 }; 
 
 export namespace storage{
