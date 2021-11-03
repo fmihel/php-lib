@@ -72,7 +72,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "fmihel-lib": "^1.5.0"
+    "fmihel-lib": "^2.0.0"
   },
   "peerDependencies": {
     "jquery": "^3.4.1"

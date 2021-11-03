@@ -49,13 +49,17 @@ export  namespace ut{
      * toBool(false) = false
     */
   export function toBool(value:any):boolean;
-    /** сравнение переменных
+  /** сравнение переменных
      * При совпадении типов - строгое сравнение, 
      * при string & number строку приводим к числу,
-     * true = 1,false = 0 но true !== '1' && false !== '0'
+     * true = 1,false = 0  true === '1' && false === '0'
      * NaN = undefined = null !==0  !==false !==''
-     * */
-  export function eq(val1:any,val2:any):boolean;    
+    */
+   export function eq(val1:any,val2:any):boolean;
+   /** приведение к bool и сравнение с true */
+   export function True(val:any):boolean;
+   /** приведение к bool и сравнение с true */
+   export function False(val:any):boolean;
 }
 
 export function DOM(selector:string, _parentDOM?:object):object;
