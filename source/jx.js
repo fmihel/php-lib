@@ -152,10 +152,10 @@ const JX = {
         if (bound === undefined) {
             const w = dom.getBoundingClientRect();
             return {
-                x: Math.round(w.left + window.pageXOffset),
-                y: Math.round(w.top + window.pageYOffset),
-                w: Math.round(w.width),
-                h: Math.round(w.height),
+                x: w.left + window.pageXOffset,
+                y: w.top + window.pageYOffset,
+                w: w.width,
+                h: w.height,
             };
         }
         // console.warn('abs(dom,bound) is not released !!!');
@@ -206,7 +206,6 @@ const JX = {
         if (p.fontSize === undefined) {
             p.fontSize = style.fontSize;
         }
-
 
         const str = document.createTextNode(text);
         const obj = document.createElement('div');

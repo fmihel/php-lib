@@ -1,13 +1,13 @@
 const path = require('path');
 const { defArg } = require('fmihel-server-lib');
 
-
 const toRemotePath = defArg('path');
 const toProduction = !toRemotePath && defArg('prod');
 
 const SOURCE_PATH = './source/';
 // const PUBLIC_PATH = toRemotePath ? 'C:/work/admin/node_modules/fmihel-browser-lib/dist/' : './dist/';
-const PUBLIC_PATH = toRemotePath ? 'C:/work/fmihel/windeco-components/node_modules/fmihel-browser-lib/dist/' : './dist/';
+// const PUBLIC_PATH = toRemotePath ? 'C:/work/fmihel/windeco-components/node_modules/fmihel-browser-lib/dist/' : './dist/';
+const PUBLIC_PATH = toRemotePath ? 'C:/work/windeco/order/node_modules/fmihel-browser-lib/dist/' : './dist/';
 
 module.exports = {
     mode: toProduction ? 'production' : 'development',
