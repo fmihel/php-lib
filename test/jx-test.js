@@ -90,5 +90,21 @@ describe('JX', () => {
             chai.expect(size).to.have.property('w');
             chai.expect(size).to.have.property('h');
         });
+
+        it('with padding ', () => {
+            const obj = document.createElement('div');
+            const str = document.createTextNode('so long text in this node!');
+            obj.style.padding = '13px';
+            obj.style.position = 'absolute';
+            obj.appendChild(str);
+            document.body.appendChild(obj);
+            // console.log('width', obj.offsetWidth);
+            const size = JX.textSize('someText qwejh jwhedf hwe', { parentDom: obj, attr: { padding: true } });
+
+            console.log('someText >> ', size);
+            chai.expect(true).to.equal(true);
+
+            document.body.removeChild(obj);
+        });
     });
 });

@@ -197,6 +197,10 @@ const JX = {
             refresh: false,
             width: 0,
             ...param,
+            attr: {
+                padding: false,
+                ...param.attr,
+            },
         };
         const style = (p.fontFamily === undefined || p.fontSize === undefined) ? t.getStyle(p.parentDom, { refresh: p.refresh }) : undefined;
 
@@ -212,8 +216,8 @@ const JX = {
 
         obj.style.fontSize = Number.isInteger(p.fontSize) ? `${p.fontSize}px` : p.fontSize;
         obj.style.fontFamily = p.fontFamily;
-        obj.style.margin = `${0}px`;
-        obj.style.padding = `${0}px`;
+        obj.style.margin = '0px';
+        obj.style.padding = p.attr.padding ? style.padding : '0px';
         obj.style.position = 'absolute';
         if (p.width === 0) {
             obj.style.whiteSpace = 'nowrap';

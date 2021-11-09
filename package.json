@@ -10,7 +10,7 @@
   "scripts": {
     "test-build": "webpack webpack.config.test.js",
     "test-dev": "webpack-dev-server --config webpack.config.test.js",
-    "copy-to-path": "cp -r source C:/work/windeco/order/node_modules/fmihel-browser-lib/",
+    "copy-to-path": "cp -r source C:/work/windeco/windeco-components/node_modules/fmihel-browser-lib/",
     "rollup-build-dist": "rollup -c rollup.config.js",
     "rollup-build-dist-min": "rollup -c rollup.config.min.js",
     "webpack-build": "webpack",
