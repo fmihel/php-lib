@@ -1,6 +1,7 @@
 <?php
 namespace fmihel\lib\test;
 
+use fmihel\console;
 use PHPUnit\Framework\TestCase;
 use fmihel\lib\Common;
 
@@ -111,7 +112,60 @@ final class CommonTest extends TestCase{
         //------------------------------------
         self::assertTrue( Common::isset(['A'=>['Bust'=>null]],'A','Bust') );        
     }
+    public function test_join(){
+        //------------------------------------
+        $url = 'https://www.site.ru/rest';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://www.site.ru/rest?a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        $url = 'https://www.site.ru/rest/';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://www.site.ru/rest/?a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        $url = 'https://www.site.ru';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://www.site.ru?a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        $url = 'https://www.site.ru/rest?v=1';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://www.site.ru/rest?v=1&a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        $url = 'www.site.ru/rest?v=1';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://www.site.ru/rest?v=1&a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        $url = '';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
+        //------------------------------------
+        $url = 'site';
+        $attr = ['a'=>1,'b'=>'text'];
+        $res = Common::join($url,$attr);
+        $eq = 'https://site?a=1&b=text';
+        //console::log($res);
+        self::assertTrue($eq === $res );
+        //------------------------------------
 
+    }
 }
 
 ?>

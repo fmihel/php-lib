@@ -156,5 +156,33 @@ class Common {
         }
 
     }
+    /** соединяет  url и массив атрибутов
+     * Ex:join('http://test.ru/rest/',['a'=>1,'b'=>'text']) // http://test.ru/rest/?a=1&b=text
+     * Ex:join('http://test.ru/rest/?v=1',['a'=>1,'b'=>'text']) // http://test.ru/rest/?v=1&a=1&b=text
+     *      
+    */
+    public static function join(string $url,array $attr):string{
+        if (!empty($url)){
+        
+            $aUrls = parse_url($url);
+            $url = (isset($aUrls['scheme'])?$aUrls['scheme']:'https').'://'.(isset($aUrls['host'])?$aUrls['host']:'');
+        
+            if (isset($aUrls['path'])){
+                $url.=$aUrls['path'];
+            }
+        
+            $url.='?';
+        
+            if (isset($aUrls['query']))
+                $url.=$aUrls['query'].'&';
+                
+            $query = http_build_query($attr);
+            
+            if ($query)
+                $url.=$query;
+            return $url;
+        }
+        return http_build_query($attr);
+    }
 
 }
