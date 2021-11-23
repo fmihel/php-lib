@@ -1,6 +1,7 @@
 <?php
 namespace fmihel\lib;
 
+
 /** 
  * загрузка файла конфигурации
 */
@@ -8,6 +9,7 @@ class ConfigClass{
 
     public $param;
     private $loadedFiles;
+    private $only_def = []; // список параметров, которые определены программно, а не из конфига. Если для такого параметра вызвать иетод get то будет сгенерировано предупреждение
     
     private $settings=[
         'fileName'=>'config.php',
@@ -75,6 +77,10 @@ class ConfigClass{
                 $this->param = Arr::extend($this->param,${$s['varName']});
                 if (array_search($abs,$this->loadedFiles)===false)
                     $this->loadedFiles[]=$abs;
+                //-----------------------------------
+                // список тех что определены, но не загружены    
+                $this->only_def = array_diff($this->only_def, array_keys($this->param));
+                //-----------------------------------    
                 return true;
             }
         }else{
@@ -84,14 +90,17 @@ class ConfigClass{
     }
     
     public function def($name,$mean){
-        if (!isset($this->param[$name]))
+        if (!isset($this->param[$name])){
+            $this->only_def[]=$name; // сохраняем в список параметров, которые только определены
             $this->param[$name] = $mean;
+        }
     }
     public function define($name,$mean){
         $this->def($name,$mean);
     }
 
     public function set($name,$mean){
+        $this->only_def_warn($name);
         $this->param[$name] = $mean;
     }
     /** 
@@ -107,12 +116,15 @@ class ConfigClass{
 
             
         if ( !isset($this->param[$name])) {
-            if ($count > 1) 
+            if ($count > 1){ 
                 return  $param[1];
-            else
+            }else
                 throw new \Exception("param [$name] is not exists", 0);
         };
-        
+
+        if ($this->only_def_warn($name))
+            error_log('config warn: param="'.$name.'" is not defined in config file!');
+    
         return $this->param[$name];
     }
 
@@ -157,6 +169,15 @@ class ConfigClass{
             $out.= ' '.$msg.'';
             
         error_log($out);
+    }
+    /** признак, что параметр не был определен в конфиг файле  */
+    private function only_def_warn(string $name):bool{
+        $idx = array_search($name,$this->only_def);
+        if ($idx!==false){
+            array_splice($this->only_def,$idx,1);
+            return true;
+        }
+        return false;    
     }
 
 }

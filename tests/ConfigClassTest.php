@@ -49,9 +49,12 @@ final class ConfigTest extends TestCase{
         $res = $config->get('load');
         self::assertTrue($res === 'ok');
         // --------------------------------------------
-        $config->def('load2','newloadmean');
+        $config->def('load2','newload2mean');
         $res = $config->get('load2');
-        self::assertTrue($res === 'newloadmean');
+        self::assertTrue($res === 'newload2mean');
+        // --------------------------------------------
+        $res = $config->get('load2');
+        self::assertTrue($res === 'newload2mean');
     }
     
 
