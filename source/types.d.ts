@@ -170,3 +170,4 @@ class ScriptLoader{
   load(url:string|object,varName?:string):Promise;
 }
 export const scriptLoader:ScriptLoader;
+

@@ -1,4 +1,5 @@
 # Библиотека браузерных ф-ций 
+### v2.2.0
 ## Установка
 `npm i fmihel-browser-lib -D`
 ## Набор ф-ций 
@@ -58,4 +59,13 @@ param - настройки для storage
 |count()|int|кол-во загруженных скриптов|
 |exist(string)|boolean|признак существования|
 |get(int)|string|возвращает имя загруженного скрипта |
+
+## url
+Работа с адресом
+|name|result|notes|
+|-----|-----|-----|
+|current()|string| текущий адрес|
+|href()|string| = current()|
+|params(url:string,?set:object,?replace:bool = false)|string| получение/замена/изменение переменных в url|
+|parsing(url)|object| разбор строки url|
 
