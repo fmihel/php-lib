@@ -171,3 +171,11 @@ class ScriptLoader{
 }
 export const scriptLoader:ScriptLoader;
 
+export class Url{
+    static href():string;
+    static current():string;
+    static params(url:string, set?:boolean = false, replace?:boolean= false):object;
+    static parsing(url:string):object;
+    static extFileName(file:string):string;
+    static extPath(file:string):string;
+}

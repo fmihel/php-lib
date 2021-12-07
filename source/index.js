@@ -5,7 +5,7 @@ import _ut from './ut';
 import _storage, { Storage } from './storage';
 import _dvc from './dvc';
 import _scriptLoader from './scriptLoader';
-import _url from './url';
+import _Url from './url';
 
 export const DOM = dom.DOM;
 export const DOMS= dom.DOMS;
@@ -24,7 +24,7 @@ export const ut=_ut;
 export const storage=_storage;
 export const dvc=_dvc;
 export const scriptLoader=_scriptLoader;
-export const url=_url;
+export const Url = _Url;
 
 export default {
     DOM: dom.DOM,
@@ -45,5 +45,5 @@ export default {
     Storage,
     dvc,
     scriptLoader,
-    url
+    Url
 };
