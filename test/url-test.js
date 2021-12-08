@@ -164,4 +164,19 @@ describe('url', () => {
             chai.expect(res).to.eql(data.out);
         });
     });
+
+    describe('nocache', () => {
+        tests([
+            {
+                url: 'https://www.site.ru/index.php', out: `https://www.site.ru/index.php?${url.default.nocacheName}=XXXXXXX`,
+            },
+        ],
+        (data, i) => `${i}:  ${data.url} => ${data.out}`,
+        (data) => {
+            const newUrl = url.nocache(data.url);
+            const { param } = url.parsing(newUrl);
+            // console.log(newUrl, param, url.default.nocacheName);
+            chai.expect(url.default.nocacheName in param).to.equal(true);
+        });
+    });
 });

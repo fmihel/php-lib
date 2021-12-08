@@ -1,7 +1,10 @@
+import ut from './ut';
+
 export default class Url {
     
     static default = {
         protocol:'http',
+        nocacheName:ut.random_str(7),
     }
     /** текущий адрес */
     static href() {
@@ -115,4 +118,25 @@ export default class Url {
         if (f.substring(f.length - 1, 1) == '/') return f;
         return `${f.substring(0, f.lastIndexOf('/'))}/`;
     }
+    /** уставнавливает новый hash тэг */
+    static hash(newHash){
+        window.location.hash = newHash;
+    }
+    /** добавляет случайно сгенерированную переменную в адрес */
+    static nocache(url){
+        return Url.params(url,{
+            [Url.default.nocacheName]:ut.random_str(7),
+        })
+    }
+    /** добавляет спецификацию протокола в адрес, если такой нет */
+    static addProtocol(url){
+        let addr = url.trim();            
+        if ((addr.indexOf('https://') !== 0)&&(addr.indexOf('http://') !== 0)){            
+            if (addr.indexOf('www.') !==0)
+                addr = 'www.'+addr;
+            addr = Url.default.protocol+ "://"+addr;
+        }    
+        return addr;
+    }
+   
 }

@@ -1,5 +1,5 @@
 # Библиотека браузерных ф-ций 
-### v2.2.1
+### v2.3.0
 ## Установка
 `npm i fmihel-browser-lib -D`
 ## Набор ф-ций 
@@ -68,4 +68,5 @@ param - настройки для storage
 |href()|string| = current()|
 |params(url:string,set?:object,replace?:bool = false)|string| получение/замена/изменение переменных в url|
 |parsing(url)|object| разбор строки url|
+|nocache(url:string)|string| добавляет случайно сгенерированную переменную в адрес |
 

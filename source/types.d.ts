@@ -178,4 +178,5 @@ export class Url{
     static parsing(url:string):object;
     static extFileName(file:string):string;
     static extPath(file:string):string;
+    static nocache(url:string):string;
 }
