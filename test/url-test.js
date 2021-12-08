@@ -130,7 +130,7 @@ describe('url', () => {
                 },
             },
             {
-                url: 'https://www.site.ru?t=3&s=text',
+                url: 'https://www.site.ru/dir1/dir2/?t=3&s=text',
                 out: {
                     domen: 'www.site.ru',
                     file: '',
@@ -138,12 +138,13 @@ describe('url', () => {
                     host: 'www.site.ru',
                     param: { t: '3', s: 'text' },
                     params: 't=3&s=text',
-                    path: '',
+                    path: 'dir1/dir2/',
                     protocol: 'https:',
-                    url: 'https://www.site.ru?t=3&s=text',
+                    url: 'https://www.site.ru/dir1/dir2/?t=3&s=text',
                 },
             },
             {
+
                 url: 'https://www.site.ru?t=3&s=text#hash_name',
                 out: {
                     domen: 'www.site.ru',
@@ -157,10 +158,27 @@ describe('url', () => {
                     url: 'https://www.site.ru?t=3&s=text',
                 },
             },
+            {
+                url: 'http://localhost:3000/?themeStyle=dark&themeSize=small&token=CHOBSER1T8QJ3GVA&order=edit&ID_ORDER=20306',
+                out: {
+                    domen: 'localhost',
+                    file: '',
+                    hash: '',
+                    host: 'localhost:3000',
+                    param: {
+                        themeStyle: 'dark', themeSize: 'small', token: 'CHOBSER1T8QJ3GVA', order: 'edit', ID_ORDER: '20306',
+                    },
+                    params: 'themeStyle=dark&themeSize=small&token=CHOBSER1T8QJ3GVA&order=edit&ID_ORDER=20306',
+                    path: '',
+                    protocol: 'http:',
+                    url: 'http://localhost:3000/?themeStyle=dark&themeSize=small&token=CHOBSER1T8QJ3GVA&order=edit&ID_ORDER=20306',
+                },
+            },
         ],
         (data, i) => `${i}: ${data.url} => ${JSON.stringify(data.out)}`,
         (data) => {
             const res = url.parsing(data.url);
+            // console.log(res);
             chai.expect(res).to.eql(data.out);
         });
     });

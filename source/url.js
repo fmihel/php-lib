@@ -44,7 +44,7 @@ export default class Url {
             const pr = pairs.join('&');
 
             const u = Url.parsing(url);
-            return `${u.protocol}//${u.domen}/${u.path}${u.file}?${pr}`;
+            return `${u.protocol}//${u.host}/${u.path}${u.file}?${pr}`;
         }
         const request = {};
         if (url.indexOf('?') === -1) return {};
