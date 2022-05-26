@@ -6,6 +6,7 @@ import _storage, { Storage } from './storage';
 import _dvc from './dvc';
 import _scriptLoader from './scriptLoader';
 import _Url from './url';
+import _imports from './imports';
 
 export const DOM = dom.DOM;
 export const DOMS= dom.DOMS;
@@ -26,6 +27,9 @@ export const dvc=_dvc;
 export const scriptLoader=_scriptLoader;
 export const Url = _Url;
 
+export const imports = _imports;
+
+
 export default {
     DOM: dom.DOM,
     DOMS: dom.DOMS,
@@ -45,5 +49,6 @@ export default {
     Storage,
     dvc,
     scriptLoader,
-    Url
+    Url,
+    imports:_imports
 };

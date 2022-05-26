@@ -70,3 +70,25 @@ param - настройки для storage
 |parsing(url)|object| разбор строки url|
 |nocache(url:string)|string| добавляет случайно сгенерированную переменную в адрес |
 
+## imports
+Отложенная загрузка моудлей
+```javascript
+import imports from 'fmihel-browser-lib';
+// описание модулей
+const modules = {
+    lazy() { return import(/* webpackChunkName: "lazy" */ './lazy').then((module) => ({ lazy:module })); },
+    lodash() { return import(/* webpackChunkName: "lodash" */ 'lodash').then((module) => ({ _: module })); },
+};
+// добавление модулей
+imports.add(modules);
+
+// отложенный вызов
+imports('lazy','lodash')
+    .then( {lazy,_} =>{
+        lazy.default.main(); // for export default
+        lazy.second();       // for export
+        _.fill(Array(3),'aaa');// lodash using
+    }
+);
+```
+

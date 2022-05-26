@@ -180,3 +180,5 @@ export class Url{
     static extPath(file:string):string;
     static nocache(url:string):string;
 }
+
+export function imports(...names:string):Promise;
