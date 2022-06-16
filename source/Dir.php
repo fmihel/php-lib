@@ -1,6 +1,8 @@
 <?php
 namespace fmihel\lib;
 
+use Error;
+
 define('_DIRECTORY_SEPARATOR','/');
 
 class Dir{
@@ -378,6 +380,60 @@ class Dir{
         }
         return str_pad("", count($arFrom) * 3, '..'.$ps).implode($ps, $arTo);
     }
+
+    static function pathAsDos($path){
+        return str_replace("/",'\\',$path);
+    }
+
+    static function pathAsUnix($path){
+        return str_replace('\\',"/",$path);
+    }
+
+    /** соединяет папки 
+     * @param {array} - массив папок
+     * @param {string} - варианты соединения asis | auto | unix | dos (unix = /, dos = \)
+     * 
+     * 
+    */
+    static function join(array $paths,$as='auto'){
+        $as = strtolower($as);
+        if ($as === '/') $as = 'unix';
+        if ($as === '\\') $as = 'dos';
+
+        $out = '';
+        $count = count($paths);
+        $dos = false;
+
+        for($i=0;$i<$count;$i++){
+            $path = trim($paths[$i]);
+            $len = mb_strlen($path)-1;
+            $left = strpos($path,'/') === 0  || strpos($path,'\\') === 0;
+            $right = strrpos($path,'/') === $len  || strrpos($path,'\\') === $len;
+
+            if ($dos === false && strpos($path,'\\')!==false)
+                $dos = true;
+            
+            if ($i>0 && $left)
+                $path = substr($path,1);
+            if ($i<$count-1 && !$right)
+                $path .= '/';
+            
+            $out.=$path;
+        }
+
+
+        if ($as=='auto' && (strpos($out,'http://')===0 || strpos($out,'https://')===0) ){
+            $as = 'unix';
+        }
+
+        if ($as === 'unix' || ($as === 'auto' && !$dos)){
+            return self::pathAsUnix($out);
+        }elseif ($as === 'dos' || ($as === 'auto' && $dos) ){
+            return self::pathAsDos($out);
+        }
+        return $out;
+    }
+
     
     
 

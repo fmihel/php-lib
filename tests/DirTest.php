@@ -73,6 +73,84 @@ final class DirTest extends TestCase{
         self::assertSame($result == $compare,true);
         //-------------------------------------        
     }
+    public function test_pathAsUnix(){
+        //-------------------------------------        
+        $path = '/path\\path/path\\';        
+        $res = '/path/path/path/';
+        self::assertEquals(Dir::pathAsUnix($path),$res );
+        //-------------------------------------        
+    }
+    public function test_pathAsDos(){
+        //-------------------------------------        
+        $path = '/path/path/path\\';        
+        $res = '\\path\\path\\path\\';
+        self::assertEquals(Dir::pathAsDos($path),$res );
+        //-------------------------------------        
+    }
+    public function test_join(){
+        //-------------------------------------        
+        $paths = ["/path\\","path","file.jpg"];        
+        $res = '\\path\\path\\file.jpg';
+        self::assertEquals(Dir::join($paths),$res );
+        //-------------------------------------        
+        $paths = ["/path/","/path/path","file.jpg"];        
+        $res = '/path/path/path/file.jpg';
+        self::assertEquals(Dir::join($paths),$res );
+        //-------------------------------------        
+        $paths = ["/path/","//","path","file.jpg"];        
+        $res = '/path//path/file.jpg';
+        self::assertEquals(Dir::join($paths),$res );
+        //-------------------------------------        
+        $paths = ["/path/","","path","file.jpg"];        
+        $res = '/path//path/file.jpg';
+        self::assertEquals(Dir::join($paths),$res );
+        //-------------------------------------        
+        $paths = ["/left/","text\more","right","file.jpg"];        
+        $res = '/left/text\more/right/file.jpg';
+        $as = 'asis';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["/left/","text\more","right","/file.jpg"];        
+        $as = 'unix';
+        $res = '/left/text/more/right/file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["/left/","text\more","right","/file.jpg"];        
+        $as = 'dos';
+        $res = '\\left\\text\\more\\right\\file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["/left\\","text\more","right","/file.jpg"];        
+        $as = 'auto';
+        $res = '\\left\\text\\more\\right\\file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["http://www.site.ru/path","text\more","right","/file.jpg"];        
+        $as = '';
+        $res = 'http://www.site.ru/path/text\\more/right/file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["http://www.site.ru/path","text\more","right","/file.jpg"];        
+        $as = 'unix';
+        $res = 'http://www.site.ru/path/text/more/right/file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["http://www.site.ru/path","text\more","right","/file.jpg"];        
+        $as = 'dos';
+        $res = 'http:\\\\www.site.ru\path\text\more\right\file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //------------------------------------- 
+        $paths = ["http://www.site.ru/path","text\more","right","/file.jpg"];        
+        $as = 'unix';
+        $res = 'http://www.site.ru/path/text/more/right/file.jpg';
+        self::assertEquals(Dir::join($paths,$as),$res );
+        //-------------------------------------        
+        $paths = ["http://www.site.ru/path","text\more","right\\","\\file.jpg"];        
+        $res = 'http://www.site.ru/path/text/more/right/file.jpg';
+        self::assertEquals(Dir::join($paths),$res );
+        //-------------------------------------        
+
+    }
 }
 
 ?>
