@@ -110,22 +110,18 @@ class Dir{
             )    
         )
         */
-        
         $res = array();
         if ($_root=='') $_root=self::slash($path,false,true);
         //------------------------------------------------
         $ext = self::_exts($exts);    
         //------------------------------------------------
         // add directory
-        $dir = scandir($path);
+        $dir = self::scandir($path);
         for($i=0;$i<count($dir);$i++){
             $item = $dir[$i];
             if (($item!=='.')&&($item!=='..')){
                 $item_path = self::slash($path,false,false).self::slash($item,true,false);
-            
-                if (is_dir($item_path)){
-                    
-                    
+                if (self::is_dir($item_path)){
                     array_push($res,array(
                         'name'=>$item,
                         //'path'=>APP::abs_path($_root,$item_path),
@@ -143,7 +139,7 @@ class Dir{
             if (($item!=='.')&&($item!=='..')){
                 $item_file = self::slash($path,false,false).self::slash($item,true,false);
             
-                if (is_file($item_file)){
+                if (self::is_file($item_file)){
                     $_ext = strtoupper(self::ext($item));
                     if ((count($ext)==0)||(in_array($_ext,$ext)))
                     array_push($res,array(
@@ -285,7 +281,7 @@ class Dir{
         $exist = file_exists($dir);
         
         if ($exist){
-            $is_dir = is_dir($dir);
+            $is_dir = self::is_dir($dir);
             $is_file = !$is_dir;
         }else{
             $is_dir = false;
@@ -298,7 +294,7 @@ class Dir{
      * проверка существовния папки
      */ 
     public static function exist($dir){
-        return (file_exists($dir) && is_dir($dir));
+        return (file_exists($dir) && self::is_dir($dir));
     }
     
     /**
@@ -316,7 +312,7 @@ class Dir{
             while(false !== ( $file = readdir($dir)) ) { 
                 if (( $file != '.' ) && ( $file != '..' )) { 
                     
-                    if ( is_dir($src . '/' . $file) ){ 
+                    if ( self::is_dir($src . '/' . $file) ){ 
                         if (!self::copy($src . '/' . $file,$dst . '/' . $file,$stopOnError))
                             $res = false;
                     }else{ 
@@ -433,10 +429,62 @@ class Dir{
         }
         return $out;
     }
+    /** аналог is_dir однако решает проблему в
+     * https://www.php.net/manual/ru/function.is-dir.php
+     * см Note that on Linux is_dir returns FALSE if a parent directory does not have +x (executable) set for the php process.
+     */
+    static function is_dir(string $path):bool{
+        $paths = [$path];
+        if (substr($path,0,1) !== '/') {
+            $paths[] = '/'.$path;
+        }
+        foreach($paths as $dir){
+            try{
+                if (@is_dir($dir))
+                    return true;
+                
+                $list = @scandir($dir);
+                if (gettype($list) === 'array' && count($list)>0)
+                    return true;
+        
+                $tmp = self::join([$dir,Str::random(10).'.txt']);
+                if (@file_put_contents($tmp,'test')>0 ){
+                    unlink($tmp);
+                    return true;
+                }
+        
+            }catch(\Exception $e){
+            }
+        };
+        return false;
+    }
+    /** аналог is_file 
+     */
+    static function is_file(string $path):bool{
+        try{
+            if (!is_file($path))
+                return false; 
+            return !self::is_dir($path);
+        }catch(\Exception $e){
 
+        }
+        return false;    
+    }
     
-    
-
+    static function scandir(string $path):array{
+        
+        $paths = [$path];
+        if (substr($path,0,1) !== '/') {
+            $paths[] = '/'.$path;
+        };
+        foreach($paths as $dir){
+            $list = @scandir($dir);
+            if (gettype($list) === 'array')
+                return $list;
+        };
+        return [];
+        
+    }
 };//class DIRS
 
 ?>

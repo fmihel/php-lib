@@ -79,6 +79,12 @@ final class CommonTest extends TestCase{
         //------------------------------------        
         self::assertTrue( (Common::eq(1,true) === true) );
         //------------------------------------        
+        self::assertTrue( (Common::eq('1',true) === true) );
+        //------------------------------------        
+        self::assertTrue( (Common::eq(' 1 ',true) === true) );
+        //------------------------------------        
+        self::assertTrue( (Common::eq('2',true) === false) );
+        //------------------------------------        
         self::assertTrue( (Common::eq(0,false) === true) );
         //------------------------------------        
         self::assertTrue( (Common::eq('',false) === false) );

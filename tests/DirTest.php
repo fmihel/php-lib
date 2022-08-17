@@ -151,6 +151,90 @@ final class DirTest extends TestCase{
         //-------------------------------------        
 
     }
+    public function test_pathinfo(){
+        //-------------------------------------        
+        $path = 'c:\test\test2\file.txt';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'c:\test\test2\file.txt');
+        self::assertEquals($info['dirname'],'c:\test\test2');
+        self::assertEquals($info['basename'],'file.txt');
+        self::assertEquals($info['extension'],'txt');        
+        self::assertEquals($info['filename'],'file');
+        //-------------------------------------        
+        $path = 'c:\test\test2';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'c:\test\test2');
+        self::assertEquals($info['dirname'],'c:\test');
+        self::assertEquals($info['basename'],'test2');
+        self::assertEquals($info['extension'],'');        
+        self::assertEquals($info['filename'],'test2');
+        //-------------------------------------        
+        $path = 'c:\test\test2\\';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'c:\test\test2\\');
+        self::assertEquals($info['dirname'],'c:\test\test2');
+        self::assertEquals($info['basename'],'');
+        self::assertEquals($info['extension'],'');        
+        self::assertEquals($info['filename'],'');
+        //-------------------------------------        
+        $path = 'c:\test\test2\file.';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'c:\test\test2\file.');
+        self::assertEquals($info['dirname'],'c:\test\test2');
+        self::assertEquals($info['basename'],'file.');
+        self::assertEquals($info['extension'],'');        
+        self::assertEquals($info['filename'],'file');
+        //-------------------------------------        
+        $path = 'http://www.windeco.su/test.php';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'http://www.windeco.su/test.php');
+        self::assertEquals($info['dirname'],'http://www.windeco.su');
+        self::assertEquals($info['basename'],'test.php');
+        self::assertEquals($info['extension'],'php');        
+        self::assertEquals($info['filename'],'test');
+        //-------------------------------------        
+        $path = 'https://www.windeco.su/test.php';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'https://www.windeco.su/test.php');
+        self::assertEquals($info['dirname'],'https://www.windeco.su');
+        self::assertEquals($info['basename'],'test.php');
+        self::assertEquals($info['extension'],'php');        
+        self::assertEquals($info['filename'],'test');
+        //-------------------------------------        
+        $path = 'https://www.windeco.su/test/index';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'https://www.windeco.su/test/index');
+        self::assertEquals($info['dirname'],'https://www.windeco.su/test');
+        self::assertEquals($info['basename'],'index');
+        self::assertEquals($info['extension'],'');        
+        self::assertEquals($info['filename'],'index');
+        //-------------------------------------        
+        $path = 'atest/test/index.txt';        
+        $info = Dir::pathinfo($path);
+        //error_log(print_r($info,true));
+        self::assertEquals($info['file'],'atest/test/index.txt');
+        self::assertEquals($info['dirname'],'atest/test');
+        self::assertEquals($info['basename'],'index.txt');
+        self::assertEquals($info['extension'],'txt');        
+        self::assertEquals($info['filename'],'index');
+        //-------------------------------------        
+        $path = 'atest/test/index/';        
+        $info = Dir::pathinfo($path);
+        error_log(print_r($info,true));
+        self::assertEquals($info['file'],'atest/test/index/');
+        self::assertEquals($info['dirname'],'atest/test/index');
+        self::assertEquals($info['basename'],'');
+        self::assertEquals($info['extension'],'');        
+        self::assertEquals($info['filename'],'');
+        //-------------------------------------        
+    }
 }
 
 ?>
