@@ -172,6 +172,15 @@ final class CommonTest extends TestCase{
         //------------------------------------
 
     }
+    public function test_issets(){
+        //------------------------------------
+        $data = ['key'=>10,'name'=>'mike','age'=>23];
+        self::assertTrue(Common::issets($data,'key') === true );
+        self::assertTrue(Common::issets($data,'key','name') === true );
+        self::assertTrue(Common::issets($data,'color') === false );
+        self::assertTrue(Common::issets($data) === true );
+
+    }    
 }
 
 ?>

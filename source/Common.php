@@ -184,5 +184,15 @@ class Common {
         }
         return http_build_query($attr);
     }
-
+    /** проверка существования переменных в массиве $data
+     *  Ex: issets($_REQUEST,'key','name','age');
+    */
+    public static function issets($data,...$keys):bool{
+        foreach($keys as $key){
+            if (!isset($data[$key])){
+                return false;
+            }
+        }
+        return true;
+    }
 }
