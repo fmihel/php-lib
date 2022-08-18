@@ -2,8 +2,8 @@
 namespace fmihel\lib;
 
 
-define('STR_TRANSLIT_RUS',str_split(mb_convert_encoding('абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ _-','cp1251','utf-8'),1));
-define('STR_TRANSLIT_ENG',str_split(mb_convert_encoding("abvgdeegziyklmnoprstufhchssuiueuyABVGDEEGZIYKLMNOPRSTUFHCHSSUIUEUY___",'cp1251','utf-8'),1));
+define('STR_TRANSLIT_RUS',str_split(mb_convert_encoding('абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ','cp1251','utf-8'),1));
+define('STR_TRANSLIT_ENG',str_split(mb_convert_encoding("abvgdeegziyklmnoprstufhchsseieeuyABVGDEEGZIYKLMNOPRSTUFHCHSSEIEEUY",'cp1251','utf-8'),1));
  
     
 class Str {
@@ -24,7 +24,7 @@ class Str {
         return $result;
     }
     /**  транслитирация для строки
-     *   разрешены все буквы, цифры и знак "_" , пробел и "-" заменяются на "_"
+     *   заменятся только кирилические символы
     */
     public static function translit(string $s):string{
        
@@ -33,17 +33,42 @@ class Str {
 
        $out = '';
        for($i=0;$i<$len;$i++){
-           $code = ord($s[$i]);
-           if ( ($code>=97 && $code<=122) || ($code>=65 && $code<=90) || ($code>=48 && $code<=57)){
-               $out.=$s[$i];
-           }else{
-               $pos = array_search($s[$i],STR_TRANSLIT_RUS);
-               if ($pos!==false){
-                   $out.=STR_TRANSLIT_ENG[$pos];
-               };
-           };
+            $pos = array_search($s[$i],STR_TRANSLIT_RUS);
+            if ($pos!==false){
+                $out.=STR_TRANSLIT_ENG[$pos];
+            }else{
+                $out.=$s[$i];
+            }
        };
        return $out;
    }
+    /**  транслитирация для строки для адреса url 
+     *   кирилица заменяется на транслит, пробед и - на _ 
+     *   косая черта / оставляется
+     *   остальное игнорируется
+    */
+    public static function translitToUrl(string $s):string{
+       
+        $s   = str_split(mb_convert_encoding($s,'cp1251','utf-8'),1);
+        $len = count($s);
+    
+        $out = '';
+        for($i=0;$i<$len;$i++){
+            $code = ord($s[$i]);
+            if ($s[$i] === '/' || $s[$i] === '\\' ){
+                $out.='/';
+            }elseif ($s[$i] === '_' || $s[$i] === ' ' || $s[$i] === '-'){
+                $out.='_';
+            }elseif ( ($code>=97 && $code<=122) || ($code>=65 && $code<=90) || ($code>=48 && $code<=57)){
+                $out.=$s[$i];
+            }else{
+                $pos = array_search($s[$i],STR_TRANSLIT_RUS);
+                if ($pos!==false){
+                    $out.=STR_TRANSLIT_ENG[$pos];
+                };
+            };
+        };
+        return $out;
+    }
 }
 ?>
