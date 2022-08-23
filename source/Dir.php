@@ -3,7 +3,7 @@ namespace fmihel\lib;
 
 use Error;
 
-define('_DIRECTORY_SEPARATOR','/');
+define('_SEPARATOR_DIRECTORY','/');
 
 class Dir{
     /**
@@ -14,7 +14,7 @@ class Dir{
         /*учитываем вариант когда точка находится в имени корневой папки*/
         $root =  substr($_SERVER['DOCUMENT_ROOT'],strrpos($_SERVER['DOCUMENT_ROOT'],'/')+1);
 
-        $dirs = explode(_DIRECTORY_SEPARATOR,trim($dir));
+        $dirs = explode(_SEPARATOR_DIRECTORY,trim($dir));
         $out = '';
         
         $is_dos = false;
@@ -25,10 +25,10 @@ class Dir{
 				}	
         
         for($i=0;$i<count($dirs);$i++)
-            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?_DIRECTORY_SEPARATOR:'').$dirs[$i]:'');
+            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?_SEPARATOR_DIRECTORY:'').$dirs[$i]:'');
         
         $last=$dirs[count($dirs)-1];
-        return ((($left)&&(!$is_dos))?_DIRECTORY_SEPARATOR:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?_DIRECTORY_SEPARATOR:'');
+        return ((($left)&&(!$is_dos))?_SEPARATOR_DIRECTORY:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?_SEPARATOR_DIRECTORY:'');
     }
     
     public static function pathinfo($file){
@@ -342,8 +342,8 @@ class Dir{
         };
             
         $path = $from;
-        $path = str_replace(array('/', '\\'), _DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(_DIRECTORY_SEPARATOR, $path), 'strlen');
+        $path = str_replace(array('/', '\\'), _SEPARATOR_DIRECTORY, $path);
+        $parts = array_filter(explode(_SEPARATOR_DIRECTORY, $path), 'strlen');
         $absolutes = array();
         foreach ($parts as $part) 
         {
@@ -356,7 +356,7 @@ class Dir{
                 $absolutes[] = $part;
             };
         };
-        return self::slash(implode(_DIRECTORY_SEPARATOR, $absolutes),false,true);
+        return self::slash(implode(_SEPARATOR_DIRECTORY, $absolutes),false,true);
     }
     /**
      * Получение относительного пути
@@ -366,7 +366,7 @@ class Dir{
      */
     static function rel_path($from,$to){
         
-        $ps = _DIRECTORY_SEPARATOR;
+        $ps = _SEPARATOR_DIRECTORY;
         $arFrom = explode($ps, rtrim($from, $ps));
         $arTo = explode($ps, rtrim($to, $ps));
         while(count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0]))

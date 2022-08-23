@@ -33,7 +33,7 @@ final class DirTest extends TestCase{
         $from = 'E:\temp\more\lib';
         $to   = '';
         $result = Dir::abs_path($from,$to);
-        $compare =  'E:'._DIRECTORY_SEPARATOR.'temp'._DIRECTORY_SEPARATOR.'more'._DIRECTORY_SEPARATOR.'lib'._DIRECTORY_SEPARATOR;
+        $compare =  'E:'._SEPARATOR_DIRECTORY.'temp'._SEPARATOR_DIRECTORY.'more'._SEPARATOR_DIRECTORY.'lib'._SEPARATOR_DIRECTORY;
         //error_log($result);
         self::assertSame($result == $compare,true);
         //-------------------------------------        
@@ -41,7 +41,7 @@ final class DirTest extends TestCase{
         $to   = '../../screen';
         $result = Dir::abs_path($from,$to);
         // E:\temp\screen
-        $compare =  'E:'._DIRECTORY_SEPARATOR.'temp'._DIRECTORY_SEPARATOR.'screen'._DIRECTORY_SEPARATOR;
+        $compare =  'E:'._SEPARATOR_DIRECTORY.'temp'._SEPARATOR_DIRECTORY.'screen'._SEPARATOR_DIRECTORY;
         //error_log($result);
         self::assertSame($result == $compare,true);
         //-------------------------------------        
@@ -52,7 +52,7 @@ final class DirTest extends TestCase{
         $to   = '/home/decoinf3/public_html/rest/a';
         $result = Dir::rel_path($from,$to);
         // ../../rest/a
-        $compare =  '..'._DIRECTORY_SEPARATOR.'..'._DIRECTORY_SEPARATOR.'rest'._DIRECTORY_SEPARATOR.'a';
+        $compare =  '..'._SEPARATOR_DIRECTORY.'..'._SEPARATOR_DIRECTORY.'rest'._SEPARATOR_DIRECTORY.'a';
         //error_log($result);
         self::assertSame($result == $compare,true);
         //-------------------------------------        
@@ -60,7 +60,7 @@ final class DirTest extends TestCase{
         $to   = '/home/decoinf3/public_html/more/data/';
         $result = Dir::rel_path($from,$to);
         // ../../more/data
-        $compare =  '..'._DIRECTORY_SEPARATOR.'..'._DIRECTORY_SEPARATOR.'more'._DIRECTORY_SEPARATOR.'data';
+        $compare =  '..'._SEPARATOR_DIRECTORY.'..'._SEPARATOR_DIRECTORY.'more'._SEPARATOR_DIRECTORY.'data';
         //error_log($result);
         self::assertSame($result == $compare,true);
         //-------------------------------------        
@@ -68,7 +68,7 @@ final class DirTest extends TestCase{
         $to   = 'E:/upper/maximal/len';
         $result = Dir::rel_path($from,$to);
         // ../../maximal/len
-        $compare =  '..'._DIRECTORY_SEPARATOR.'..'._DIRECTORY_SEPARATOR.'maximal'._DIRECTORY_SEPARATOR.'len';
+        $compare =  '..'._SEPARATOR_DIRECTORY.'..'._SEPARATOR_DIRECTORY.'maximal'._SEPARATOR_DIRECTORY.'len';
         //error_log($result);
         self::assertSame($result == $compare,true);
         //-------------------------------------        
