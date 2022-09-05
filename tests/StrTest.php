@@ -78,4 +78,10 @@ final class StrTest extends TestCase{
 
     }
 
+    public function test_mb_trim(){
+        $value = Str::mb_trim(' test str ');
+        error_log($value);
+        self::assertTrue( $value === 'test str' );
+    }
+
 };

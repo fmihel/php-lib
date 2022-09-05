@@ -74,5 +74,11 @@ class Str {
 
         return '';
     }
+    
+    /** мультибайтная версия trim */
+    public static function mb_trim(string $str):string {
+        return preg_replace("/^\s+|\s+$/u", "", $str); 
+    }
+    
 }
 ?>
