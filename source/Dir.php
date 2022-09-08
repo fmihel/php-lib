@@ -120,7 +120,7 @@ class Dir{
         for($i=0;$i<count($dir);$i++){
             $item = $dir[$i];
             if (($item!=='.')&&($item!=='..')){
-                $item_path = self::slash($path,false,false).self::slash($item,true,false);
+                $item_path = self::slash(self::join([$path,$item]).false,false);  //self::slash($path,false,false).self::slash($item,true,false);
                 if (self::is_dir($item_path)){
                     array_push($res,array(
                         'name'=>$item,
@@ -137,7 +137,7 @@ class Dir{
         for($i=0;$i<count($dir);$i++){
             $item = $dir[$i];
             if (($item!=='.')&&($item!=='..')){
-                $item_file = self::slash($path,false,false).self::slash($item,true,false);
+                $item_file = self::slash(self::join([$path,$item]),false,false);// self::slash($path,false,false).self::slash($item,true,false);
             
                 if (self::is_file($item_file)){
                     $_ext = strtoupper(self::ext($item));
@@ -272,11 +272,29 @@ class Dir{
             unlink($path.$files[$i]);
 
         for($i=0;$i<count($dirs);$i++){
-            self::clear(self::slash($path.$dirs[$i],false,true));
-            rmdir($path.$dirs[$i]);
+            $dir = self::join([$path,$dirs[$i]]);
+            self::clear(self::slash($dir,false,true));
+            rmdir($dir);
         };    
     }
-    
+    /** удаляет папку вместе  с ее содержимым */
+    public static function delete($path) {
+        if (!is_dir($path)) {
+            throw new \Exception("$path must be a directory");
+        }
+        if (substr($path, strlen($path) - 1, 1) != '/') {
+            $path .= '/';
+        }
+        $files = glob($path . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::delete($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($path);
+    }    
     public static function info($dir){
         $exist = file_exists($dir);
         
@@ -462,8 +480,6 @@ class Dir{
      */
     static function is_file(string $path):bool{
         try{
-            if (!is_file($path))
-                return false; 
             return !self::is_dir($path);
         }catch(\Exception $e){
 
@@ -483,8 +499,8 @@ class Dir{
                 return $list;
         };
         return [];
-        
     }
+    
 };//class DIRS
 
 ?>
