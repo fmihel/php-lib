@@ -1,20 +1,18 @@
 <?php
 namespace fmihel\lib;
 
-use Error;
-
 define('_SEPARATOR_DIRECTORY','/');
 
 class Dir{
     /**
      * добавление/удаление замыкающих слешей
      */
-    public static function slash($dir,$left=true,$right=true){
+    public static function slash($dir,$left=true,$right=true,$slash = DIRECTORY_SEPARATOR){
         if (trim($dir)=='') return '';
         /*учитываем вариант когда точка находится в имени корневой папки*/
         $root =  substr($_SERVER['DOCUMENT_ROOT'],strrpos($_SERVER['DOCUMENT_ROOT'],'/')+1);
 
-        $dirs = explode(_SEPARATOR_DIRECTORY,trim($dir));
+        $dirs = explode($slash,trim($dir));
         $out = '';
         
         $is_dos = false;
@@ -25,10 +23,10 @@ class Dir{
 				}	
         
         for($i=0;$i<count($dirs);$i++)
-            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?_SEPARATOR_DIRECTORY:'').$dirs[$i]:'');
+            $out.=(strlen($dirs[$i])>0?(strlen($out)>0?$slash:'').$dirs[$i]:'');
         
         $last=$dirs[count($dirs)-1];
-        return ((($left)&&(!$is_dos))?_SEPARATOR_DIRECTORY:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?_SEPARATOR_DIRECTORY:'');
+        return ((($left)&&(!$is_dos))?$slash:'').$out.(($right)&&(($last==$root)||(!strpos($last,'.')))?$slash:'');
     }
     
     public static function pathinfo($file){
@@ -100,7 +98,7 @@ class Dir{
         return $ext;
     }
     
-    public static function struct($path,$exts=array(),$only_dir=false,$level=10000,$_root=''){
+    public static function struct($path,$exts=array(),$only_dir=false,$level=10000,$_root='',$slash=DIRECTORY_SEPARATOR){
         /*return file_struct begin from $path
         $res = array(
             array(  'name' - short name  Ex: menu
@@ -111,7 +109,7 @@ class Dir{
         )
         */
         $res = array();
-        if ($_root=='') $_root=self::slash($path,false,true);
+        if ($_root=='') $_root=self::slash($path,false,true,$slash);
         //------------------------------------------------
         $ext = self::_exts($exts);    
         //------------------------------------------------
@@ -120,33 +118,33 @@ class Dir{
         for($i=0;$i<count($dir);$i++){
             $item = $dir[$i];
             if (($item!=='.')&&($item!=='..')){
-                $item_path = self::slash(self::join([$path,$item]).false,false);  //self::slash($path,false,false).self::slash($item,true,false);
+                $item_path = self::slash(self::join([$path,$item]),false,false,$slash);  //self::slash($path,false,false).self::slash($item,true,false);
                 if (self::is_dir($item_path)){
-                    array_push($res,array(
-                        'name'=>$item,
-                        //'path'=>APP::abs_path($_root,$item_path),
-                        'path'=>substr($item_path,strlen($_root)),
-                        'is_file'=>false,
-                        'childs'=>($level<=0?array():self::struct($item_path.'/',$ext,$only_dir,$level-1,$_root))));
-                }
-            }
-        }
+                    $res[]=[
+                        'name'      =>$item,
+                        'path'      =>substr($item_path,strlen($_root)),
+                        'is_file'   =>false,
+                        'childs'    =>($level<=0?[]:self::struct($item_path.$slash,$ext,$only_dir,$level-1,$_root,$slash))
+                    ];
+                };
+            };
+        };//for
     
         // add files
         if (!$only_dir)
         for($i=0;$i<count($dir);$i++){
             $item = $dir[$i];
             if (($item!=='.')&&($item!=='..')){
-                $item_file = self::slash(self::join([$path,$item]),false,false);// self::slash($path,false,false).self::slash($item,true,false);
+                $item_file = self::slash(self::join([$path,$item]),false,false,$slash);// self::slash($path,false,false).self::slash($item,true,false);
             
                 if (self::is_file($item_file)){
                     $_ext = strtoupper(self::ext($item));
                     if ((count($ext)==0)||(in_array($_ext,$ext)))
-                    array_push($res,array(
+                    $res[]=[
                         'name'=>$item,
-                        //'path'=>APP::abs_path($_root,$item_file),
                         'path'=>substr($item_file,strlen($_root)),
-                        'is_file'=>true));
+                        'is_file'=>true
+                    ];
                 }
             }
         }
@@ -312,7 +310,7 @@ class Dir{
      * проверка существовния папки
      */ 
     public static function exist($dir){
-        return (file_exists($dir) && self::is_dir($dir));
+        return (self::is_dir($dir));
     }
     
     /**
@@ -352,16 +350,16 @@ class Dir{
     /** 
      * Получение абсолютного пути из from в to
     */
-    public static function abs_path($from,$to = ''){
+    public static function abs_path($from,$to = '',$slash=DIRECTORY_SEPARATOR){
         if ($to !== '')
         {
-            $to     = self::slash($to,true,false);
-            $from   = self::slash($from,false,false).self::slash($to,true,false);
+            $to     = self::slash($to,true,false,$slash);
+            $from   = self::slash($from,false,false,$slash).self::slash($to,true,false,$slash);
         };
             
         $path = $from;
-        $path = str_replace(array('/', '\\'), _SEPARATOR_DIRECTORY, $path);
-        $parts = array_filter(explode(_SEPARATOR_DIRECTORY, $path), 'strlen');
+        $path = str_replace(array('/', '\\'),$slash, $path);
+        $parts = array_filter(explode($slash, $path), 'strlen');
         $absolutes = array();
         foreach ($parts as $part) 
         {
@@ -374,7 +372,7 @@ class Dir{
                 $absolutes[] = $part;
             };
         };
-        return self::slash(implode(_SEPARATOR_DIRECTORY, $absolutes),false,true);
+        return self::slash(implode($slash, $absolutes),false,true);
     }
     /**
      * Получение относительного пути
@@ -382,9 +380,9 @@ class Dir{
      * to = '/home/decoinf3/public_html/rest/a
      * result ../../rest/a
      */
-    static function rel_path($from,$to){
+    static function rel_path($from,$to,$slash = DIRECTORY_SEPARATOR){
         
-        $ps = _SEPARATOR_DIRECTORY;
+        $ps = $slash;
         $arFrom = explode($ps, rtrim($from, $ps));
         $arTo = explode($ps, rtrim($to, $ps));
         while(count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0]))
