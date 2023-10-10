@@ -1,37 +1,43 @@
 <?php
 namespace fmihel\lib;
 
-class Arr {
-    /** 
+use Exception;
+
+class Arr
+{
+    /**
      * проверка, является ли входная переменная ассоциативным массивом
-    */
-    public static function is_assoc($array){
+     */
+    public static function is_assoc($array)
+    {
         $result = false;
-        try{
-        
-            $result  = ( count(array_filter(array_keys($array), 'is_string')) > 0 );
-        
-        }catch(\Exception $e){
-                
+        try {
+
+            $result = (count(array_filter(array_keys($array), 'is_string')) > 0);
+
+        } catch (\Exception $e) {
+
         }
         return $result;
     }
-    /** 
+    /**
      * аналог ф-ции extend jQuery
      * только ассоциативные массивы
-    */
-    public static function extend($a = [],$b = []){
-        
+     */
+    public static function extend($a = [], $b = [])
+    {
+
         if ((is_array($a)) && (is_array($b))) {
-            if ($a === []) 
+            if ($a === []) {
                 return $b;
+            }
 
             $res = [];
-                
+
             if (self::is_assoc($a)) {
 
                 foreach ($a as $k => $v) {
-                  if (!isset($b[$k])) {
+                    if (!isset($b[$k])) {
                         $res[$k] = $v;
                     } else {
                         if ((is_array($v)) && (is_array($b[$k]))) {
@@ -42,96 +48,136 @@ class Arr {
                     }
                 }
 
-                foreach($b as $k=>$v){
-                    if (!isset($a[$k])){
+                foreach ($b as $k => $v) {
+                    if (!isset($a[$k])) {
                         $res[$k] = $v;
                     }
                 }
-
 
             }
             return $res;
         };
         return $a;
     }
-    
-    /** 
-     * сравнение массивов
-    */
-    public static function eq(Array $a=[],Array $b=[],$param=[]){
-        $p = array_merge([
-            'compare'=>'soft'
-        ],$param);
-        
-        if (($a===[]) && ($b===[])) 
-            return true;
 
-        if (count($a)!==count($b))
+    /**
+     * сравнение массивов
+     */
+    public static function eq(array $a = [], array $b = [], $param = [])
+    {
+        $p = array_merge([
+            'compare' => 'soft',
+        ], $param);
+
+        if (($a === []) && ($b === [])) {
+            return true;
+        }
+
+        if (count($a) !== count($b)) {
             return false;
-        
+        }
+
         $assocA = self::is_assoc($a);
         $assocB = self::is_assoc($a);
 
-
-        if ($assocA!==$assocB)
+        if ($assocA !== $assocB) {
             return false;
-        
-        if ((!$assocA) && (!$assocB)) 
-            return count(array_diff($a,$b)) === 0;
-        
-        foreach($a as $key=>$val){
+        }
+
+        if ((!$assocA) && (!$assocB)) {
+            return count(array_diff($a, $b)) === 0;
+        }
+
+        foreach ($a as $key => $val) {
             $typeVal = gettype($val);
-            if (gettype($key) === 'string'){
-                
-                $eq = ( isset($b[$key]) && (  ( $typeVal==='array' && self::eq($val,$b[$key],$p) )  ||  ($p['compare'] === 'soft' && $b[$key]==$val) || ($p['compare'] !== 'soft' && $b[$key]===$val) )); 
-                if (!$eq)
+            if (gettype($key) === 'string') {
+
+                $eq = (isset($b[$key]) && (($typeVal === 'array' && self::eq($val, $b[$key], $p)) || ($p['compare'] === 'soft' && $b[$key] == $val) || ($p['compare'] !== 'soft' && $b[$key] === $val)));
+                if (!$eq) {
                     return false;
-            }else{
+                }
+
+            } else {
                 $find = false;
-                foreach($b as $keyB=>$valB){
-                    if (gettype($keyB)!=='string'){
-                        if (  ( $typeVal==='array' && self::eq($val,$valB,$p) )  ||  ($p['compare'] === 'soft' && $valB==$val) || ($p['compare'] !== 'soft' && $valB===$val) ){
+                foreach ($b as $keyB => $valB) {
+                    if (gettype($keyB) !== 'string') {
+                        if (($typeVal === 'array' && self::eq($val, $valB, $p)) || ($p['compare'] === 'soft' && $valB == $val) || ($p['compare'] !== 'soft' && $valB === $val)) {
                             $find = true;
                             break;
                         };
                     };
                 };
-                if (!$find) 
+                if (!$find) {
                     return false;
-            }        
+                }
+
+            }
         }
-        return true;    
+        return true;
     }
-    /** 
+    /**
      * аналог jQuery extend но на выходе будут только ключи содержащиеся в $default
      * Ex: Arr::default(['ID'=>1,'NAME'=>'noneme'],['NAME'=>'mike','AGE'=>100])
      * res:  ['ID'=>1,'NAME'=>'mike']
-    */
-    public static function default(array $default,array $args){
-        return array_intersect_key(array_merge($default,$args),$default);
+     */
+    public static function default(array $default, array $args)
+    {
+        return array_intersect_key(array_merge($default, $args), $default);
     }
 
     /** перемещает элемент массива из позиции $from в $to */
-    public static function move(array &$array, int $from,int $to) {
+    public static function move(array &$array, int $from, int $to)
+    {
         $out = array_splice($array, $from, 1);
         array_splice($array, $to, 0, $out);
     }
     /** вставить элемент в позицию в массиве ( первый элемент = 0 )
-    * Arr::insert([0,1,2,3],333);    // [0,1,2,3,333]
-    * Arr::insert([0,1,2,3],333,0);  // [333,0,1,2,3]
-    * Arr::insert([0,1,2,3],333,-10);// [333,0,1,2,3]
-    * Arr::insert([0,1,2,3],333,1);  // [0,333,1,2,3]
-    */
-    public static function insert(array &$toArray,$data,$pos=false){
-        if ($pos===false || $pos>=count($toArray)){
-            $toArray[]=$data;
-        }elseif ($pos<=0){
-            array_unshift($toArray,$data);
-        }else
+     * Arr::insert([0,1,2,3],333);    // [0,1,2,3,333]
+     * Arr::insert([0,1,2,3],333,0);  // [333,0,1,2,3]
+     * Arr::insert([0,1,2,3],333,-10);// [333,0,1,2,3]
+     * Arr::insert([0,1,2,3],333,1);  // [0,333,1,2,3]
+     */
+    public static function insert(array &$toArray, $data, $pos = false)
+    {
+        if ($pos === false || $pos >= count($toArray)) {
+            $toArray[] = $data;
+        } elseif ($pos <= 0) {
+            array_unshift($toArray, $data);
+        } else {
             array_splice($toArray, $pos, 0, $data);
-        
+        }
+
     }
+
+    /** поиск элемента в data с использование $callback
+     *  ВНИМАНИЕ! ALERT!!
+     * @return {any} возвращает либо false (если ничего не найдено) либо [ value ] (найденное значение как 0вой элемент массива)
+     */
+    public static function find(array $data, $callback)
+    {
+        if (self::is_assoc($data)) {
+            throw new \Exception('data must be array (not assoc)');
+        };
+
+        foreach ($data as $index => $value) {
+            if ($callback($value, $index, $data) === true) {
+                return [$value];
+            };
+        };
+        return false;
+    }
+    public static function findIndex(array $data, $callback)
+    {
+        if (self::is_assoc($data)) {
+            throw new \Exception('data must be array (not assoc)');
+        };
+
+        foreach ($data as $index => $value) {
+            if ($callback($value, $index, $data) === true) {
+                return $index;
+            };
+        };
+        return -1;
+    }
+
 }
-
-
-?>
