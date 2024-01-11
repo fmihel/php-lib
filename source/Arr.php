@@ -10,6 +10,9 @@ class Arr
      */
     public static function is_assoc($array)
     {
+        if (gettype($array)!=='array')
+            return false;
+
         $result = false;
         try {
 
