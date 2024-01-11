@@ -58,109 +58,37 @@ class Dir
         return $out;
     }
 
-    public static function struct($path, $exts = array(), $only_dir = false, $level = 10000, $_root = '', $slash = DIRECTORY_SEPARATOR)
+    public static function files(string $path, array $exts = [], bool $full_path = false, bool $only_root = true): array
     {
-        /*return file_struct begin from $path
-        $res = array(
-        array(  'name' - short name  Ex: menu
-        'path' - path from begin $path Ex: ws/inter/menu/
-        'is_file' - true if file
-        childs = array(...) - childs dir (if is_file = false :)
-        )
-        )
-         */
-        $res = array();
-        if ($_root == '') {
-            $_root = self::slash($path, false, true, $slash);
-        }
 
-        //------------------------------------------------
-        $ext = self::_exts($exts);
-        //------------------------------------------------
-        // add directory
-        $dir = self::scandir($path);
-        for ($i = 0; $i < count($dir); $i++) {
-            $item = $dir[$i];
-            if (($item !== '.') && ($item !== '..')) {
-                $item_path = self::slash(self::join([$path, $item]), false, false, $slash); //self::slash($path,false,false).self::slash($item,true,false);
-                if (self::is_dir($item_path)) {
-                    $res[] = [
-                        'name' => $item,
-                        'path' => substr($item_path, strlen($_root)),
-                        'is_file' => false,
-                        'childs' => ($level <= 0 ? [] : self::struct($item_path . $slash, $ext, $only_dir, $level - 1, $_root, $slash))
-                    ];
-                };
-            };
-        }; //for
-
-        // add files
-        if (!$only_dir) {
-            for ($i = 0; $i < count($dir); $i++) {
-                $item = $dir[$i];
-                if (($item !== '.') && ($item !== '..')) {
-                    $item_file = self::slash(self::join([$path, $item]), false, false, $slash); // self::slash($path,false,false).self::slash($item,true,false);
-
-                    if (self::is_file($item_file)) {
-                        $_ext = strtoupper(self::ext($item));
-                        if ((count($ext) == 0) || (in_array($_ext, $ext))) {
-                            $res[] = [
-                                'name' => $item,
-                                'path' => substr($item_file, strlen($_root)),
-                                'is_file' => true,
-                            ];
-                        }
-
-                    }
+        $res = [];
+        $struct = self::scandir($path);
+        foreach ($struct as $item) {
+            if ($item !== '.' && $item !== '..') {
+                $name = self::join($path, $item);
+                if (self::is_file($name)) {
+                    $res[] = $full_path ? $name : $item;
+                } elseif (!$only_root) {
+                    $res = array_merge($res, self::files($name, $exts, $full_path, false));
                 }
             }
         }
-
         return $res;
     }
 
-    public static function files($path, $exts = '', $full_path = false, $only_root = true)
+    public static function dirs(string $path, bool $full_path = false, bool $only_root = true): array
     {
-
-        //echo 'path:  '.$path."\n";
-
-        $struct = self::struct($path, $exts, false, 0);
-        $full_path = ($only_root ? $full_path : true);
-
-        $res = array();
-
-        for ($i = 0; $i < count($struct); $i++) {
-            $item = $struct[$i];
-            if ($item['is_file']) {
-                //array_push($res,($full_path?$item['path']:$item['name']));
-                array_push($res, ($full_path ? $path : '') . $item['name']);
+        $res = [];
+        $struct = self::scandir($path);
+        foreach ($struct as $item) {
+            if ($item !== '.' && $item !== '..') {
+                $name = self::join($path, $item);
+                if (self::is_dir($name)) {
+                    $res[] = $full_path ? $name : $item;
+                    if (!$only_root) {
+                        $res = array_merge($res, self::dirs($name, $full_path, false));
+                    }}
             }
-        }
-
-        $dirs = ($only_root ? array() : self::dirs($path, true));
-        for ($i = 0; $i < count($dirs); $i++) {
-
-            $next_path = $path . $dirs[$i] . '/';
-
-            $out = self::files($next_path, $exts, true, false);
-            for ($j = 0; $j < count($out); $j++) {
-                array_push($res, $out[$j]);
-            }
-
-        }
-        return $res;
-    }
-
-    public static function dirs($path, $full_path = false)
-    {
-        $struct = self::struct($path, '', true, 0);
-        $res = array();
-        for ($i = 0; $i < count($struct); $i++) {
-            $item = $struct[$i];
-            if (!$item['is_file']) {
-                array_push($res, ($full_path ? $item['path'] : $item['name']));
-            }
-
         }
         return $res;
     }
@@ -324,31 +252,27 @@ class Dir
      */
     public static function is_dir(string $path): bool
     {
-        $paths = [$path];
-        if (substr($path, 0, 1) !== '/') {
-            $paths[] = '/' . $path;
+        if (@is_dir($path)) {
+            return true;
         }
-        foreach ($paths as $dir) {
-            try {
-                if (@is_dir($dir)) {
-                    return true;
-                }
 
-                $list = @scandir($dir);
-                if (gettype($list) === 'array' && count($list) > 0) {
-                    return true;
-                }
+        $list = @scandir($path);
+        if (gettype($list) === 'array' && count($list) > 0) {
+            return true;
+        }
 
-                $tmp = self::join([$dir, Str::random(10) . '.txt']);
-                if (@file_put_contents($tmp, 'test') > 0) {
-                    unlink($tmp);
-                    return true;
-                }
+        $is_dir = false;
+        $tmp = self::join($path, '_tmp-' . rand(10000, 99999) . '.tmp');
+        try {
+            $is_dir = (@file_put_contents($tmp, 'test') > 0);
+        } catch (\Exception $e) {};
 
-            } catch (\Exception $e) {
-            }
-        };
-        return false;
+        if (file_exists($tmp)) {
+            unlink($tmp);
+        }
+
+        return $is_dir;
+
     }
 
     /** аналог is_file */
@@ -356,5 +280,28 @@ class Dir
     {
         return !self::is_dir($path);
     }
+    private static function scandir(string $path): array
+    {
+        $list = @scandir($path);
+        return gettype($list) === 'array' ? $list : [];
+    }
+    public static function ext(string $file): string
+    {
+        if (strpos($file, '.') === false) {
+            return '';
+        };
+        $val = strrev($file);
+        $dos = strpos($val, '/');
+        $unix = strpos($val, '\\');
+        $dot = strpos($val, '.');
+        if ($dos !== false && $dot > $dos) {
+            return '';
+        }
 
+        if ($unix !== false && $dot > $unix) {
+            return '';
+        }
+        return strrev(substr($val, 0, $dot));
+
+    }
 }

@@ -2,6 +2,7 @@
 namespace fmihel\lib\test;
 
 use fmihel\lib\Dir;
+use fmihel\lib\System;
 use PHPUnit\Framework\TestCase;
 
 final class DirTest extends TestCase
@@ -52,7 +53,35 @@ final class DirTest extends TestCase
         self::assertEquals($expect, $result);
 
     }
+    public function test_files()
+    {
 
+        $path = System::is_win() ? "D:\\work\\fmihel\\php-lib\\tests\\data" : "./tests/data";
+        $result = Dir::files($path, [], false);
+        self::assertTrue(true);
+    }
+    public function test_ext()
+    {
+        $result = Dir::ext('file.php');
+        $expect = 'php';
+        self::assertEquals($expect, $result);
+        //-------------------------------------
+        $result = Dir::ext('d:\test\file.docx');
+        $expect = 'docx';
+        self::assertEquals($expect, $result);
+        //-------------------------------------
+        $result = Dir::ext('d:\test\file.docx/more');
+        $expect = '';
+        self::assertEquals($expect, $result);
+        //-------------------------------------
+        $result = Dir::ext('line/stone/more.dat');
+        $expect = 'dat';
+        self::assertEquals($expect, $result);
+        //-------------------------------------
+        $result = Dir::ext('line/stone/.gitignore');
+        $expect = 'gitignore';
+        self::assertEquals($expect, $result);
+    }
     // public function test_slash(){
     //     //-------------------------------------
     //     $in = 'mytext/width';

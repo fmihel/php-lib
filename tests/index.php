@@ -2,8 +2,8 @@
 
 use fmihel\lib\Dir;
 
-require_once __DIR__ . '/source/Dir.php';
-require_once __DIR__ . '/source/Str.php';
+require_once __DIR__ . '/../source/Dir.php';
+require_once __DIR__ . '/../source/Str.php';
 
 function msg(...$args)
 {
@@ -14,8 +14,9 @@ function msg(...$args)
     error_log('---------------------------');
 };
 
-$path = 'D:\work\windeco\windeco3\tests\server\\';
+//$path = 'D:\work\windeco\windeco3\tests\server\\';
 
-$files = Dir::files($path, 'php', true, false);
+$path = "D:\\work\\fmihel\\php-lib\\tests\\data";
+$files = Dir::files($path, ['php'], true, false);
 
 msg('files', $files);

@@ -1,5 +1,7 @@
 <?php
 
+namespace fmihel\lib;
+
 class System
 {
     /** windows or linux */
