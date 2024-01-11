@@ -66,7 +66,7 @@ class Dir
         foreach ($struct as $item) {
             if ($item !== '.' && $item !== '..') {
                 $name = self::join($path, $item);
-                if (self::is_file($name)) {
+                if (self::is_file($name) && (empty($exts) || array_search(self::ext($name), $exts) !== false)) {
                     $res[] = $full_path ? $name : $item;
                 } elseif (!$only_root) {
                     $res = array_merge($res, self::files($name, $exts, $full_path, false));
@@ -280,11 +280,13 @@ class Dir
     {
         return !self::is_dir($path);
     }
+
     private static function scandir(string $path): array
     {
         $list = @scandir($path);
         return gettype($list) === 'array' ? $list : [];
     }
+
     public static function ext(string $file): string
     {
         if (strpos($file, '.') === false) {

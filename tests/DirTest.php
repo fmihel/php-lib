@@ -57,7 +57,8 @@ final class DirTest extends TestCase
     {
 
         $path = System::is_win() ? "D:\\work\\fmihel\\php-lib\\tests\\data" : "./tests/data";
-        $result = Dir::files($path, [], false);
+        $result = Dir::files($path, ['txt', 'php', 'dat'], true, false);
+        error_log(print_r($result, true));
         self::assertTrue(true);
     }
     public function test_ext()

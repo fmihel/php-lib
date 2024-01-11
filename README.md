@@ -1,4 +1,4 @@
-# php-lib v3.7.0
+# php-lib v5
  
  ```composer require fmihel/php-lib```
 
@@ -49,8 +49,13 @@ use fmihel\lib\Common;
 use fmihel\lib\Dir;
 ``` 
 ### property
-|method|args|result|notes|
-|----|----|-----|-----|
+|method|args|notes|
+|----|----|----|
+|files(string $path,$exts = [], bool $full_path = false, bool $only_root = true): array||список файлов|
+|dirs(string $path,bool $full_path = false, bool $only_root = true): array||список папок|
+|join(...$paths)||объединить пути|
+
+
 
 
 ---
