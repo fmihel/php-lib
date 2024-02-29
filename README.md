@@ -7,7 +7,8 @@
 [3. Dir - работа с файлами и каталогами](#Dir)<br/>
 [3. Events - создание коллекций событий](#Events)<br/>
 [4. Arr - работа с массивами](#Arr)<br/>
-[4. Type - работа с типами](#Type)<br/>
+[5. Type - работа с типами](#Type)<br/>
+[6. Url - работа с адресом](#Url)<br/>
 
 
 ---
@@ -90,6 +91,16 @@ use fmihel\lib\Type;
 |----|----|-----|-----|
 
 
+---
+## Url
+```php
+use fmihel\lib\Url;
+``` 
+### property
+|method|result|notes|
+|----|----|----|
+|Url::join(...$paths)|string|Соединяет маршруты<br>Ex:<br> Url::join('\\path\\','\\path2\\')<br>Url::join('http://', 'dir', 'file.txt')|
+|Url::build(string $url,array $attr=[])|string|Добавляет атрибуты к адресу $url|
 
 
 
