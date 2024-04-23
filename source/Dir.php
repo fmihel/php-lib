@@ -87,7 +87,8 @@ class Dir
                     $res[] = $full_path ? $name : $item;
                     if (!$only_root) {
                         $res = array_merge($res, self::dirs($name, $full_path, false));
-                    }}
+                    }
+                }
             }
         }
         return $res;
@@ -106,16 +107,16 @@ class Dir
     public static function clear($path)
     {
 
-        $files = self::files($path, '', false);
+        $files = self::files($path, [], false);
         $dirs = self::dirs($path, false);
 
         for ($i = 0; $i < count($files); $i++) {
-            unlink($path . $files[$i]);
+            unlink(self::join($path, $files[$i]));
         }
 
         for ($i = 0; $i < count($dirs); $i++) {
-            $dir = self::join([$path, $dirs[$i]]);
-            self::clear(self::slash($dir, false, true));
+            $dir = self::join($path, $dirs[$i]);
+            self::clear($dir . '/');
             rmdir($dir);
         };
     }
