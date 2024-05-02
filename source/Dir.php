@@ -307,4 +307,18 @@ class Dir
         return strrev(substr($val, 0, $dot));
 
     }
+    /** создает папки, при наличие отсуствующей вложенности, создает и ее */
+    public static function mkdir($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        $paths = explode('/', $path);
+        $current = '';
+        foreach ($paths as $dir) {
+            $current = implode('/', [$current, $dir]);
+            if (!file_exists($current)) {
+                mkdir($current);
+            }
+        };
+    }
+
 }
