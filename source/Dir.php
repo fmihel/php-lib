@@ -317,9 +317,15 @@ class Dir
 
         $paths = explode('/', $path);
         $current = '';
+
         foreach ($paths as $dir) {
-            $current = empty($current) ? $dir : implode('/', [$current, $dir]);
-            if (!file_exists($current)) {
+
+            if (!$dir && !$current) {
+                $current = '/';
+            } else {
+                $current .= ($current && $current !== '/' ? '/' : '') . $dir;
+            }
+            if ($current && !file_exists($current)) {
                 mkdir($current);
             }
         };
