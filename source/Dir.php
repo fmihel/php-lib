@@ -310,11 +310,15 @@ class Dir
     /** создает папки, при наличие отсуствующей вложенности, создает и ее */
     public static function mkdir($path)
     {
+        $dos_slash = '<#DOSSLASH%>';
+        $path = str_replace(':\\', $dos_slash, $path);
         $path = str_replace('\\', '/', $path);
+        $path = str_replace($dos_slash, ':\\', $path);
+
         $paths = explode('/', $path);
         $current = '';
         foreach ($paths as $dir) {
-            $current = implode('/', [$current, $dir]);
+            $current = empty($current) ? $dir : implode('/', [$current, $dir]);
             if (!file_exists($current)) {
                 mkdir($current);
             }
