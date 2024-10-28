@@ -6,18 +6,17 @@ use fmihel\lib\Type;
 class Common
 {
 
-    /** Common::get($var,...$props,$default)
+    /** Common::get($var,array $props,$default = false)
      *
      */
-    public static function get($var, ...$props)
+    public static function get($var, array $props, $default = false)
     {
         $count = count($props);
-        if ($count <= 1) {
-            throw new \Exception("Common::get must have 3 or more params");
+        if ($count === 0) {
+            throw new \Exception("props is empty");
         }
 
-        $default = $props[$count - 1];
-        $count--;
+        // $default = $props[$count - 1];
 
         if (!isset($var)) {
             return $default;
@@ -46,11 +45,9 @@ class Common
                 } else {
                     $var = $var->{$prop};
                 }
-
             } else {
                 return $default;
             }
-
         }
     }
 
